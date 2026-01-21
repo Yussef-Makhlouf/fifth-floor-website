@@ -26,10 +26,10 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
     }
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
     }
   }, [isOpen])
 
@@ -47,23 +47,23 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
         : 'bg-transparent py-6'
         }`}
     >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between">
+      <div className="relative z-50 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between">
 
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-3 group transition-opacity duration-300 hover:opacity-80"
         >
-          <div className="relative w-12 h-12">
+          <div className="relative w-12 h-12 shrink-0">
             <Image
-              src="/logos/fifth-icon-dark.png"
+              src={isOpen ? "/logos/fifth-icon-light.png" : "/logos/fifth-icon-dark.png"}
               alt="Fifth Floor"
               fill
-              className="object-contain rounded-full"
+              className="object-contain rounded-full transition-opacity duration-300"
               priority
             />
           </div>
-          <span className="text-xl font-bold tracking-[0.2em] text-[#3E3E3E]">
+          <span className={`text-xl font-bold tracking-[0.2em] whitespace-nowrap transition-colors duration-300 ${isOpen ? 'text-white' : 'text-[#3E3E3E]'}`}>
             FIFTH FLOOR
           </span>
         </Link>

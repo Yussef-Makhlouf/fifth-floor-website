@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fontClass} antialiased`}>
+      <body className={`${fontClass} antialiased overflow-x-hidden`}>
         {children}
         <Analytics />
       </body>
