@@ -88,6 +88,16 @@ export default function Services() {
         className="fixed inset-0 z-0 pointer-events-none"
       />
 
+      {/* Background Decor */}
+      <div className="absolute top-20 left-10 w-[500px] h-[500px] opacity-[0.04] pointer-events-none select-none z-0">
+        <Image
+          src="/logos/fifth-decore-dark.png"
+          alt=""
+          fill
+          className="object-contain"
+        />
+      </div>
+
       <div className="max-w-[1400px] mx-auto relative z-10" ref={containerRef}>
         <div className="flex flex-col lg:flex-row">
           {/* Left Column - Scrollable Content */}

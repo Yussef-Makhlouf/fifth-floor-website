@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Image from 'next/image'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
 import GridBackground, { DotPattern } from '@/components/ui/grid-background'
 
@@ -57,6 +58,16 @@ export default function Philosophy() {
         opacity={0.05}
       />
       <div className="absolute bottom-1/4 left-0 w-px h-48 bg-[#919191] opacity-20" />
+
+      {/* Background Decor */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] opacity-[0.03] pointer-events-none select-none">
+        <Image
+          src="/logos/fifth-decore-dark.png"
+          alt=""
+          fill
+          className="object-contain"
+        />
+      </div>
 
       {/* Fading Grid Background - Top */}
       {/* <GridBackground

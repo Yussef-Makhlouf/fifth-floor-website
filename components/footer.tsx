@@ -28,10 +28,10 @@ export default function Footer() {
           <div className="md:col-span-4">
             <Link href="/" className="block mb-6 relative w-40 h-10">
               <Image
-                src="/logos/fifith-floor-light.png"
+                src="/logos/fifth-icon-light.png"
                 alt="Fifth Floor"
                 fill
-                className="object-contain object-left"
+                className="object-contain object-left rounded-full"
               />
             </Link>
             <p className="text-sm leading-relaxed max-w-xs">

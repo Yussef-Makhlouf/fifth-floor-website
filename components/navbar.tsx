@@ -23,9 +23,9 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
   }, [])
 
   const navLinks = [
-    { label: 'Work', href: '#work' },
+    { label: 'Work', href: '/#work' },
     { label: 'Services', href: 'services' },
-    { label: 'Philosophy', href: '#philosophy' },
+    { label: 'Philosophy', href: '/#philosophy' },
     { label: 'Contact', href: '/contact' },
   ]
 

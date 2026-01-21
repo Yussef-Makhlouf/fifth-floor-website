@@ -5,6 +5,7 @@ import ArchitecturalShapes from '@/components/ui/architectural-shapes'
 import { OFFICE_LOCATIONS, SERVICES, COMPANY_INFO } from '@/lib/contact-config'
 import CustomMap from '@/components/ui/custom-map'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function ContactInfo() {
   const [activeLocation, setActiveLocation] = useState(0)
@@ -25,6 +26,16 @@ export default function ContactInfo() {
         className="absolute top-0 right-0 rotate-90"
         opacity={0.1}
       />
+
+      {/* Background Decor */}
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] opacity-[0.03] pointer-events-none select-none">
+        <Image
+          src="/logos/fifth-decore-dark.png"
+          alt=""
+          fill
+          className="object-contain"
+        />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
 
@@ -57,8 +68,8 @@ export default function ContactInfo() {
                   key={idx}
                   onClick={() => setActiveLocation(idx)}
                   className={`group p-8 border transition-all duration-500 cursor-pointer relative overflow-hidden ${activeLocation === idx
-                      ? 'bg-[#3E3E3E] border-[#3E3E3E] text-white shadow-xl scale-105'
-                      : 'bg-white border-[#919191]/20 text-[#3E3E3E] hover:border-[#3E3E3E] hover:shadow-lg'
+                    ? 'bg-[#3E3E3E] border-[#3E3E3E] text-white shadow-xl scale-105'
+                    : 'bg-white border-[#919191]/20 text-[#3E3E3E] hover:border-[#3E3E3E] hover:shadow-lg'
                     }`}
                 >
                   <div className="flex items-center justify-between mb-6">
