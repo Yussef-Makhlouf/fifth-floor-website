@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function ProcessSection() {
   const steps = [
     {
@@ -28,8 +30,18 @@ export default function ProcessSection() {
   ]
 
   return (
-    <section className="py-32 px-8 md:px-16 lg:px-24 bg-background border-t border-border">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-32 px-8 md:px-16 lg:px-24 bg-background border-t border-border relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] md:w-[800px] md:h-[800px] opacity-[0.03] pointer-events-none select-none">
+        <Image
+          src="/logos/fifth-decore-dark.png"
+          alt=""
+          fill
+          className="object-contain"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section intro */}
         <div className="mb-20 animate-slide-up">
           <div className="flex items-center gap-3 mb-8">
@@ -44,7 +56,7 @@ export default function ProcessSection() {
         {/* Process steps */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-6">
           {steps.map((step, idx) => (
-            <div 
+            <div
               key={idx}
               className="flex flex-col group animate-slide-up"
               style={{ animationDelay: `${idx * 0.12}s` }}

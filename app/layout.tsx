@@ -13,21 +13,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Yussef Dev Studio' }],
   creator: 'Yussef Dev Studio',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/logos/fifith-favicon.png',
+    shortcut: '/logos/fifith-favicon.png',
+    apple: '/logos/fifith-favicon.png',
   },
   openGraph: {
     title: 'FIFTH FLOOR – Where Big Ideas Take Shape',

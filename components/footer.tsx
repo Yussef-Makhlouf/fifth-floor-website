@@ -1,5 +1,8 @@
 'use client'
 
+import Link from 'next/link'
+import Image from 'next/image'
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
@@ -23,7 +26,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
           {/* Brand */}
           <div className="md:col-span-4">
-            <p className="section-label mb-4">Fifth Floor</p>
+            <Link href="/" className="block mb-6 relative w-40 h-10">
+              <Image
+                src="/logos/fifith-floor-light.png"
+                alt="Fifth Floor"
+                fill
+                className="object-contain object-left"
+              />
+            </Link>
             <p className="text-sm leading-relaxed max-w-xs">
               Premium creative house serving government entities, corporations,
               cultural institutions, and luxury brands across the GCC.

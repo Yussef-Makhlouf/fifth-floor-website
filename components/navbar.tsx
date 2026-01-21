@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 
 interface NavBarProps {
   isScrolled?: boolean
@@ -31,17 +32,23 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
-          ? 'bg-[#CFCFCF] border-b border-[#919191]'
-          : 'bg-transparent'
+        ? 'bg-[#CFCFCF] border-b border-[#919191]'
+        : 'bg-transparent'
         }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-6 flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
-          className="text-xl md:text-2xl font-bold tracking-[0.2em] text-[#3E3E3E] hover-line-extend transition-colors duration-400"
+          className="relative w-48 h-12 transition-opacity duration-300 hover:opacity-80"
         >
-          FIFTH FLOOR
+          <Image
+            src="/logos/fifth-icon-dark.png"
+            alt="Fifth Floor"
+            fill
+            className="object-contain object-left rounded-full"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}

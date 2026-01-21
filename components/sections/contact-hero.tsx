@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 import { useEffect, useRef } from 'react'
 import DiagonalGrid from '@/components/ui/diagonal-grid'
 import { CircleDecoration } from '@/components/ui/architectural-shapes'
@@ -54,6 +56,9 @@ export default function ContactHero() {
       <div className="absolute top-1/4 right-1/3 w-2 h-2 bg-[#3E3E3E]/20 rotate-45 hidden md:block" />
       <div className="absolute bottom-1/3 left-1/3 w-3 h-3 border border-[#919191]/30 rotate-45 hidden md:block" />
       <div className="absolute top-2/3 right-1/4 w-4 h-4 border border-[#3E3E3E]/20 rounded-full hidden lg:block" />
+      <div className="absolute top-32 left-1/4 w-12 h-12 opacity-10 hidden lg:block animate-float">
+        <Image src="/logos/fifth-icon-dark.png" alt="" fill className="object-contain" />
+      </div>
 
       <div className="relative z-10 max-w-4xl">
         {/* Premium Label with line accents */}
