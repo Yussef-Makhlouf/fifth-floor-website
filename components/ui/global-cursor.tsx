@@ -111,12 +111,12 @@ export default function GlobalCursor() {
         <div className="hidden md:block">
             <div
                 ref={cursorDotRef}
-                className="fixed w-[10px] h-[10px] bg-[#3E3E3E] rounded-full pointer-events-none z-[9999] transition-[transform,opacity] duration-200"
+                className="fixed w-[10px] h-[10px] bg-white rounded-full pointer-events-none z-[9999] transition-[transform,opacity] duration-200 mix-blend-difference"
                 style={{ transform: 'translate(-50%, -50%)', left: -100, top: -100 }}
             />
             <div
                 ref={cursorRingRef}
-                className="fixed w-[36px] h-[36px] border border-[#3E3E3E]/50 rounded-full pointer-events-none z-[9998] transition-[transform,opacity] duration-200"
+                className="fixed w-[36px] h-[36px] border border-white/50 rounded-full pointer-events-none z-[9998] transition-[transform,opacity] duration-200 mix-blend-difference"
                 style={{ transform: 'translate(-50%, -50%)', left: -100, top: -100 }}
             />
         </div>

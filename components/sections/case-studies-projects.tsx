@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import ProjectPanel, { ProjectData } from '@/components/ui/project-panel'
 
 export interface Project {
     id: number
@@ -126,6 +127,34 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
         ? projects
         : projects.filter((p) => p.category === activeFilter)
 
+    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
+    const [isPanelOpen, setIsPanelOpen] = useState(false)
+
+    const handleOpenPanel = (project: Project) => {
+        // Map the CaseStudies Project to ProjectData format expected by ProjectPanel
+        const mappedProject: ProjectData = {
+            id: project.id,
+            title: project.title,
+            category: project.category,
+            year: project.year,
+            image: project.image,
+            description: project.description,
+            client: project.client,
+            metrics: project.metrics,
+            tags: project.tags,
+            // The challenge isn't explicitly in the Case Studies project interface but we'll include it optionally or omit it
+        }
+        setSelectedProject(mappedProject)
+        setIsPanelOpen(true)
+    }
+
+    const handleClosePanel = () => {
+        setIsPanelOpen(false)
+        setTimeout(() => {
+            setSelectedProject(null)
+        }, 700)
+    }
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -160,8 +189,9 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                 return (
                     <div
                         key={project.id}
-                        className={`project-block relative w-full border-b border-[#919191]/30`}
+                        className={`project-block relative w-full border-b border-[#919191]/30 cursor-pointer`}
                         data-category={project.category}
+                        onClick={() => handleOpenPanel(project)}
                     >
                         <div className={`grid grid-cols-1 lg:grid-cols-2 ${isReversed ? 'lg:direction-rtl' : ''}`}>
                             {/* LEFT / Sticky Column */}
@@ -264,9 +294,8 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                                 </div>
 
                                 {/* CTA Link */}
-                                <a
-                                    href="/contact"
-                                    className="reveal-item opacity-0 translate-y-6 transition-all duration-700 group inline-flex items-center gap-3 text-sm font-medium text-[#3E3E3E] uppercase tracking-wider hover:gap-5 mb-12"
+                                <span
+                                    className="reveal-item opacity-0 translate-y-6 transition-all duration-700 group inline-flex items-center gap-3 text-sm font-medium text-[#3E3E3E] uppercase tracking-wider hover:gap-5 mb-12 cursor-pointer"
                                     style={{ transitionDelay: '0.64s' }}
                                 >
                                     <span>View Project</span>
@@ -274,7 +303,7 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>
                                     <div className="flex-1 h-px bg-[#919191]/30 group-hover:bg-[#3E3E3E]/50 transition-colors" />
-                                </a>
+                                </span>
 
                                 {/* Browser Frame Mockup */}
                                 <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700"
@@ -315,6 +344,13 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                     <p className="text-lg text-[#919191]">No projects found in this category.</p>
                 </div>
             )}
+
+            {/* Side Panel Overlay */}
+            <ProjectPanel 
+                project={selectedProject}
+                isOpen={isPanelOpen}
+                onClose={handleClosePanel}
+            />
         </section>
     )
 }
