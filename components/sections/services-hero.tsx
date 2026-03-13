@@ -8,10 +8,10 @@ import ArchitecturalShapes from '@/components/ui/architectural-shapes'
 
 export default function ServicesHero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24 bg-gradient-to-br from-white via-[#f8f8f8] to-[#f0f0f0] pt-32 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col justify-center px-6 sm:px-8 md:px-16 lg:px-24 bg-gradient-to-br from-white via-[#f8f8f8] to-[#f0f0f0] pt-28 sm:pt-32 overflow-hidden">
       {/* Animated Background Gradient Orbs */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-[#3E3E3E]/5 to-transparent rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/3 left-1/4 w-[400px] h-[400px] bg-gradient-to-tl from-[#919191]/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/4 right-1/4 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-gradient-to-br from-[#3E3E3E]/5 to-transparent rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/3 left-1/4 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-gradient-to-tl from-[#919191]/5 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Diagonal Grid Background */}
       <DiagonalGrid
@@ -43,7 +43,7 @@ export default function ServicesHero() {
         size="md"
       />
 
-      {/* Vertical Line Decorations - More dynamic with gradients */}
+      {/* Vertical Line Decorations */}
       <div className="absolute top-1/4 left-10 md:left-20 w-px h-48 bg-gradient-to-b from-transparent via-[#919191]/40 to-transparent" />
       <div className="absolute bottom-1/4 right-10 md:right-20 w-px h-36 bg-gradient-to-b from-transparent via-[#919191]/30 to-transparent" />
 
@@ -60,39 +60,42 @@ export default function ServicesHero() {
         <Image src="/logos/fifth-icon-dark.png" alt="" fill className="object-contain" />
       </div>
 
-      <div className="relative z-10 max-w-4xl">
+      <div className="relative z-10 max-w-5xl">
         {/* Premium Label with line accents */}
-        <div className="flex items-center gap-4 mb-10 animate-fade-in">
-          <div className="w-12 h-px bg-gradient-to-r from-transparent to-[#919191]" />
-          <div className="tracking-[0.3em] text-xs font-semibold text-[#6A6A6A] uppercase px-4 py-2 border border-[#919191]/30 rounded-full backdrop-blur-sm">
-            Our Expertise
+        <div className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-10 animate-fade-in">
+          <div className="w-8 sm:w-12 h-px bg-gradient-to-r from-transparent to-[#919191]" />
+          <div className="tracking-[0.2em] sm:tracking-[0.3em] text-[10px] sm:text-xs font-semibold text-[#6A6A6A] uppercase px-3 sm:px-4 py-1.5 sm:py-2 border border-[#919191]/30 rounded-full backdrop-blur-sm">
+            Creative & Digital Excellence
           </div>
         </div>
 
-        {/* Main Headline - Enhanced typography */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] mb-10 animate-fade-in text-[#3E3E3E]">
-          <span className="block mb-2">Crafting Experiences</span>
+        {/* Main Headline */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] mb-8 sm:mb-10 animate-fade-in text-[#3E3E3E]">
+          <span className="block mb-2">Full-Spectrum</span>
           <span className="block bg-gradient-to-r from-[#3E3E3E] via-[#5a5a5a] to-[#3E3E3E] bg-clip-text text-transparent">
-            That Endure
+            Creative & Digital
+          </span>
+          <span className="block mt-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#6A6A6A] font-extralight">
+            Services
           </span>
         </h1>
 
         {/* Animated Divider */}
-        <div className="flex items-center gap-3 mb-10 animate-line-extend">
-          <div className="w-16 h-px bg-[#3E3E3E]" />
+        <div className="flex items-center gap-3 mb-8 sm:mb-10 animate-line-extend">
+          <div className="w-12 sm:w-16 h-px bg-[#3E3E3E]" />
           <div className="w-2 h-2 border border-[#3E3E3E]/40 rotate-45" />
         </div>
 
         <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <p className="text-lg md:text-xl text-[#6A6A6A] font-light leading-relaxed max-w-2xl mb-12">
-            We specialize in strategic branding, experiential design, and creative direction for discerning brands and cultural institutions.
+          <p className="text-base sm:text-lg md:text-xl text-[#6A6A6A] font-light leading-relaxed max-w-2xl mb-10 sm:mb-12">
+            We blend strategic branding, experiential design, and cutting-edge digital solutions to build powerful, sustainable presences for ambitious brands and institutions across the GCC.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-12 sm:mb-16">
             <a
               href="#services-overview"
-              className="group px-8 py-4 bg-[#3E3E3E] text-white font-medium tracking-wide hover:bg-[#2a2a2a] transition-all duration-300 rounded-sm flex items-center gap-3 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
+              className="group px-6 sm:px-8 py-3.5 sm:py-4 bg-[#3E3E3E] text-white font-medium tracking-wide hover:bg-[#2a2a2a] transition-all duration-300 rounded-sm flex items-center justify-center sm:justify-start gap-3 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
             >
               Explore Services
               <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,27 +104,39 @@ export default function ServicesHero() {
             </a>
             <a
               href="/contact"
-              className="px-8 py-4 border border-[#3E3E3E]/30 text-[#3E3E3E] font-medium tracking-wide hover:border-[#3E3E3E] hover:bg-[#3E3E3E]/5 transition-all duration-300 rounded-sm"
+              className="px-6 sm:px-8 py-3.5 sm:py-4 border border-[#3E3E3E]/30 text-[#3E3E3E] font-medium tracking-wide hover:border-[#3E3E3E] hover:bg-[#3E3E3E]/5 transition-all duration-300 rounded-sm text-center"
             >
               Start a Project
             </a>
           </div>
 
-          {/* Service Tags */}
-          <div className="flex flex-wrap gap-3">
-            {['Brand Strategy', 'Branding', 'Marketing', 'Events', 'Booths', 'Creative Concepts'].map((tag) => (
-              <span
-                key={tag}
-                className="px-4 py-2 bg-white/60 backdrop-blur-sm border border-[#919191]/20 text-[#6A6A6A] text-xs uppercase tracking-wider rounded-full hover:border-[#3E3E3E]/40 transition-colors cursor-default"
-              >
-                {tag}
-              </span>
-            ))}
+          {/* Service Tags – Two Row Layout */}
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              {['Brand Strategy', 'Branding', 'Marketing', 'Events', 'Booths', 'Creative Concepts'].map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/60 backdrop-blur-sm border border-[#919191]/20 text-[#6A6A6A] text-[10px] sm:text-xs uppercase tracking-wider rounded-full hover:border-[#3E3E3E]/40 transition-colors cursor-default"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              {['Web Development', 'UI/UX Design', 'SEO & Analytics', 'Managed Hosting', 'Tech Consulting', 'WP Migration'].map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[#3E3E3E]/5 backdrop-blur-sm border border-[#3E3E3E]/15 text-[#3E3E3E] text-[10px] sm:text-xs uppercase tracking-wider rounded-full hover:border-[#3E3E3E]/40 hover:bg-[#3E3E3E]/10 transition-colors cursor-default"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Services Hero Visual - Enhanced with responsive visibility */}
+      {/* Services Hero Visual */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 sm:w-2/5 md:w-[35%] lg:w-[40%] h-[60%] sm:h-[70%] md:h-[80%] opacity-15 sm:opacity-25 md:opacity-50 lg:opacity-80 pointer-events-none">
         <div className="relative w-full h-full">
           <img
