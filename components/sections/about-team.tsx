@@ -1,48 +1,47 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
-import { DotPattern } from '@/components/ui/grid-background'
 
 const team = [
     {
-        id: 1,
+        id: '01',
         name: 'Ahmad Al-Rashid',
         role: 'Founder & Creative Director',
         description: 'Visionary leader with 15+ years in branding and creative strategy.',
         expertise: ['Brand Strategy', 'Creative Direction', 'Client Relations'],
     },
     {
-        id: 2,
+        id: '02',
         name: 'Sarah Mitchell',
         role: 'Head of Design',
         description: 'Award-winning designer specializing in visual identity systems.',
         expertise: ['Visual Identity', 'Typography', 'Print Design'],
     },
     {
-        id: 3,
+        id: '03',
         name: 'Omar Hassan',
         role: 'Strategy Director',
         description: 'Expert in market analysis and brand positioning strategies.',
         expertise: ['Market Research', 'Brand Positioning', 'Competitive Analysis'],
     },
     {
-        id: 4,
+        id: '04',
         name: 'Fatima Al-Zahra',
         role: 'Experience Director',
         description: 'Creates immersive brand experiences and event concepts.',
         expertise: ['Event Design', 'Experiential Marketing', 'Spatial Design'],
     },
     {
-        id: 5,
+        id: '05',
         name: 'David Chen',
         role: 'Digital Lead',
         description: 'Bridges creative vision with digital innovation and technology.',
         expertise: ['Digital Strategy', 'Web Development', 'Interactive Design'],
     },
     {
-        id: 6,
+        id: '06',
         name: 'Layla Abbas',
         role: 'Project Director',
         description: 'Ensures seamless delivery of complex multi-disciplinary projects.',
@@ -52,6 +51,7 @@ const team = [
 
 export default function AboutTeam() {
     const sectionRef = useRef<HTMLDivElement>(null)
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -59,14 +59,14 @@ export default function AboutTeam() {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('opacity-100')
-                        entry.target.classList.remove('opacity-0', 'translate-y-8')
+                        entry.target.classList.remove('opacity-0', 'translate-y-12')
                     }
                 })
             },
             { threshold: 0.1 }
         )
 
-        const items = sectionRef.current?.querySelectorAll('.team-item')
+        const items = sectionRef.current?.querySelectorAll('.team-animate')
         items?.forEach((item) => observer.observe(item))
 
         return () => observer.disconnect()
@@ -76,145 +76,147 @@ export default function AboutTeam() {
         <section
             id="team"
             ref={sectionRef}
-            className="section-padding bg-[#3E3E3E] relative overflow-hidden"
+            className="pt-32 pb-48 bg-[#f5f5f5] relative overflow-hidden"
         >
             {/* Background Decorations */}
-            <ArchitecturalShapes
-                variant="circle"
-                size="xl"
-                className="absolute -top-40 -left-40"
-                opacity={0.03}
-            />
-
-            <DotPattern
-                fadeFrom="corner-tr"
-                dotColor="#6A6A6A"
-                dotSize={1}
-                spacing={35}
-                opacity={0.08}
-            />
-
-            {/* Vertical Lines */}
-            <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-[#6A6A6A]/10 to-transparent" />
+            <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-[#919191]/20 to-transparent" />
+            <div className="absolute top-0 right-1/2 w-px h-full bg-gradient-to-b from-transparent via-[#919191]/10 to-transparent" />
 
             {/* Background Decor */}
-            <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] opacity-[0.02] pointer-events-none select-none rotate-12">
+            <div className="absolute top-1/2 left-0 w-[600px] h-[600px] opacity-[0.03] pointer-events-none select-none -translate-x-1/2 -translate-y-1/2">
                 <Image
                     src="/logos/fifth-decore-dark.png"
                     alt=""
                     fill
-                    className="object-contain invert"
+                    className="object-contain"
                 />
             </div>
 
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
                 {/* Section Header */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20 md:mb-28">
-                    <div className="lg:col-span-5">
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="w-12 h-px bg-[#6A6A6A]" />
-                            <p className="section-label text-[#919191]">The Collective</p>
-                        </div>
-
-                        <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#CFCFCF] mb-6">
-                            Our Team
-                        </h2>
-
-                        <div className="w-20 h-px bg-[#6A6A6A] mb-8" />
+                <div className="team-animate opacity-0 translate-y-12 transition-all duration-1000 mb-20 md:mb-32">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="w-12 h-px bg-[#919191]" />
+                        <p className="section-label text-[#6A6A6A]">The Collective</p>
                     </div>
 
-                    <div className="lg:col-span-7 flex items-end">
-                        <p className="text-lg text-[#919191] leading-relaxed max-w-xl">
-                            A diverse collective of strategists, designers, and creators united by a shared
-                            passion for crafting exceptional brand experiences. Each member brings unique
-                            expertise and perspective to every project.
-                        </p>
+                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-[#3E3E3E] mb-6">
+                        Our People
+                    </h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mt-12">
+                        <div className="hidden md:block md:col-span-5" />
+                        <div className="md:col-span-7">
+                            <p className="text-xl md:text-2xl text-[#6A6A6A] leading-relaxed font-light border-l border-[#919191] pl-6">
+                                A diverse collective of strategists, designers, and creators united by a shared
+                                passion for crafting exceptional brand experiences.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                {/* Team Grid - Unconventional Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {team.map((member, idx) => (
-                        <div
-                            key={member.id}
-                            className={`team-item opacity-0 translate-y-8 transition-all duration-700 group ${idx === 0 ? 'lg:col-span-2 lg:row-span-1' : ''
-                                }`}
-                            style={{ transitionDelay: `${idx * 100}ms` }}
-                        >
+                {/* Team List - Interactive Rows */}
+                <div className="border-t border-[#919191]/30">
+                    {team.map((member, idx) => {
+                        const isHovered = hoveredIndex === idx
+                        
+                        return (
                             <div
-                                className={`relative bg-gradient-to-br from-[#4a4a4a] to-[#3E3E3E] p-8 h-full min-h-[280px] flex flex-col justify-between border border-[#6A6A6A]/20 hover:border-[#CFCFCF]/30 transition-colors duration-500 ${idx === 0 ? 'lg:flex-row lg:items-center lg:gap-12' : ''
-                                    }`}
+                                key={member.id}
+                                className="team-animate opacity-0 translate-y-12 transition-all duration-700 relative group cursor-pointer border-b border-[#919191]/30"
+                                style={{ transitionDelay: `${idx * 100}ms` }}
+                                onMouseEnter={() => setHoveredIndex(idx)}
+                                onMouseLeave={() => setHoveredIndex(null)}
                             >
-                                {/* Decorative Corner */}
-                                <div className="absolute top-0 right-0 w-20 h-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <div className="absolute top-4 right-4 w-px h-8 bg-[#CFCFCF]/30" />
-                                    <div className="absolute top-4 right-4 w-8 h-px bg-[#CFCFCF]/30" />
-                                </div>
+                                {/* Hover Background transition */}
+                                <div className="absolute inset-0 bg-white scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] -z-10" />
 
-                                {/* Member Number */}
-                                <div
-                                    className={`absolute ${idx === 0 ? 'top-8 left-8' : 'top-6 left-6'
-                                        } text-6xl font-bold text-[#CFCFCF]/5`}
-                                >
-                                    {String(idx + 1).padStart(2, '0')}
-                                </div>
+                                <div className="py-8 md:py-12 px-4 transition-all duration-500 group-hover:px-8">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                        
+                                        <div className="flex items-center gap-8 md:gap-16 w-full md:w-auto">
+                                            <span className="text-sm md:text-base font-mono text-[#919191] group-hover:text-[#3E3E3E] transition-colors duration-300">
+                                                {member.id}
+                                            </span>
+                                            <h3 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[#3E3E3E] tracking-tight group-hover:translate-x-4 transition-transform duration-500">
+                                                {member.name}
+                                            </h3>
+                                        </div>
 
-                                {/* Main Content */}
-                                <div className={idx === 0 ? 'lg:flex-1' : ''}>
-                                    <p className="text-xs uppercase tracking-widest text-[#919191] mb-3">
-                                        {member.role}
-                                    </p>
-                                    <h3 className="text-2xl md:text-3xl font-bold text-[#CFCFCF] mb-4 group-hover:translate-x-1 transition-transform duration-300">
-                                        {member.name}
-                                    </h3>
-                                    <p className="text-base text-[#919191] leading-relaxed mb-6 max-w-sm">
-                                        {member.description}
-                                    </p>
-                                </div>
+                                        <div className="flex items-center text-left md:text-right md:w-1/3 group-hover:-translate-x-4 transition-transform duration-500">
+                                            <p className="text-sm md:text-base uppercase tracking-widest text-[#6A6A6A] group-hover:text-[#3E3E3E] font-medium transition-colors duration-300 ml-14 md:ml-0">
+                                                {member.role}
+                                            </p>
+                                        </div>
+                                        
+                                    </div>
 
-                                {/* Expertise Tags */}
-                                <div
-                                    className={`flex flex-wrap gap-2 ${idx === 0 ? 'lg:justify-end lg:max-w-xs' : ''
-                                        }`}
-                                >
-                                    {member.expertise.map((skill) => (
-                                        <span
-                                            key={skill}
-                                            className="px-3 py-1 border border-[#6A6A6A]/30 text-[#919191] text-xs uppercase tracking-wider hover:border-[#CFCFCF]/40 hover:text-[#CFCFCF] transition-colors"
-                                        >
-                                            {skill}
-                                        </span>
-                                    ))}
+                                    {/* Expandable Content Container */}
+                                    <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]">
+                                        <div className="overflow-hidden">
+                                            <div className="pt-8 md:pt-12 pl-14 md:pl-24">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                                    <div>
+                                                        <p className="text-lg md:text-xl text-[#3E3E3E] leading-relaxed font-light mb-6">
+                                                            {member.description}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <p className="text-xs uppercase tracking-widest text-[#919191] mb-6">Expertise</p>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {member.expertise.map((skill) => (
+                                                                <span
+                                                                    key={skill}
+                                                                    className="px-4 py-2 bg-[#f5f5f5] text-[#3E3E3E] text-xs uppercase tracking-wider font-medium"
+                                                                >
+                                                                    {skill}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
 
                 {/* Join CTA */}
-                <div className="mt-20 text-center">
-                    <p className="text-[#919191] mb-6">
-                        Passionate about creative excellence? We're always looking for exceptional talent.
+                <div className="mt-32 text-center team-animate opacity-0 translate-y-12 transition-all duration-1000 delay-300">
+                    <p className="text-xl md:text-2xl font-light text-[#6A6A6A] mb-8">
+                        Passionate about creative excellence?
                     </p>
                     <a
                         href="/contact"
-                        className="inline-flex items-center gap-3 text-[#CFCFCF] font-medium hover:text-white transition-colors group"
+                        className="group relative inline-flex items-center gap-4 px-10 py-5 bg-[#3E3E3E] text-white uppercase tracking-widest text-sm font-semibold overflow-hidden transition-colors duration-500 hover:text-[#3E3E3E]"
                     >
-                        <span className="border-b border-[#CFCFCF]/30 group-hover:border-[#CFCFCF] pb-1 transition-colors">
-                            Join Our Team
+                        <span className="relative z-10 flex items-center gap-4">
+                            Join Our Studio
+                            <svg
+                                className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                            >
+                                <path d="M7 17L17 7M17 7H7M17 7V17" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
                         </span>
-                        <svg
-                            className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                        >
-                            <path d="M7 17L17 7M17 7H7M17 7V17" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <div className="absolute inset-0 bg-white border border-[#3E3E3E] scale-x-0 origin-right transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-x-100 group-hover:origin-left" />
                     </a>
                 </div>
             </div>
+            
+            <ArchitecturalShapes
+                variant="corner"
+                size="lg"
+                className="absolute bottom-12 right-12 opacity-5 pointer-events-none"
+            />
         </section>
     )
 }

@@ -1,16 +1,14 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
 import GridBackground from '@/components/ui/grid-background'
-import FlipCard from '@/components/ui/flip-card'
 
 const values = [
     {
         id: 1,
         title: 'Strategic Vision',
         icon: '◆',
-        frontBg: 'bg-gradient-to-br from-[#3E3E3E] to-[#2a2a2a]',
         description:
             'Every project begins with deep understanding. We craft strategies that align with your goals and resonate with your audience.',
         principle: 'Think before you create',
@@ -19,7 +17,6 @@ const values = [
         id: 2,
         title: 'Creative Excellence',
         icon: '✦',
-        frontBg: 'bg-gradient-to-br from-[#4a4a4a] to-[#3E3E3E]',
         description:
             'We push creative boundaries while maintaining sophistication. Bold ideas executed with refined precision.',
         principle: 'Excellence in every detail',
@@ -28,7 +25,6 @@ const values = [
         id: 3,
         title: 'Cultural Intelligence',
         icon: '◇',
-        frontBg: 'bg-gradient-to-br from-[#3E3E3E] to-[#2a2a2a]',
         description:
             'Deep understanding of regional values and global trends. We create brands that feel authentic and relevant.',
         principle: 'Global vision, local heart',
@@ -37,7 +33,6 @@ const values = [
         id: 4,
         title: 'Client Partnership',
         icon: '○',
-        frontBg: 'bg-gradient-to-br from-[#4a4a4a] to-[#3E3E3E]',
         description:
             "We're invested in your success beyond project delivery. Long-term relationships built on trust and shared vision.",
         principle: 'Your success is our measure',
@@ -46,7 +41,6 @@ const values = [
         id: 5,
         title: 'Refined Execution',
         icon: '□',
-        frontBg: 'bg-gradient-to-br from-[#3E3E3E] to-[#2a2a2a]',
         description:
             'From concept to delivery, every detail matters. We maintain the highest standards throughout the process.',
         principle: 'Precision at every step',
@@ -55,158 +49,144 @@ const values = [
         id: 6,
         title: 'Experiential Mastery',
         icon: '△',
-        frontBg: 'bg-gradient-to-br from-[#4a4a4a] to-[#3E3E3E]',
         description:
             'We create immersive experiences that leave lasting impressions. Emotional connections that drive action.',
-        principle: 'Create memories, not just moments',
+        principle: 'Create memories',
     },
 ]
 
 export default function AboutValues() {
-    const sectionRef = useRef<HTMLDivElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [activeIndex, setActiveIndex] = useState(0)
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('opacity-100')
-                        entry.target.classList.remove('opacity-0', 'translate-y-8')
-                    }
-                })
-            },
-            { threshold: 0.1 }
-        )
+        const handleScroll = () => {
+            if (!containerRef.current) return
+            
+            const container = containerRef.current
+            const items = container.querySelectorAll('.value-scroll-item')
+            const viewportHalf = window.innerHeight / 2
+            
+            let closestIndex = 0
+            let closestDistance = Infinity
 
-        const items = sectionRef.current?.querySelectorAll('.value-item')
-        items?.forEach((item) => observer.observe(item))
+            items.forEach((item, index) => {
+                const rect = item.getBoundingClientRect()
+                const itemCenter = rect.top + rect.height / 2
+                const distance = Math.abs(viewportHalf - itemCenter)
+                
+                if (distance < closestDistance) {
+                    closestDistance = distance
+                    closestIndex = index
+                }
+            })
 
-        return () => observer.disconnect()
+            setActiveIndex(closestIndex)
+        }
+
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        // Initial call
+        handleScroll()
+        
+        return () => window.removeEventListener('scroll', handleScroll)
     }, [])
 
     return (
         <section
             id="values"
-            ref={sectionRef}
-            className="section-padding relative overflow-hidden bg-gradient-to-b from-white via-[#fafafa] to-[#f5f5f5]"
+            className="relative bg-[#3E3E3E] text-white"
         >
-            {/* Background Decorations */}
-            <GridBackground
-                fadeFrom="corner-tl"
-                gridColor="#919191"
-                gridSizeX={24}
-                gridSizeY={32}
-                opacity={0.12}
-            />
+            {/* Background Details */}
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-20 transition-colors duration-700 ease-in-out">
+                <GridBackground
+                    fadeFrom="corner-tl"
+                    gridColor="#CFCFCF"
+                    gridSizeX={32}
+                    gridSizeY={32}
+                    opacity={1}
+                />
+            </div>
 
             <ArchitecturalShapes
-                variant="rectangle"
+                variant="circle"
                 size="xl"
-                className="absolute -top-20 -right-20 rotate-12"
-                opacity={0.05}
+                className="absolute top-1/4 -right-40"
+                opacity={0.03}
             />
 
-            <div className="absolute top-1/3 left-0 w-px h-48 bg-[#919191] opacity-20" />
-            <div className="absolute bottom-1/4 right-0 w-px h-32 bg-[#919191] opacity-20" />
+            <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-[#6A6A6A]/10 via-[#6A6A6A]/20 to-[#6A6A6A]/10 pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto">
-                {/* Section Header */}
-                <div className="text-center mb-20 md:mb-28">
-                    <div className="flex items-center justify-center gap-4 mb-8">
-                        <div className="w-12 h-px bg-[#919191]" />
-                        <p className="section-label text-[#6A6A6A]">What Drives Us</p>
-                        <div className="w-12 h-px bg-[#919191]" />
+            <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+                
+                {/* Sticky layout container */}
+                <div ref={containerRef} className="relative flex flex-col md:flex-row items-start lg:gap-24 w-full pt-32 pb-48">
+                    
+                    {/* LEFT COLUMN - Sticky Header & Graphic */}
+                    <div className="md:sticky top-32 w-full md:w-1/2 md:h-[calc(100vh-16rem)] flex flex-col justify-between z-10 mb-20 md:mb-0">
+                        <div>
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-12 h-px bg-[#CFCFCF]" />
+                                <p className="section-label text-[#CFCFCF] m-0">Studio Philosophy</p>
+                            </div>
+
+                            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
+                                The Axioms
+                            </h2>
+                            <p className="text-xl text-[#919191] leading-relaxed max-w-md">
+                                The principles that guide every decision, shape every creation,
+                                and define who we are as a creative partner.
+                            </p>
+                        </div>
+                        
+                        {/* Dynamic abstract visual indicator */}
+                        <div className="hidden md:flex flex-col items-center justify-center w-full aspect-square border border-[#6A6A6A]/20 bg-[#6A6A6A]/5 backdrop-blur-sm relative overflow-hidden mt-12">
+                            <span className="text-[12rem] text-[#CFCFCF]/10 font-bold transition-all duration-700 absolute inset-0 flex items-center justify-center scale-150 transform-gpu" style={{ transform: `scale(${1 + activeIndex * 0.1}) translateY(${activeIndex * 5}px)` }}>
+                                {values[activeIndex]?.icon}
+                            </span>
+                            
+                            <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end border-t border-[#6A6A6A]/30 pt-4 px-2">
+                                <span className="text-[#919191] font-mono text-sm">
+                                    0{activeIndex + 1} &mdash; 0{values.length}
+                                </span>
+                                <span className="text-white text-sm font-medium uppercase tracking-widest text-right max-w-[50%]">
+                                    {values[activeIndex]?.principle}
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
-                    <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#3E3E3E] mb-6">
-                        Our Values
-                    </h2>
-
-                    <div className="w-20 h-px bg-[#919191] mx-auto mb-8" />
-
-                    <p className="text-lg text-[#6A6A6A] leading-relaxed max-w-2xl mx-auto">
-                        The principles that guide every decision, shape every creation,
-                        and define who we are as a creative partner.
-                    </p>
-                </div>
-
-                {/* Values Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {values.map((value, idx) => (
-                        <div
-                            key={value.id}
-                            className="value-item opacity-0 translate-y-8 transition-all duration-700"
-                            style={{ transitionDelay: `${idx * 100}ms` }}
-                        >
-                            <FlipCard
-                                className="h-80"
-                                frontContent={
-                                    <div
-                                        className={`w-full h-full ${value.frontBg} p-8 flex flex-col justify-between relative overflow-hidden group`}
-                                    >
-                                        {/* Decorative Pattern */}
-                                        <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                                            <div className="absolute top-4 right-4 w-px h-16 bg-[#CFCFCF]" />
-                                            <div className="absolute top-4 right-4 w-16 h-px bg-[#CFCFCF]" />
-                                        </div>
-
-                                        {/* Icon */}
-                                        <span className="text-4xl text-[#CFCFCF]/60 group-hover:text-[#CFCFCF]/80 transition-colors">
+                    {/* RIGHT COLUMN - Scrolling Content */}
+                    <div className="w-full md:w-1/2 flex flex-col m-0 p-0 md:pt-48 md:pb-48 relative z-10">
+                        {values.map((value, idx) => {
+                            const isActive = idx === activeIndex
+                            return (
+                                <div 
+                                    key={value.id}
+                                    className={`value-scroll-item flex flex-col justify-center min-h-[50vh] transition-all duration-700 ease-in-out ${
+                                        isActive ? 'opacity-100 translate-x-0' : 'opacity-20 translate-x-8'
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-6 mb-6">
+                                        <span className={`text-4xl transition-colors duration-500 ${isActive ? 'text-white' : 'text-[#6A6A6A]'}`}>
                                             {value.icon}
                                         </span>
-
-                                        {/* Title */}
-                                        <div>
-                                            <h3 className="text-2xl font-bold text-[#CFCFCF] mb-3">
-                                                {value.title}
-                                            </h3>
-                                            <p className="text-sm text-[#919191] uppercase tracking-wider">
-                                                Hover to learn more →
-                                            </p>
-                                        </div>
+                                        <h3 className={`text-3xl md:text-4xl lg:text-5xl font-bold transition-colors duration-500 ${isActive ? 'text-white' : 'text-[#919191]'}`}>
+                                            {value.title}
+                                        </h3>
                                     </div>
-                                }
-                                backContent={
-                                    <div className="w-full h-full bg-white border border-[#919191]/30 p-8 flex flex-col justify-between">
-                                        {/* Principle */}
-                                        <div>
-                                            <p className="text-xs uppercase tracking-wider text-[#6A6A6A] mb-4">
-                                                {value.principle}
-                                            </p>
-                                            <div className="w-12 h-px bg-[#3E3E3E] mb-6" />
-                                        </div>
-
-                                        {/* Description */}
-                                        <p className="text-base text-[#3E3E3E] leading-relaxed">
-                                            {value.description}
-                                        </p>
-
-                                        {/* Icon */}
-                                        <span className="text-2xl text-[#919191]/40 self-end">
-                                            {value.icon}
-                                        </span>
+                                    <p className={`text-lg md:text-xl lg:text-2xl leading-relaxed max-w-xl transition-colors duration-500 ${isActive ? 'text-[#CFCFCF]' : 'text-[#6A6A6A]'}`}>
+                                        {value.description}
+                                    </p>
+                                    
+                                    <div className={`mt-8 flex items-center gap-4 transition-all duration-500 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 hidden md:flex'}`}>
+                                        <div className="w-12 h-px bg-white/50" />
+                                        <span className="text-xs uppercase tracking-[0.2em] text-white/50">{value.principle}</span>
                                     </div>
-                                }
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {/* Philosophy Quote */}
-                <div className="mt-24 pt-16 border-t border-[#919191]/30 text-center">
-                    <blockquote className="max-w-3xl mx-auto">
-                        <p className="text-2xl md:text-3xl font-light leading-relaxed text-[#3E3E3E] mb-6">
-                            "We believe that luxury is not about noise—it's about precision.
-                            Excellence is communicated through restraint, authenticity through discretion."
-                        </p>
-                        <div className="flex items-center justify-center gap-3">
-                            <div className="w-8 h-px bg-[#919191]" />
-                            <p className="text-xs uppercase tracking-widest text-[#6A6A6A]">
-                                Studio Philosophy
-                            </p>
-                            <div className="w-8 h-px bg-[#919191]" />
-                        </div>
-                    </blockquote>
+                                </div>
+                            )
+                        })}
+                    </div>
+                    
                 </div>
             </div>
         </section>

@@ -4,8 +4,8 @@ import NavBar from '@/components/navbar'
 import AboutHero from '@/components/sections/about-hero'
 import AboutStory from '@/components/sections/about-story'
 import AboutValues from '@/components/sections/about-values'
-import AboutTeam from '@/components/sections/about-team'
-import AboutAwards from '@/components/sections/about-awards'
+import AboutVision from '@/components/sections/about-vision'
+import AboutApproach from '@/components/sections/about-approach'
 import AboutCTA from '@/components/sections/about-cta'
 import Footer from '@/components/footer'
 
@@ -16,9 +16,10 @@ export default function AboutPage() {
             <main>
                 <AboutHero />
                 <AboutStory />
+                 <AboutApproach />
                 <AboutValues />
-                <AboutTeam />
-                <AboutAwards />
+                <AboutVision />
+               
                 <AboutCTA />
             </main>
             <Footer />
