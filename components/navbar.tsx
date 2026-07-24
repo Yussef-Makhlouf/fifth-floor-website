@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import Image from 'next/image'
+import MagneticButton from '@/components/ui/magnetic-button'
 
 interface NavBarProps {
   isScrolled?: boolean
@@ -121,12 +122,14 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
           })}
 
           {/* Quick CTA */}
-          <Link
-            href="/contact"
-            className="ml-4 px-5 py-2.5 bg-[#1A1A1C] text-[#F7F6F3] text-xs font-semibold uppercase tracking-[0.2em] rounded-full hover:bg-[#3E3E42] transition-all duration-300 active-press hover:shadow-lg"
-          >
-            Start Project
-          </Link>
+          <MagneticButton strength={0.25}>
+            <Link
+              href="/contact"
+              className="px-5 py-2.5 bg-[#1A1A1C] text-[#F7F6F3] text-xs font-semibold uppercase tracking-[0.2em] rounded-full hover:bg-[#3E3E42] transition-all duration-300 active-press hover:shadow-lg inline-block"
+            >
+              Start Project
+            </Link>
+          </MagneticButton>
         </div>
 
         {/* Mobile Menu Button */}

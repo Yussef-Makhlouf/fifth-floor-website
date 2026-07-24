@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
 import { DotPattern } from '@/components/ui/grid-background'
 import { OFFICE_LOCATIONS, SERVICES, COMPANY_INFO } from '@/lib/contact-config'
 import { contactFormSchema, validateForm, validateField, type ContactFormData, type FormErrors } from '@/lib/contact-schema'
+import ScrollReveal from '@/components/ui/scroll-reveal'
+import MagneticButton from '@/components/ui/magnetic-button'
 
 type FormState = {
   name: string
@@ -21,32 +23,11 @@ const initialFormState: FormState = {
 }
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLDivElement>(null)
   const [formData, setFormData] = useState<FormState>(initialFormState)
   const [errors, setErrors] = useState<FormErrors<ContactFormData>>({})
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('opacity-100')
-            entry.target.classList.remove('opacity-0', 'translate-y-6')
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
 
   const handleChange = useCallback((
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -133,16 +114,13 @@ export default function Contact() {
       />
 
       <div className="max-w-7xl mx-auto">
-        <div
-          ref={sectionRef}
-          className="opacity-0 translate-y-6 transition-all duration-1000"
-        >
+        <ScrollReveal variant="fade-up">
           {/* Two Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
             {/* Left Column */}
             <div className="lg:col-span-6">
               <p className="section-label mb-4 text-[#6A6A6A]">Get In Touch</p>
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#3E3E3E] mb-6">
+              <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#3E3E3E] mb-6 font-syne-display">
                 Let's Create
                 <br />
                 Together
@@ -156,13 +134,13 @@ export default function Contact() {
               {/* Contact Details */}
               <div className="space-y-6">
                 <div>
-                  <p className="text-semibold uppercase tracking-widest text-[#3e3e3e] mb-2">Locations</p>
+                  <p className="text-semibold uppercase tracking-widest text-[#3e3e3e] mb-2 font-mono text-xs">Locations</p>
                   <p className="text-base text-[#3E3E3E]">
                     {OFFICE_LOCATIONS.map(loc => `${loc.region} ${loc.country}`).join(' | ')}
                   </p>
                 </div>
                 <div>
-                  <p className="text-semibold uppercase tracking-widest text-[#3e3e3e] mb-2">Email</p>
+                  <p className="text-semibold uppercase tracking-widest text-[#3e3e3e] mb-2 font-mono text-xs">Email</p>
                   <a
                     href={`mailto:${COMPANY_INFO.mainEmail}`}
                     className="text-base text-[#3E3E3E] hover:text-[#6A6A6A] transition-colors duration-300 hover-line-extend"
@@ -181,7 +159,7 @@ export default function Contact() {
               <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                 {/* Name */}
                 <div>
-                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3">
+                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3 text-xs font-mono">
                     Your Name <span className="text-red-400">*</span>
                   </label>
                   <input
@@ -200,7 +178,7 @@ export default function Contact() {
 
                 {/* Email */}
                 <div>
-                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3">
+                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3 text-xs font-mono">
                     Email Address <span className="text-red-400">*</span>
                   </label>
                   <input
@@ -219,7 +197,7 @@ export default function Contact() {
 
                 {/* Service */}
                 <div>
-                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3">
+                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3 text-xs font-mono">
                     Service Interest
                   </label>
                   <select
@@ -238,7 +216,7 @@ export default function Contact() {
 
                 {/* Message */}
                 <div>
-                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3">
+                  <label className="block text-semibold uppercase tracking-widest text-[#3e3e3e] mb-3 text-xs font-mono">
                     Project Details <span className="text-red-400">*</span>
                   </label>
                   <textarea
@@ -257,21 +235,23 @@ export default function Contact() {
 
                 {/* Submit */}
                 <div className="pt-4">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="px-10 py-4 bg-[#3E3E3E] text-[#ffffff] font-medium tracking-wide hover:bg-[#6A6A6A] transition-all duration-400 hover-lift disabled:opacity-70 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : 'Send Message'}
-                  </button>
+                  <MagneticButton strength={0.3}>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-10 py-4 bg-[#3E3E3E] text-[#ffffff] font-medium tracking-wide hover:bg-[#6A6A6A] transition-all duration-400 hover-lift disabled:opacity-70 disabled:cursor-not-allowed rounded-full text-xs uppercase tracking-[0.2em]"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Sending...
+                        </span>
+                      ) : 'Send Message'}
+                    </button>
+                  </MagneticButton>
                 </div>
 
                 {/* Success/Error Messages */}
@@ -288,7 +268,7 @@ export default function Contact() {
               </form>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )

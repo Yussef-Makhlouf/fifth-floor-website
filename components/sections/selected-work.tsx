@@ -1,11 +1,14 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
 import { ArrowUpRight } from 'lucide-react'
 import ProjectPanel, { ProjectData } from '@/components/ui/project-panel'
+import ScrollReveal from '@/components/ui/scroll-reveal'
+import ParallaxCard from '@/components/ui/parallax-card'
+import MagneticButton from '@/components/ui/magnetic-button'
 
 const projects: ProjectData[] = [
   {
@@ -91,25 +94,6 @@ export default function SelectedWork() {
     }, 700)
   }
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('opacity-100', 'translate-y-0')
-            entry.target.classList.remove('opacity-0', 'translate-y-16')
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
-
-    const items = sectionRef.current?.querySelectorAll('.reveal-on-scroll')
-    items?.forEach((item) => observer.observe(item))
-
-    return () => observer.disconnect()
-  }, [])
-
   return (
     <section
       id="work"
@@ -128,7 +112,7 @@ export default function SelectedWork() {
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 relative z-10" ref={sectionRef}>
         {/* Section Header */}
-        <div className="mb-20 md:mb-32 reveal-on-scroll opacity-0 translate-y-16 transition-all duration-1000 ease-out border-b border-white/10 pb-12">
+        <ScrollReveal variant="fade-up" className="mb-20 md:mb-32 border-b border-white/10 pb-12">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-2 h-2 rounded-full bg-[#F7F6F3] animate-pulse" />
             <p className="tracking-[0.3em] uppercase text-xs font-semibold text-[#8E8D8A] font-mono">
@@ -144,107 +128,109 @@ export default function SelectedWork() {
               A curated selection of defining identity systems, spatial environments, and digital benchmarks for market leaders.
             </p>
           </div>
-        </div>
+        </ScrollReveal>
 
-        {/* Projects List - Editorial Staggered Layout */}
+        {/* Projects List */}
         <div className="flex flex-col gap-24 md:gap-40">
           {projects.map((project, idx) => (
-            <div
-              key={project.id}
-              onClick={() => handleOpenPanel(project)}
-              className={`reveal-on-scroll cursor-pointer opacity-0 translate-y-16 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col ${
-                idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-              } md:gap-16 lg:gap-24 items-center group relative w-full h-[75vh] md:h-auto mb-2 md:mb-0`}
-              style={{ transitionDelay: '100ms' }}
-            >
-              {/* Image Frame Container */}
-              <div className="w-full h-full md:w-[60%] lg:w-[65%] md:h-auto relative group z-20">
-                {/* Oversized Number Watermark */}
-                <div
-                  className={`hidden md:block absolute ${
-                    idx % 2 === 0 ? '-left-16' : '-right-16'
-                  } -bottom-20 text-[14rem] font-bold text-white/[0.03] z-0 pointer-events-none select-none font-numeric-tabular font-syne-display rotate-[-4deg] group-hover:rotate-0 transition-transform duration-1000`}
-                >
-                  0{idx + 1}
-                </div>
+            <ScrollReveal key={project.id} variant="fade-up" delay={idx * 0.1}>
+              <div
+                onClick={() => handleOpenPanel(project)}
+                className={`cursor-pointer flex flex-col ${
+                  idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                } md:gap-16 lg:gap-24 items-center group relative w-full h-[75vh] md:h-auto mb-2 md:mb-0`}
+              >
+                {/* Image Frame Container with Parallax tilt */}
+                <ParallaxCard tiltAmount={6} className="w-full h-full md:w-[60%] lg:w-[65%] md:h-auto relative z-20">
+                  {/* Oversized Number Watermark */}
+                  <div
+                    className={`hidden md:block absolute ${
+                      idx % 2 === 0 ? '-left-16' : '-right-16'
+                    } -bottom-20 text-[14rem] font-bold text-white/[0.03] z-0 pointer-events-none select-none font-numeric-tabular font-syne-display rotate-[-4deg] group-hover:rotate-0 transition-transform duration-1000`}
+                  >
+                    0{idx + 1}
+                  </div>
 
-                <div className="relative w-full h-full md:aspect-[16/11] z-10 overflow-hidden md:rounded-lg bg-[#18181B] border border-white/10 shadow-2xl">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
-                  />
+                  <div className="relative w-full h-full md:aspect-[16/11] z-10 overflow-hidden md:rounded-lg bg-[#18181B] border border-white/10 shadow-2xl">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+                    />
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E10]/90 via-[#0E0E10]/30 to-transparent opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 ease-out" />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E10]/90 via-[#0E0E10]/30 to-transparent opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 ease-out" />
 
-                  {/* Central Hover Badge (Desktop) */}
-                  <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] scale-90 group-hover:scale-100 pointer-events-none">
-                    <div className="w-28 h-28 rounded-full bg-white/15 backdrop-blur-xl border border-white/30 flex flex-col items-center justify-center text-[#F7F6F3] transform group-hover:-translate-y-1 transition-transform duration-500 shadow-2xl">
-                      <span className="text-[11px] font-semibold tracking-widest uppercase mb-1 font-mono">View Case</span>
-                      <ArrowUpRight className="w-5 h-5" />
+                    {/* Central Hover Badge (Desktop) */}
+                    <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] scale-90 group-hover:scale-100 pointer-events-none">
+                      <div className="w-28 h-28 rounded-full bg-white/15 backdrop-blur-xl border border-white/30 flex flex-col items-center justify-center text-[#F7F6F3] transform group-hover:-translate-y-1 transition-transform duration-500 shadow-2xl">
+                        <span className="text-[11px] font-semibold tracking-widest uppercase mb-1 font-mono">View Case</span>
+                        <ArrowUpRight className="w-5 h-5" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </ParallaxCard>
 
-              {/* Text Content Block */}
-              <div className={`absolute bottom-0 left-0 w-full p-6 md:p-0 z-30 md:relative md:w-[40%] lg:w-[35%] flex flex-col justify-end md:justify-center ${idx % 2 === 0 ? 'md:pr-6' : 'md:pl-6'}`}>
-                <div className="flex items-center gap-4 mb-4 md:mb-6">
-                  <span className="text-xs font-mono text-[#8E8D8A] font-numeric-tabular">0{idx + 1}</span>
-                  <div className="h-px bg-white/20 w-12 md:group-hover:w-20 md:group-hover:bg-white transition-all duration-500" />
-                  <span className="text-xs tracking-[0.25em] uppercase text-[#F7F6F3] font-semibold font-mono">
-                    {project.category}
-                  </span>
-                </div>
-
-                <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold font-syne-display text-[#F7F6F3] mb-4 md:mb-6 tracking-tighter leading-[1.05] transition-colors duration-500 group-hover:text-white">
-                  {project.title}
-                </h3>
-
-                <p className="text-white/80 md:text-[#8E8D8A] text-xs sm:text-sm md:text-base mb-6 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none font-sans">
-                  {project.description}
-                </p>
-
-                {/* Key Metrics Banner with font-numeric-tabular */}
-                {project.metrics && project.metrics.length > 0 && (
-                  <div className="flex gap-6 mb-8 pt-4 border-t border-white/10 text-xs font-mono font-numeric-tabular text-[#8E8D8A]">
-                    {project.metrics.slice(0, 2).map((m) => (
-                      <div key={m.label}>
-                        <span className="text-[#F7F6F3] font-bold text-sm block font-numeric-tabular">{m.value}</span>
-                        <span className="text-[10px] uppercase text-[#6E6E73]">{m.label}</span>
-                      </div>
-                    ))}
+                {/* Text Content Block */}
+                <div className={`absolute bottom-0 left-0 w-full p-6 md:p-0 z-30 md:relative md:w-[40%] lg:w-[35%] flex flex-col justify-end md:justify-center ${idx % 2 === 0 ? 'md:pr-6' : 'md:pl-6'}`}>
+                  <div className="flex items-center gap-4 mb-4 md:mb-6">
+                    <span className="text-xs font-mono text-[#8E8D8A] font-numeric-tabular">0{idx + 1}</span>
+                    <div className="h-px bg-white/20 w-12 md:group-hover:w-20 md:group-hover:bg-white transition-all duration-500" />
+                    <span className="text-xs tracking-[0.25em] uppercase text-[#F7F6F3] font-semibold font-mono">
+                      {project.category}
+                    </span>
                   </div>
-                )}
 
-                {/* Discover Link */}
-                <div className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#F7F6F3] group-hover:text-white transition-colors duration-300">
-                  <span>Explore Case Study</span>
-                  <ArrowUpRight className="w-4 h-4 text-[#8E8D8A] group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold font-syne-display text-[#F7F6F3] mb-4 md:mb-6 tracking-tighter leading-[1.05] transition-colors duration-500 group-hover:text-white">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-white/80 md:text-[#8E8D8A] text-xs sm:text-sm md:text-base mb-6 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none font-sans">
+                    {project.description}
+                  </p>
+
+                  {/* Key Metrics Banner */}
+                  {project.metrics && project.metrics.length > 0 && (
+                    <div className="flex gap-6 mb-8 pt-4 border-t border-white/10 text-xs font-mono font-numeric-tabular text-[#8E8D8A]">
+                      {project.metrics.slice(0, 2).map((m) => (
+                        <div key={m.label}>
+                          <span className="text-[#F7F6F3] font-bold text-sm block font-numeric-tabular">{m.value}</span>
+                          <span className="text-[10px] uppercase text-[#6E6E73]">{m.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Discover Link */}
+                  <div className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#F7F6F3] group-hover:text-white transition-colors duration-300">
+                    <span>Explore Case Study</span>
+                    <ArrowUpRight className="w-4 h-4 text-[#8E8D8A] group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 
         {/* View All Button */}
-        <div className="mt-24 md:mt-40 text-center reveal-on-scroll opacity-0 translate-y-16 transition-all duration-1000 relative">
+        <ScrollReveal variant="fade-up" className="mt-24 md:mt-40 text-center relative">
           <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full h-px bg-white/10 z-0 hidden md:block" />
 
-          <Link
-            href="/case-studies"
-            className="relative z-10 inline-flex items-center justify-center px-8 py-4 bg-[#18181B] border border-white/20 hover:border-white/40 text-[#F7F6F3] rounded-full group transition-all duration-300 active-press shadow-xl"
-          >
-            <span className="text-xs uppercase tracking-[0.25em] font-semibold mr-4 group-hover:mr-6 transition-all duration-300">
-              View All Case Studies
-            </span>
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-[#0E0E10] transition-colors duration-300">
-              <ArrowUpRight className="w-4 h-4" />
-            </div>
-          </Link>
-        </div>
+          <MagneticButton strength={0.3}>
+            <Link
+              href="/case-studies"
+              className="relative z-10 inline-flex items-center justify-center px-8 py-4 bg-[#18181B] border border-white/20 hover:border-white/40 text-[#F7F6F3] rounded-full group transition-all duration-300 active-press shadow-xl"
+            >
+              <span className="text-xs uppercase tracking-[0.25em] font-semibold mr-4 group-hover:mr-6 transition-all duration-300">
+                View All Case Studies
+              </span>
+              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-[#0E0E10] transition-colors duration-300">
+                <ArrowUpRight className="w-4 h-4" />
+              </div>
+            </Link>
+          </MagneticButton>
+        </ScrollReveal>
       </div>
 
       {/* Side Panel Overlay */}

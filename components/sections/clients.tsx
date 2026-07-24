@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { CircleDecoration } from '@/components/ui/architectural-shapes'
+import ScrollReveal from '@/components/ui/scroll-reveal'
 
 const clients = [
   'Ministry of Culture',
@@ -25,23 +26,25 @@ export default function Clients() {
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 md:px-16 lg:px-20 mb-16 md:mb-20">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-px bg-[#8E8D8A]" />
-              <p className="text-xs uppercase tracking-[0.35em] text-[#8E8D8A] font-mono">
-                // Strategic Partners
-              </p>
+        <ScrollReveal variant="fade-up">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-px bg-[#8E8D8A]" />
+                <p className="text-xs uppercase tracking-[0.35em] text-[#8E8D8A] font-mono">
+                  // Strategic Partners
+                </p>
+              </div>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.02]">
+                Trusted by <span className="font-serif-accent font-normal italic text-[#8E8D8A]">Visionaries</span> <br />
+                and GCC Market Leaders.
+              </h2>
             </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.02]">
-              Trusted by <span className="font-serif-accent font-normal italic text-[#8E8D8A]">Visionaries</span> <br />
-              and GCC Market Leaders.
-            </h2>
+            <div className="hidden md:block">
+              <CircleDecoration size="sm" className="opacity-30 text-[#8E8D8A]" />
+            </div>
           </div>
-          <div className="hidden md:block">
-            <CircleDecoration size="sm" className="opacity-30 text-[#8E8D8A]" />
-          </div>
-        </div>
+        </ScrollReveal>
       </div>
 
       {/* Infinite Marquee Strip */}

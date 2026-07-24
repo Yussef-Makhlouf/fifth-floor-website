@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import ScrollReveal from '@/components/ui/scroll-reveal'
+import MagneticButton from '@/components/ui/magnetic-button'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -14,26 +16,30 @@ export default function Footer() {
       {/* Main Footer Content */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 py-24 md:py-32 relative z-10">
         {/* Large Brand Statement */}
-        <div className="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-16">
-          <div>
-            <span className="text-xs uppercase tracking-[0.35em] text-[#6E6E73] font-mono mb-4 block">
-              // Fifth Floor Creative House
-            </span>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.05]">
-              Where Big Ideas <br />
-              <span className="font-serif-accent text-[#8E8D8A]">Take Shape.</span>
-            </h2>
+        <ScrollReveal variant="fade-up">
+          <div className="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-16">
+            <div>
+              <span className="text-xs uppercase tracking-[0.35em] text-[#6E6E73] font-mono mb-4 block">
+                // Fifth Floor Creative House
+              </span>
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.05]">
+                Where Big Ideas <br />
+                <span className="font-serif-accent text-[#8E8D8A]">Take Shape.</span>
+              </h2>
+            </div>
+            <MagneticButton strength={0.35}>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center px-8 py-4 bg-[#F7F6F3] text-[#0E0E10] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all duration-300 active-press hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] shrink-0"
+              >
+                Start A Collaboration
+              </Link>
+            </MagneticButton>
           </div>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 bg-[#F7F6F3] text-[#0E0E10] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all duration-300 active-press hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] w-fit shrink-0"
-          >
-            Start A Collaboration
-          </Link>
-        </div>
+        </ScrollReveal>
 
         {/* Location & Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
+        <ScrollReveal variant="stagger" staggerAmount={0.12} className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
           {/* Brand Column */}
           <div className="md:col-span-4 space-y-4">
             <Link href="/" className="flex items-center gap-3 w-fit group">
@@ -112,7 +118,7 @@ export default function Footer() {
               <p>Dubai, DIFC Gate Precinct</p>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#6E6E73]">

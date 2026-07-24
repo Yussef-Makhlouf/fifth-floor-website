@@ -1,8 +1,11 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap-config'
+import ScrollReveal from '@/components/ui/scroll-reveal'
 
 const philosophyPoints = [
   {
@@ -23,30 +26,44 @@ const philosophyPoints = [
 ]
 
 export default function Philosophy() {
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const rightColRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('opacity-100', 'translate-y-0')
-            entry.target.classList.remove('opacity-0', 'translate-y-6')
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
+  useGSAP(
+    () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return
+      }
 
-    const items = sectionRef.current?.querySelectorAll('.philosophy-item')
-    items?.forEach((item) => observer.observe(item))
+      if (!rightColRef.current) return
 
-    return () => observer.disconnect()
-  }, [])
+      const items = rightColRef.current.querySelectorAll('.philosophy-card')
+
+      gsap.fromTo(
+        items,
+        { opacity: 0, x: 40, y: 20 },
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.9,
+          stagger: 0.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: rightColRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      )
+    },
+    { scope: containerRef }
+  )
 
   return (
     <section
       id="philosophy"
+      ref={containerRef}
       className="py-28 md:py-40 bg-[#F7F6F3] text-[#1A1A1C] relative overflow-hidden hairline-grid-light"
     >
       {/* Background Decor */}
@@ -66,33 +83,31 @@ export default function Philosophy() {
         />
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 relative z-10" ref={sectionRef}>
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 relative z-10">
         {/* Two Column Asymmetric Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
           {/* Left Column - Sticky Section Header */}
           <div className="lg:col-span-5 lg:sticky lg:top-36">
-            <span className="text-xs uppercase tracking-[0.35em] text-[#8E8D8A] font-mono mb-4 block">
-              // Our Mindset
-            </span>
-            <h2 className="text-5xl md:text-7xl font-bold font-syne-display tracking-tighter text-[#1A1A1C] mb-6 leading-[0.98]">
-              Core <br />
-              <span className="font-serif-accent text-[#55555A] font-normal italic">Philosophy.</span>
-            </h2>
-            <div className="w-16 h-[2px] bg-[#1A1A1C] mb-8 opacity-30" />
-            <p className="text-base text-[#55555A] leading-relaxed max-w-md font-sans">
-              At Fifth Floor, we believe in the power of calculated restraint.
-              Great concepts require breathing space, and powerful brands thrive on clarity, intent, and unyielding execution.
-            </p>
+            <ScrollReveal variant="fade-up">
+              <span className="text-xs uppercase tracking-[0.35em] text-[#8E8D8A] font-mono mb-4 block">
+                // Our Mindset
+              </span>
+              <h2 className="text-5xl md:text-7xl font-bold font-syne-display tracking-tighter text-[#1A1A1C] mb-6 leading-[0.98]">
+                Core <br />
+                <span className="font-serif-accent text-[#55555A] font-normal italic">Philosophy.</span>
+              </h2>
+              <div className="w-16 h-[2px] bg-[#1A1A1C] mb-8 opacity-30" />
+              <p className="text-base text-[#55555A] leading-relaxed max-w-md font-sans">
+                At Fifth Floor, we believe in the power of calculated restraint.
+                Great concepts require breathing space, and powerful brands thrive on clarity, intent, and unyielding execution.
+              </p>
+            </ScrollReveal>
           </div>
 
           {/* Right Column - Accordion Editorial Items */}
-          <div className="lg:col-span-7 space-y-0">
+          <div ref={rightColRef} className="lg:col-span-7 space-y-0">
             {philosophyPoints.map((point, idx) => (
-              <div
-                key={point.id}
-                className="philosophy-item opacity-0 translate-y-6 transition-all duration-700"
-                style={{ transitionDelay: `${idx * 150}ms` }}
-              >
+              <div key={point.id} className="philosophy-card">
                 {/* Divider Line */}
                 <div className="h-px bg-[#1A1A1C]/15" />
 
@@ -106,7 +121,7 @@ export default function Philosophy() {
 
                     {/* Text */}
                     <div className="space-y-3">
-                      <h3 className="text-2xl md:text-4xl font-bold font-syne-display text-[#1A1A1C] group-hover:translate-x-2 transition-transform duration-300">
+                      <h3 className="text-2xl md:text-4xl font-bold font-syne-display text-[#1A1A1C] group-hover:translate-x-3 transition-transform duration-300">
                         {point.title}
                       </h3>
                       <p className="text-sm md:text-base text-[#55555A] leading-relaxed max-w-xl font-sans">

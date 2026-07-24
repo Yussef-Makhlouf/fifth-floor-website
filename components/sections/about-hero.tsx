@@ -1,11 +1,14 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import DiagonalGrid from '@/components/ui/diagonal-grid'
 import ArchitecturalShapes, { CircleDecoration } from '@/components/ui/architectural-shapes'
 import AnimatedCounter from '@/components/ui/animated-counter'
 import TextReveal, { TextRevealLine } from '@/components/ui/text-reveal'
+import { useGSAP } from '@gsap/react'
+import { gsap } from '@/lib/gsap-config'
+import MagneticButton from '@/components/ui/magnetic-button'
 
 const stats = [
     { value: 8, suffix: '+', label: 'Years of Excellence' },
@@ -17,35 +20,51 @@ const stats = [
 export default function AboutHero() {
     const sectionRef = useRef<HTMLDivElement>(null)
     const imageRef = useRef<HTMLDivElement>(null)
+    const contentRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('opacity-100')
-                        entry.target.classList.remove('opacity-0', 'translate-y-12')
-                    }
+    useGSAP(
+        () => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return
+            }
+
+            // Scroll Parallax for background image
+            if (imageRef.current) {
+                gsap.to(imageRef.current, {
+                    yPercent: 20,
+                    scale: 1.08,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: true,
+                    },
                 })
-            },
-            { threshold: 0.1 }
-        )
+            }
 
-        const items = sectionRef.current?.querySelectorAll('.animate-on-scroll')
-        items?.forEach((item) => observer.observe(item))
-
-        const handleScroll = () => {
-            if (!imageRef.current) return
-            const scrolled = window.scrollY
-            imageRef.current.style.transform = `translateY(${scrolled * 0.3}px) scale(${1 + scrolled * 0.0005})`
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        return () => {
-            observer.disconnect()
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
+            // Stagger stats bar intro
+            const statItems = sectionRef.current?.querySelectorAll('.stat-item')
+            if (statItems) {
+                gsap.fromTo(
+                    statItems,
+                    { opacity: 0, y: 30 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        stagger: 0.15,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: sectionRef.current,
+                            start: 'top 60%',
+                        },
+                    }
+                )
+            }
+        },
+        { scope: sectionRef }
+    )
 
     return (
         <section
@@ -54,7 +73,7 @@ export default function AboutHero() {
         >
             {/* Cinematic Background Image setup with Parallax */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                <div ref={imageRef} className="absolute inset-0 w-full h-[120%] -top-[10%] origin-top transition-transform duration-100 ease-out">
+                <div ref={imageRef} className="absolute inset-0 w-full h-[120%] -top-[10%] origin-top">
                     <Image
                         src="/images/about-hero-visual.png"
                         alt="Fifth Floor Architecture"
@@ -80,12 +99,12 @@ export default function AboutHero() {
             <ArchitecturalShapes variant="rectangle" size="xl" className="absolute bottom-32 left-10 opacity-10" />
 
             {/* Main Content Layout */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-32 pb-48 flex flex-col justify-center">
+            <div ref={contentRef} className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-32 pb-48 flex flex-col justify-center">
                 
                 {/* Premium Label */}
-                <div className="flex items-center gap-6 mb-12 animate-on-scroll opacity-0 translate-y-12 transition-all duration-1000 ease-out">
+                <div className="flex items-center gap-6 mb-12">
                     <div className="h-px bg-gradient-to-r from-[#919191] to-transparent w-24" />
-                    <span className="tracking-[0.4em] text-sm font-medium text-[#6A6A6A] uppercase">
+                    <span className="tracking-[0.4em] text-sm font-medium text-[#6A6A6A] uppercase font-mono">
                         Our Manifesto
                     </span>
                     <div className="h-px bg-gradient-to-l from-[#919191] to-transparent w-24" />
@@ -100,7 +119,7 @@ export default function AboutHero() {
                     />
                     <TextReveal
                         text="Experiences"
-                        className="text-7xl md:text-9xl lg:text-[10rem] font-bold text-[#3E3E3E] leading-[0.9] tracking-tighter"
+                        className="text-7xl md:text-9xl lg:text-[10rem] font-bold text-[#3E3E3E] leading-[0.9] tracking-tighter font-syne-display"
                         delay={300}
                         staggerDelay={60}
                     />
@@ -114,30 +133,32 @@ export default function AboutHero() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-20 items-end">
                     <TextRevealLine delay={900}>
-                        <p className="text-xl md:text-2xl text-[#6A6A6A] font-light leading-relaxed max-w-xl border-l border-[#3E3E3E] pl-6 ml-2">
+                        <p className="text-xl md:text-2xl text-[#6A6A6A] font-light leading-relaxed max-w-xl border-l border-[#3E3E3E] pl-6 ml-2 font-sans">
                             Fifth Floor is a premium creative agency crafting strategic brand identities,
                             immersive experiences, and cultural narratives for discerning clients globally.
                         </p>
                     </TextRevealLine>
                     
                     <div className="flex justify-start md:justify-end">
-                        <a
-                            href="#story"
-                            className="group relative px-10 py-5 bg-transparent border border-[#3E3E3E] text-[#3E3E3E] uppercase tracking-widest text-sm font-semibold overflow-hidden transition-colors duration-500 hover:text-white"
-                        >
-                            <span className="relative z-10 flex items-center gap-3">
-                                Discover Our Story
-                                <svg
-                                    className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </span>
-                            <div className="absolute inset-0 bg-[#3E3E3E] scale-x-0 origin-left transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-x-100" />
-                        </a>
+                        <MagneticButton strength={0.3}>
+                            <a
+                                href="#story"
+                                className="group relative px-10 py-5 bg-transparent border border-[#3E3E3E] text-[#3E3E3E] uppercase tracking-widest text-sm font-semibold overflow-hidden transition-colors duration-500 hover:text-white inline-block rounded-full"
+                            >
+                                <span className="relative z-10 flex items-center gap-3">
+                                    Discover Our Story
+                                    <svg
+                                        className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </span>
+                                <div className="absolute inset-0 bg-[#3E3E3E] scale-x-0 origin-left transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-x-100 rounded-full" />
+                            </a>
+                        </MagneticButton>
                     </div>
                 </div>
 
@@ -147,13 +168,13 @@ export default function AboutHero() {
             <div className="absolute bottom-0 left-0 w-full z-20 hidden md:block border-t border-white/20">
                 <div className="bg-white/40 backdrop-blur-md border-t border-[#919191]/10 px-6 md:px-12 lg:px-24">
                     <div className="max-w-7xl mx-auto flex justify-between items-center py-6">
-                        {stats.map((stat, idx) => (
-                            <div key={stat.label} className="flex gap-4 items-center animate-on-scroll opacity-0 translate-y-8 transition-all duration-700" style={{ transitionDelay: `${800 + idx * 100}ms` }}>
+                        {stats.map((stat) => (
+                            <div key={stat.label} className="stat-item flex gap-4 items-center">
                                 <div className="text-3xl font-light text-[#3E3E3E]">
                                     <AnimatedCounter end={stat.value} suffix={stat.suffix} duration={2500} />
                                 </div>
                                 <div className="w-px h-8 bg-[#919191]/30 mx-2" />
-                                <span className="text-xs text-[#6A6A6A] uppercase tracking-widest w-24 leading-snug">
+                                <span className="text-xs text-[#6A6A6A] uppercase tracking-widest w-24 leading-snug font-mono">
                                     {stat.label}
                                 </span>
                             </div>
@@ -163,8 +184,8 @@ export default function AboutHero() {
             </div>
             
             {/* Scroll Indicator */}
-            <div className="absolute bottom-[100px] md:bottom-24 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4 animate-on-scroll opacity-0 transition-opacity duration-1000 delay-[1200ms] pointer-events-none z-10">
-                <span className="text-[10px] uppercase tracking-[0.4em] text-[#919191] font-medium">Scroll</span>
+            <div className="absolute bottom-[100px] md:bottom-24 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4 pointer-events-none z-10">
+                <span className="text-[10px] uppercase tracking-[0.4em] text-[#919191] font-mono">Scroll</span>
                 <div className="w-px h-12 bg-gradient-to-b from-[#919191] to-transparent animate-pulse" />
             </div>
         </section>
