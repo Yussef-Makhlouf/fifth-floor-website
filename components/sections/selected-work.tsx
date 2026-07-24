@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
-import GridBackground, { DotPattern } from '@/components/ui/grid-background'
 import { ArrowUpRight } from 'lucide-react'
 import ProjectPanel, { ProjectData } from '@/components/ui/project-panel'
 
@@ -19,7 +19,7 @@ const projects: ProjectData[] = [
     metrics: [
       { label: 'Growth', value: '+340%' },
       { label: 'Attendees', value: '50K' },
-      { label: 'Engagement', value: '1.2S' }
+      { label: 'Engagement', value: '1.2s' }
     ],
     tags: ['Brand Strategy', 'Visual Identity', 'Motion Graphics', 'Guidelines'],
     challenge: 'Modernizing a deeply historical entity without losing its foundational roots and significance in the cultural landscape.'
@@ -73,8 +73,6 @@ const projects: ProjectData[] = [
     challenge: 'Designing a structure that is both visually arresting and functionally capable of handling high foot traffic safely.'
   },
 ]
-
-import Link from 'next/link'
 
 export default function SelectedWork() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -175,7 +173,7 @@ export default function SelectedWork() {
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                    className="object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
                   />
 
                   {/* Gradient Overlay */}
@@ -209,19 +207,19 @@ export default function SelectedWork() {
                   {project.description}
                 </p>
 
-                {/* Key Metrics Banner */}
+                {/* Key Metrics Banner with font-numeric-tabular */}
                 {project.metrics && project.metrics.length > 0 && (
                   <div className="flex gap-6 mb-8 pt-4 border-t border-white/10 text-xs font-mono font-numeric-tabular text-[#8E8D8A]">
                     {project.metrics.slice(0, 2).map((m) => (
                       <div key={m.label}>
-                        <span className="text-[#F7F6F3] font-bold text-sm block">{m.value}</span>
+                        <span className="text-[#F7F6F3] font-bold text-sm block font-numeric-tabular">{m.value}</span>
                         <span className="text-[10px] uppercase text-[#6E6E73]">{m.label}</span>
                       </div>
                     ))}
                   </div>
                 )}
 
-                {/* Discover Link with hover line */}
+                {/* Discover Link */}
                 <div className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#F7F6F3] group-hover:text-white transition-colors duration-300">
                   <span>Explore Case Study</span>
                   <ArrowUpRight className="w-4 h-4 text-[#8E8D8A] group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />

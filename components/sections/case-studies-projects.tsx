@@ -21,7 +21,7 @@ export const projects: Project[] = [
     {
         id: 1,
         number: '01',
-        title: 'National Identity Reimagined',
+        title: 'National identity reimagined',
         client: 'Ministry of Culture',
         category: 'Brand Strategy',
         year: '2024',
@@ -29,7 +29,7 @@ export const projects: Project[] = [
         metrics: [
             { label: 'Brand Touchpoints', value: '120+' },
             { label: 'Reach', value: '4.2M' },
-            { label: 'Duration', value: '8 Months' },
+            { label: 'Duration', value: '8 mos' },
         ],
         tags: ['Brand Strategy', 'Visual Identity', 'Guidelines'],
         image: '/projects/project-1.png',
@@ -37,7 +37,7 @@ export const projects: Project[] = [
     {
         id: 2,
         number: '02',
-        title: 'Investment Summit Experience',
+        title: 'Investment summit experience',
         client: 'Kuwait Investment Forum',
         category: 'Events',
         year: '2024',
@@ -53,14 +53,14 @@ export const projects: Project[] = [
     {
         id: 3,
         number: '03',
-        title: 'Luxury Retail Presence',
+        title: 'Luxury retail presence',
         client: 'Al Raya Collection',
         category: 'Booths',
         year: '2023',
         description: 'Exhibition booth design for a luxury retail brand — transforming a 200sqm footprint into a multi-sensory brand environment that drove record-breaking engagement.',
         metrics: [
             { label: 'Booth Size', value: '200m²' },
-            { label: 'Visitor Flow', value: '8K+' },
+            { label: 'Visitor Flow', value: '8,000+' },
             { label: 'Leads', value: '1,200' },
         ],
         tags: ['Booth Design', 'Fabrication', '3D Visualization'],
@@ -69,7 +69,7 @@ export const projects: Project[] = [
     {
         id: 4,
         number: '04',
-        title: 'Digital Ecosystem Launch',
+        title: 'Digital ecosystem launch',
         client: 'Venture Capital Group',
         category: 'Digital',
         year: '2023',
@@ -85,7 +85,7 @@ export const projects: Project[] = [
     {
         id: 5,
         number: '05',
-        title: 'Cultural Festival Identity',
+        title: 'Cultural festival identity',
         client: 'Abu Dhabi Design Week',
         category: 'Marketing',
         year: '2023',
@@ -101,7 +101,7 @@ export const projects: Project[] = [
     {
         id: 6,
         number: '06',
-        title: 'Heritage Brand Revival',
+        title: 'Heritage brand revival',
         client: 'Al Bahar Group',
         category: 'Brand Strategy',
         year: '2022',
@@ -131,7 +131,6 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
     const [isPanelOpen, setIsPanelOpen] = useState(false)
 
     const handleOpenPanel = (project: Project) => {
-        // Map the CaseStudies Project to ProjectData format expected by ProjectPanel
         const mappedProject: ProjectData = {
             id: project.id,
             title: project.title,
@@ -142,7 +141,6 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
             client: project.client,
             metrics: project.metrics,
             tags: project.tags,
-            // The challenge isn't explicitly in the Case Studies project interface but we'll include it optionally or omit it
         }
         setSelectedProject(mappedProject)
         setIsPanelOpen(true)
@@ -166,7 +164,7 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                     }
                 })
             },
-            { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+            { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
         )
 
         const items = sectionRef.current?.querySelectorAll('.reveal-item')
@@ -180,8 +178,7 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
             ref={sectionRef}
             className="bg-white relative"
         >
-            {/* Top border */}
-            <div className="w-full h-px bg-[#919191]/30" />
+            <div className="w-full h-px bg-[#e5e5e5]" />
 
             {filteredProjects.map((project, idx) => {
                 const isReversed = idx % 2 !== 0
@@ -189,90 +186,78 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                 return (
                     <div
                         key={project.id}
-                        className={`project-block relative w-full border-b border-[#919191]/30 cursor-pointer`}
+                        className="project-block relative w-full border-b border-[#e5e5e5] cursor-pointer group"
                         data-category={project.category}
                         onClick={() => handleOpenPanel(project)}
                     >
-                        <div className={`grid grid-cols-1 lg:grid-cols-2 ${isReversed ? 'lg:direction-rtl' : ''}`}>
-                            {/* LEFT / Sticky Column */}
-                            <div className={`relative lg:sticky lg:top-0 lg:h-screen flex items-center justify-center overflow-hidden border-b lg:border-b-0 ${isReversed ? 'lg:order-2 lg:border-l' : 'lg:border-r'} border-[#919191]/30 bg-[#fafafa]`}>
-                                {/* Giant Watermark Number */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2">
+                            {/* Sticky Brand Identifier Side */}
+                            <div className={`relative lg:sticky lg:top-[72px] lg:h-[calc(100vh-72px)] flex items-center justify-center overflow-hidden border-b lg:border-b-0 ${isReversed ? 'lg:order-2 lg:border-l' : 'lg:border-r'} border-[#e5e5e5] bg-[#fafafa]`}>
+                                
+                                {/* Watermark Number */}
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                                    <span
-                                        className="project-number text-[30vw] sm:text-[28vw] lg:text-[14vw] font-bold text-[#CFCFCF]/40 leading-none transition-transform duration-700 hover:scale-105"
-                                    >
+                                    <span className="font-mono text-[24vw] sm:text-[20vw] lg:text-[12vw] font-light text-[#e0e0e0]/40 leading-none transition-transform duration-700 group-hover:scale-105">
                                         {project.number}
                                     </span>
                                 </div>
 
-                                {/* Sticky Content */}
-                                <div className="relative z-10 p-8 sm:p-12 lg:p-16 py-16 lg:py-0 text-center lg:text-left">
-                                    {/* Category Label */}
+                                {/* Content */}
+                                <div className="relative z-10 p-8 sm:p-12 lg:p-16 text-center lg:text-left">
                                     <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700">
-                                        <span className="inline-block px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-[#6A6A6A] border border-[#919191]/40 mb-6">
+                                        <span className="inline-block px-3 py-1 text-[9px] uppercase tracking-[0.22em] text-[#6A6A6A] border border-[#e0e0e0] bg-white mb-6">
                                             {project.category}
                                         </span>
                                     </div>
 
-                                    {/* Client Name */}
-                                    <h3 className="reveal-item opacity-0 translate-y-6 transition-all duration-700 text-3xl sm:text-4xl lg:text-5xl font-bold text-[#3E3E3E] mb-4 leading-tight"
+                                    <h3 className="reveal-item opacity-0 translate-y-6 transition-all duration-700 text-3xl sm:text-4xl lg:text-5xl font-light text-[#1a1a1a] mb-4 leading-snug tracking-tight"
                                         style={{ transitionDelay: '0.08s' }}
                                     >
                                         {project.client}
                                     </h3>
 
-                                    {/* Year */}
                                     <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700 flex items-center gap-3 justify-center lg:justify-start"
                                         style={{ transitionDelay: '0.16s' }}
                                     >
-                                        <div className="w-8 h-px bg-[#919191]" />
-                                        <span className="text-sm font-bold tracking-[0.2em] text-[#919191]">
+                                        <div className="w-6 h-px bg-[#3E3E3E]" />
+                                        <span className="font-mono text-xs font-semibold tracking-widest text-[#919191] font-numeric-tabular">
                                             {project.year}
                                         </span>
                                     </div>
                                 </div>
-
-                                {/* Corner decorations */}
-                                <div className="absolute top-6 left-6 w-6 h-px bg-[#919191]/30 hidden lg:block" />
-                                <div className="absolute top-6 left-6 w-px h-6 bg-[#919191]/30 hidden lg:block" />
-                                <div className="absolute bottom-6 right-6 w-6 h-px bg-[#919191]/30 hidden lg:block" />
-                                <div className="absolute bottom-6 right-6 w-px h-6 bg-[#919191]/30 hidden lg:block" />
                             </div>
 
-                            {/* RIGHT / Scrollable Column */}
+                            {/* Detailed Content & Mockup Side */}
                             <div className={`relative min-h-[80vh] lg:min-h-screen flex flex-col justify-center p-8 sm:p-12 lg:p-16 xl:p-20 ${isReversed ? 'lg:order-1' : ''}`}>
-                                {/* Project Title */}
-                                <h4 className="reveal-item opacity-0 translate-y-6 transition-all duration-700 text-2xl sm:text-3xl lg:text-4xl font-bold text-[#3E3E3E] mb-4 leading-tight"
+                                
+                                <h4 className="reveal-item opacity-0 translate-y-6 transition-all duration-700 text-2xl sm:text-3xl lg:text-4xl font-light text-[#1a1a1a] mb-4 leading-snug tracking-tight group-hover:text-[#3E3E3E] transition-colors"
                                     style={{ transitionDelay: '0.24s' }}
                                 >
                                     {project.title}
                                 </h4>
 
-                                {/* Divider */}
-                                <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700 w-12 h-px bg-[#3E3E3E] mb-6"
+                                <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700 w-10 h-px bg-[#1a1a1a] mb-6"
                                     style={{ transitionDelay: '0.32s' }}
                                 />
 
-                                {/* Description */}
-                                <p className="reveal-item opacity-0 translate-y-6 transition-all duration-700 text-base sm:text-lg text-[#6A6A6A] font-light leading-relaxed mb-10 max-w-lg"
+                                <p className="reveal-item opacity-0 translate-y-6 transition-all duration-700 text-sm sm:text-base text-[#6A6A6A] font-light leading-relaxed mb-10 max-w-lg"
                                     style={{ transitionDelay: '0.40s' }}
                                 >
                                     {project.description}
                                 </p>
 
-                                {/* Metrics Grid */}
-                                <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700 grid grid-cols-3 mb-10 border border-[#919191]/30"
+                                {/* Tabular Metrics Grid */}
+                                <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700 grid grid-cols-3 mb-10 border border-[#e5e5e5]"
                                     style={{ transitionDelay: '0.48s' }}
                                 >
                                     {project.metrics.map((metric, mIdx) => (
                                         <div
                                             key={metric.label}
-                                            className={`p-4 sm:p-6 text-center ${mIdx < 2 ? 'border-r border-[#919191]/30' : ''}`}
+                                            className={`p-4 sm:p-5 text-center ${mIdx < 2 ? 'border-r border-[#e5e5e5]' : ''}`}
                                         >
-                                            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#3E3E3E] mb-1">
+                                            <div className="font-mono text-lg sm:text-2xl font-light text-[#1a1a1a] font-numeric-tabular mb-1">
                                                 {metric.value}
                                             </div>
-                                            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#919191]">
+                                            <p className="text-[8px] sm:text-[9px] uppercase tracking-widest text-[#919191]">
                                                 {metric.label}
                                             </p>
                                         </div>
@@ -286,48 +271,45 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                                     {project.tags.map((tag) => (
                                         <span
                                             key={tag}
-                                            className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#6A6A6A] border border-[#919191]/30 hover:border-[#3E3E3E]/50 hover:text-[#3E3E3E] transition-colors duration-300"
+                                            className="px-3 py-1 text-[9px] uppercase tracking-wider text-[#919191] border border-[#e5e5e5] group-hover:border-[#919191] group-hover:text-[#3E3E3E] transition-colors"
                                         >
                                             {tag}
                                         </span>
                                     ))}
                                 </div>
 
-                                {/* CTA Link */}
+                                {/* Trigger Link */}
                                 <span
-                                    className="reveal-item opacity-0 translate-y-6 transition-all duration-700 group inline-flex items-center gap-3 text-sm font-medium text-[#3E3E3E] uppercase tracking-wider hover:gap-5 mb-12 cursor-pointer"
+                                    className="reveal-item opacity-0 translate-y-6 transition-all duration-700 inline-flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-[#1a1a1a] font-medium mb-12 cursor-pointer"
                                     style={{ transitionDelay: '0.64s' }}
                                 >
-                                    <span>View Project</span>
-                                    <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <span>Explore case study</span>
+                                    <svg className="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>
-                                    <div className="flex-1 h-px bg-[#919191]/30 group-hover:bg-[#3E3E3E]/50 transition-colors" />
                                 </span>
 
-                                {/* Browser Frame Mockup */}
+                                {/* Browser / Device Mockup Frame */}
                                 <div className="reveal-item opacity-0 translate-y-6 transition-all duration-700"
                                     style={{ transitionDelay: '0.72s' }}
                                 >
-                                    <div className="border border-[#919191]/30 overflow-hidden">
-                                        {/* Browser Chrome */}
-                                        <div className="flex items-center gap-2 px-4 py-3 bg-[#fafafa] border-b border-[#919191]/30">
+                                    <div className="border border-[#e5e5e5] bg-[#0f0f0f] overflow-hidden shadow-xl">
+                                        <div className="flex items-center justify-between px-4 py-2.5 bg-[#1a1a1a] border-b border-white/10">
                                             <div className="flex gap-1.5">
-                                                <div className="w-2.5 h-2.5 rounded-full bg-[#CFCFCF]" />
-                                                <div className="w-2.5 h-2.5 rounded-full bg-[#CFCFCF]" />
-                                                <div className="w-2.5 h-2.5 rounded-full bg-[#CFCFCF]" />
+                                                <div className="w-2 h-2 rounded-full bg-white/20" />
+                                                <div className="w-2 h-2 rounded-full bg-white/20" />
+                                                <div className="w-2 h-2 rounded-full bg-white/20" />
                                             </div>
-                                            <div className="flex-1 mx-4">
-                                                <div className="w-full max-w-[200px] h-5 bg-[#CFCFCF]/50 rounded-full mx-auto" />
-                                            </div>
+                                            <span className="font-mono text-[9px] text-white/30 tracking-widest uppercase">
+                                                {project.client} · Case Showcase
+                                            </span>
                                         </div>
-                                        {/* Image */}
-                                        <div className="relative aspect-[16/10] bg-[#f0f0f0]">
+                                        <div className="relative aspect-[16/10] overflow-hidden">
                                             <Image
                                                 src={project.image}
                                                 alt={project.title}
                                                 fill
-                                                className="object-cover"
+                                                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                                             />
                                         </div>
                                     </div>
@@ -338,14 +320,12 @@ export default function CaseStudiesProjects({ activeFilter }: CaseStudiesProject
                 )
             })}
 
-            {/* Empty State */}
             {filteredProjects.length === 0 && (
                 <div className="py-32 text-center">
-                    <p className="text-lg text-[#919191]">No projects found in this category.</p>
+                    <p className="text-sm font-mono text-[#919191]">No projects match this filter.</p>
                 </div>
             )}
 
-            {/* Side Panel Overlay */}
             <ProjectPanel 
                 project={selectedProject}
                 isOpen={isPanelOpen}

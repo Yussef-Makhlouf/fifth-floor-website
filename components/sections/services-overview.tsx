@@ -1,11 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import GridBackground from '@/components/ui/grid-background'
-import { CircleDecoration } from '@/components/ui/architectural-shapes'
 import { creativeServices, digitalServices, ServiceItem } from '@/lib/data/services'
 
-/* ─── Creative Card: Large editorial layout with image ─── */
+/* ─── Creative Card: Editorial zig-zag layout ─── */
 function CreativeServiceCard({ service, index }: { service: ServiceItem; index: number }) {
   const isReversed = index % 2 !== 0
   return (
@@ -13,8 +11,8 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
       className="group animate-slide-up"
       style={{ animationDelay: `${index * 0.12}s` }}
     >
-      <div className={`relative flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} bg-white border border-transparent hover:border-[#919191]/20 hover:shadow-2xl transition-all duration-700 overflow-hidden`}>
-        
+      <div className={`relative flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} bg-white hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.08)] transition-all duration-700 overflow-hidden border border-[#f0f0f0] hover:border-[#e0e0e0]`}>
+
         {/* Image Side */}
         <div className="relative w-full md:w-1/2 aspect-[4/3] md:aspect-auto md:min-h-[380px] overflow-hidden">
           <Image
@@ -22,46 +20,46 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
             alt={service.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#3E3E3E]/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-white/30" />
-          
-          {/* Floating category badge on image */}
-          <div className="absolute top-4 left-4 sm:top-6 sm:left-6">
-            <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#3E3E3E] font-medium">
+          <div className={`absolute inset-0 ${isReversed ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-transparent via-transparent to-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+
+          {/* Category label */}
+          <div className="absolute top-4 left-4">
+            <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-[#3E3E3E] font-medium">
               Creative
             </span>
           </div>
-
-          {/* Corner decoration on image */}
-          <div className="absolute bottom-4 right-4 w-8 h-8 border-r border-b border-white/30 hidden sm:block" />
         </div>
 
         {/* Content Side */}
-        <div className="relative w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center">
-          {/* Decorative vertical line */}
-          <div className="absolute left-0 top-8 bottom-8 w-[2px] bg-gradient-to-b from-transparent via-[#3E3E3E]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden md:block" />
+        <div className="relative w-full md:w-1/2 p-8 md:p-10 lg:p-14 flex flex-col justify-center">
+          {/* Animated left border accent */}
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#3E3E3E] scale-y-0 group-hover:scale-y-100 origin-center transition-transform duration-500 hidden md:block" />
 
           {/* Icon */}
-          <div className="inline-flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 mb-5 sm:mb-6 bg-[#3E3E3E]/5 text-[#3E3E3E] group-hover:bg-[#3E3E3E] group-hover:text-white rounded-full transition-all duration-500">
+          <div className="inline-flex items-center justify-center w-10 h-10 mb-6 bg-[#f5f5f5] text-[#3E3E3E] group-hover:bg-[#1a1a1a] group-hover:text-white transition-all duration-400">
             {service.icon}
           </div>
 
           {/* Title */}
-          <h3 className="text-2xl sm:text-2xl md:text-3xl font-light text-[#3E3E3E] mb-3 sm:mb-4 leading-tight group-hover:text-[#2a2a2a] transition-colors duration-300">
+          <h3 className="text-2xl md:text-3xl font-light text-[#1a1a1a] mb-4 leading-tight tracking-tight group-hover:text-[#0a0a0a] transition-colors duration-300">
             {service.title}
           </h3>
 
           {/* Description */}
-          <p className="text-[#6A6A6A] text-sm sm:text-base leading-relaxed mb-6">
+          <p className="text-[#6A6A6A] text-sm leading-relaxed mb-7">
             {service.description}
           </p>
 
-          {/* Keywords */}
-          <div className="flex flex-wrap gap-2 sm:gap-3 pt-5 border-t border-[#919191]/15 mb-6">
+          {/* Keywords — styled as bordered chips */}
+          <div className="flex flex-wrap gap-2 pt-5 border-t border-[#f0f0f0] mb-6">
             {service.keywords.map((keyword) => (
-              <span key={keyword} className="text-[10px] sm:text-xs uppercase tracking-widest text-[#919191] group-hover:text-[#6A6A6A] transition-colors">
+              <span
+                key={keyword}
+                className="text-[9px] uppercase tracking-[0.18em] text-[#919191] border border-[#ebebeb] px-2.5 py-1 group-hover:border-[#c0c0c0] transition-colors duration-300"
+              >
                 {keyword}
               </span>
             ))}
@@ -70,13 +68,13 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
           {/* Explore link */}
           <a
             href={`/services/${service.slug}`}
-            className="inline-flex items-center gap-2.5 text-xs uppercase tracking-widest text-[#919191] group-hover:text-[#3E3E3E] transition-all duration-300 mt-auto"
+            className="inline-flex items-center gap-2.5 text-[10px] uppercase tracking-[0.2em] text-[#919191] group-hover:text-[#1a1a1a] transition-all duration-300 mt-auto"
           >
-            <span>Explore Service</span>
-            <svg className="w-3.5 h-3.5 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span>Explore service</span>
+            <svg className="w-3 h-3 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-            <span className="block w-0 group-hover:w-10 h-px bg-[#3E3E3E] transition-all duration-500" />
+            <span className="block w-0 group-hover:w-8 h-px bg-[#1a1a1a] transition-all duration-500" />
           </a>
         </div>
       </div>
@@ -84,79 +82,80 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
   )
 }
 
-/* ─── Digital Card: Compact card with top image strip ─── */
-function DigitalServiceCard({ service, index }: { service: ServiceItem; index: number }) {
+/* ─── Digital Service: Bento card ─── */
+interface DigitalBentoCardProps {
+  service: ServiceItem
+  index: number
+  featured?: boolean
+}
+
+function DigitalBentoCard({ service, index, featured = false }: DigitalBentoCardProps) {
   return (
     <article
-      className="group animate-slide-up h-full"
+      className={`group animate-slide-up relative overflow-hidden bg-[#0f0f0f] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-500 ${featured ? 'flex flex-col sm:flex-row' : 'flex flex-col'}`}
       style={{ animationDelay: `${index * 0.1}s` }}
     >
-      <div className="relative h-full bg-white border border-[#919191]/10 hover:border-[#3E3E3E]/20 hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col">
-        
-        {/* Image strip */}
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
-          <Image
-            src={service.image}
-            alt={service.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-          />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
-          
-          {/* Floating category badge */}
-          <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
-            <span className="px-2.5 py-1 bg-[#3E3E3E]/80 backdrop-blur-sm text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-white font-medium">
-              Digital
+      {/* Image section */}
+      <div className={`relative overflow-hidden flex-shrink-0 ${featured ? 'w-full sm:w-1/2 aspect-[16/10] sm:aspect-auto' : 'aspect-[16/10]'}`}>
+        <Image
+          src={service.image}
+          alt={service.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-700 group-hover:scale-[1.03] scale-100 transition-transform"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/30 to-transparent" />
+
+        {/* Category badge */}
+        <div className="absolute top-4 left-4">
+          <span className="px-2.5 py-1 bg-white/10 backdrop-blur-sm text-[9px] uppercase tracking-[0.18em] text-white/70 font-medium">
+            Digital
+          </span>
+        </div>
+
+        {/* Service number watermark */}
+        <div className="absolute bottom-3 right-4 font-mono text-[10px] tracking-widest text-white/20 font-numeric-tabular">
+          {String(index + 1).padStart(2, '0')}
+        </div>
+      </div>
+
+      {/* Content section */}
+      <div className={`relative p-6 sm:p-7 flex flex-col flex-1 ${featured ? '' : ''}`}>
+        {/* Left border accent */}
+        <div className="absolute left-0 top-4 bottom-4 w-px bg-white/0 group-hover:bg-white/10 transition-colors duration-500" />
+
+        {/* Icon */}
+        <div className="inline-flex items-center justify-center w-9 h-9 mb-5 bg-white/[0.06] text-white/60 group-hover:bg-white/[0.12] group-hover:text-white transition-all duration-300">
+          {service.icon}
+        </div>
+
+        <h3 className={`font-light text-white leading-snug tracking-tight mb-3 group-hover:text-white transition-colors duration-300 ${featured ? 'text-xl sm:text-2xl' : 'text-lg'}`}>
+          {service.title}
+        </h3>
+
+        <p className={`text-white/40 leading-relaxed mb-5 flex-1 group-hover:text-white/60 transition-colors duration-300 ${featured ? 'text-sm' : 'text-xs'}`}>
+          {service.description}
+        </p>
+
+        {/* Keywords */}
+        <div className="flex flex-wrap gap-2 pt-4 border-t border-white/[0.06] mb-4">
+          {service.keywords.slice(0, featured ? 4 : 2).map((k) => (
+            <span key={k} className="text-[8px] uppercase tracking-widest text-white/30 group-hover:text-white/50 transition-colors">
+              {k}
             </span>
-          </div>
-
-          {/* Small decorative element */}
-          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-5 h-5 border border-white/25 rotate-45 group-hover:rotate-[135deg] transition-transform duration-700" />
+          ))}
         </div>
 
-        {/* Content */}
-        <div className="relative p-5 sm:p-6 flex flex-col flex-1">
-          {/* Active indicator – left bar */}
-          <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#6A6A6A] opacity-0 group-hover:opacity-100 transition-all duration-500" />
-          
-          {/* Icon */}
-          <div className="inline-flex items-center justify-center w-10 h-10 mb-4 bg-[#6A6A6A]/10 text-[#6A6A6A] group-hover:bg-[#3E3E3E] group-hover:text-white rounded-full transition-all duration-400">
-            {service.icon}
-          </div>
-
-          {/* Title */}
-          <h3 className="text-lg sm:text-xl font-light text-[#3E3E3E] mb-2.5 leading-snug group-hover:text-[#2a2a2a] transition-colors duration-300">
-            {service.title}
-          </h3>
-
-          {/* Description */}
-          <p className="text-[#6A6A6A] text-sm leading-relaxed mb-5 flex-1">
-            {service.description}
-          </p>
-
-          {/* Keywords */}
-          <div className="flex flex-wrap gap-2 pt-4 border-t border-[#919191]/12 mb-4">
-            {service.keywords.map((keyword) => (
-              <span key={keyword} className="text-[9px] sm:text-[10px] uppercase tracking-widest text-[#919191] group-hover:text-[#6A6A6A] transition-colors">
-                {keyword}
-              </span>
-            ))}
-          </div>
-
-          {/* Explore link */}
-          <a
-            href={`/services/${service.slug}`}
-            className="inline-flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-widest text-[#919191] group-hover:text-[#3E3E3E] transition-all duration-300"
-          >
-            <span>Explore</span>
-            <svg className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-            <span className="block w-0 group-hover:w-6 h-px bg-[#3E3E3E] transition-all duration-500" />
-          </a>
-        </div>
+        {/* Link */}
+        <a
+          href={`/services/${service.slug}`}
+          className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-white/30 group-hover:text-white/70 transition-all duration-300"
+        >
+          <span>Explore</span>
+          <svg className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
       </div>
     </article>
   )
@@ -164,43 +163,29 @@ function DigitalServiceCard({ service, index }: { service: ServiceItem; index: n
 
 export default function ServicesOverview() {
   return (
-    <section id="services-overview" className="relative py-20 sm:py-28 md:py-32 px-6 sm:px-8 md:px-16 lg:px-24 bg-white border-t border-[#919191]/20 overflow-hidden">
-      {/* Grid Background */}
-      <GridBackground
-        fadeFrom="bottom"
-        gridColor="#919191"
-        gridSizeX={30}
-        gridSizeY={30}
-        opacity={0.08}
-      />
+    <section id="services-overview" className="relative py-24 sm:py-32 bg-white border-t border-[#f0f0f0] overflow-hidden">
 
-      {/* Decorative circles */}
-      <CircleDecoration className="absolute -top-20 -right-20 hidden lg:block" size="xl" />
-      <CircleDecoration className="absolute bottom-40 -left-16 hidden md:block" size="md" />
-
-      {/* Floating decorative lines */}
-      <div className="absolute top-1/4 right-0 w-32 md:w-48 h-px bg-gradient-to-l from-[#919191]/20 to-transparent" />
-      <div className="absolute bottom-1/3 left-0 w-24 md:w-36 h-px bg-gradient-to-r from-[#919191]/20 to-transparent" />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24">
 
         {/* ─── CREATIVE SERVICES ─── */}
-        <div className="mb-20 sm:mb-28 md:mb-32">
+        <div className="mb-24 sm:mb-32">
           {/* Section intro */}
-          <div className="mb-12 sm:mb-16 md:mb-20 animate-slide-up">
-            <div className="flex items-center gap-3 mb-6 sm:mb-8">
-              <div className="w-8 sm:w-12 h-px bg-[#3E3E3E]" />
-              <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-widest text-[#6A6A6A]">Creative Services</p>
+          <div className="mb-14 sm:mb-18 animate-slide-up">
+            <div className="flex items-center gap-3 mb-7">
+              <div className="w-8 h-px bg-[#3E3E3E]" />
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#6A6A6A] font-medium">Creative services</p>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-light leading-tight max-w-3xl text-[#3E3E3E] mb-4">
-              Strategic Creativity
-            </h2>
-            <p className="text-sm sm:text-base text-[#6A6A6A] max-w-xl leading-relaxed">
-              Brand strategy, experiential design, and creative direction for discerning brands and cultural institutions.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <h2 className="text-4xl sm:text-5xl font-light leading-tight text-[#1a1a1a] tracking-tight">
+                Strategic creativity
+              </h2>
+              <p className="text-sm text-[#6A6A6A] max-w-sm leading-relaxed sm:text-right">
+                Brand strategy, experiential design, and creative direction for discerning brands and cultural institutions.
+              </p>
+            </div>
           </div>
 
-          {/* Creative Services – editorial stacked layout */}
+          {/* Creative — editorial stacked zig-zag */}
           <div className="space-y-6 sm:space-y-8">
             {creativeServices.map((service, idx) => (
               <CreativeServiceCard key={service.slug} service={service} index={idx} />
@@ -208,52 +193,67 @@ export default function ServicesOverview() {
           </div>
         </div>
 
-        {/* ─── Elegant Divider ─── */}
-        <div className="flex items-center gap-4 mb-20 sm:mb-28 md:mb-32">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#919191]/30 to-transparent" />
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 bg-[#919191]/30 rotate-45" />
-            <div className="w-2 h-2 border border-[#919191]/40 rotate-45" />
-            <div className="w-1.5 h-1.5 bg-[#919191]/30 rotate-45" />
-          </div>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#919191]/30 to-transparent" />
+        {/* ─── Divider ─── */}
+        <div className="flex items-center gap-4 mb-24 sm:mb-32">
+          <div className="flex-1 h-px bg-[#f0f0f0]" />
+          <div className="w-1 h-1 bg-[#c8c8c8] rotate-45" />
+          <div className="flex-1 h-px bg-[#f0f0f0]" />
         </div>
 
         {/* ─── DIGITAL SERVICES ─── */}
         <div>
           {/* Section intro */}
-          <div className="mb-12 sm:mb-16 md:mb-20 animate-slide-up">
-            <div className="flex items-center gap-3 mb-6 sm:mb-8">
-              <div className="w-8 sm:w-12 h-px bg-[#3E3E3E]" />
-              <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-widest text-[#6A6A6A]">Digital Services</p>
+          <div className="mb-14 sm:mb-18 animate-slide-up">
+            <div className="flex items-center gap-3 mb-7">
+              <div className="w-8 h-px bg-[#6A6A6A]" />
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#6A6A6A] font-medium">Digital services</p>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-light leading-tight max-w-3xl text-[#3E3E3E] mb-4">
-              Digital Infrastructure
-            </h2>
-            <p className="text-sm sm:text-base text-[#6A6A6A] max-w-xl leading-relaxed">
-              Comprehensive digital solutions — from development and hosting to SEO and product consulting — powered by modern technologies for sustainable growth.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <h2 className="text-4xl sm:text-5xl font-light leading-tight text-[#1a1a1a] tracking-tight">
+                Digital infrastructure
+              </h2>
+              <p className="text-sm text-[#6A6A6A] max-w-sm leading-relaxed sm:text-right">
+                Development, hosting, SEO, and product consulting — powered by modern technologies for sustainable growth.
+              </p>
+            </div>
           </div>
 
-          {/* Digital Services – card grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
-            {digitalServices.map((service, idx) => (
-              <DigitalServiceCard key={service.slug} service={service} index={idx} />
-            ))}
+          {/* Digital — Asymmetric bento grid */}
+          <div className="space-y-3 sm:space-y-4">
+
+            {/* Row 1: 1 featured wide card */}
+            <DigitalBentoCard service={digitalServices[0]} index={0} featured />
+
+            {/* Row 2: 2-col split — wide left + narrow right */}
+            <div className="grid grid-cols-1 sm:grid-cols-[1.5fr_1fr] gap-3 sm:gap-4">
+              <DigitalBentoCard service={digitalServices[1]} index={1} />
+              <DigitalBentoCard service={digitalServices[2]} index={2} />
+            </div>
+
+            {/* Row 3: narrow left + wide right (flip) */}
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.5fr] gap-3 sm:gap-4">
+              <DigitalBentoCard service={digitalServices[3]} index={3} />
+              <DigitalBentoCard service={digitalServices[4]} index={4} />
+            </div>
+
+            {/* Row 4: final card full-width but compact */}
+            {digitalServices[5] && (
+              <DigitalBentoCard service={digitalServices[5]} index={5} featured />
+            )}
           </div>
         </div>
 
         {/* ─── Bottom Statement ─── */}
-        <div className="mt-20 sm:mt-28 pt-12 border-t border-[#919191]/15 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <p className="text-sm text-[#6A6A6A] max-w-lg leading-relaxed italic">
+        <div className="mt-20 sm:mt-28 pt-10 border-t border-[#f0f0f0] flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <p className="text-xs text-[#919191] max-w-lg leading-relaxed">
             FIFTH FLOOR delivers technical services and expansion strategies to serve all sectors and leading enterprises with confidence and flexibility.
           </p>
           <a
             href="/contact"
-            className="group inline-flex items-center gap-3 text-xs uppercase tracking-widest text-[#3E3E3E] hover:text-[#6A6A6A] transition-colors"
+            className="group inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-[#3E3E3E] hover:text-[#6A6A6A] transition-colors"
           >
-            <span>Discuss Your Project</span>
-            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span>Discuss your project</span>
+            <svg className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>

@@ -40,62 +40,52 @@ export default function CaseStudiesFilter({ activeFilter, onFilterChange, projec
     }, [activeFilter])
 
     return (
-        <div id="case-studies" className="sticky top-[64px] sm:top-[72px] z-40 bg-white/90 backdrop-blur-xl border-b border-[#919191]/20">
-            {/* Mobile: full-width pill strip */}
-            <div
-                ref={scrollRef}
-                className="flex items-center gap-2 overflow-x-auto scroll-smooth px-4 sm:px-6 md:px-12 lg:px-24 py-3 sm:py-4 scrollbar-hide"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-                {/* Divider label – hidden on very small screens */}
-                <div className="hidden sm:flex items-center gap-3 mr-1 shrink-0">
-                    <span className="text-[9px] uppercase tracking-[0.3em] text-[#b3b3b3] font-medium whitespace-nowrap">
-                        Filter
-                    </span>
-                    <div className="w-px h-4 bg-[#919191]/25" />
-                </div>
+        <div id="case-studies" className="sticky top-[64px] sm:top-[72px] z-40 bg-white/95 backdrop-blur-xl border-b border-[#e5e5e5]">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24">
+                <div
+                    ref={scrollRef}
+                    className="flex items-center gap-0 overflow-x-auto scroll-smooth py-0 scrollbar-hide"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                    {/* Filter Eyebrow */}
+                    <div className="hidden md:flex items-center gap-3 pr-6 py-4 border-r border-[#ebebeb] mr-2 shrink-0">
+                        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#919191] font-medium">
+                            Filter
+                        </span>
+                    </div>
 
-                {categories.map((cat) => {
-                    const isActive = activeFilter === cat
-                    const count = cat === 'All'
-                        ? Object.values(projectCounts).reduce((a, b) => a + b, 0)
-                        : (projectCounts[cat] || 0)
+                    {categories.map((cat) => {
+                        const isActive = activeFilter === cat
+                        const count = cat === 'All'
+                            ? Object.values(projectCounts).reduce((a, b) => a + b, 0)
+                            : (projectCounts[cat] || 0)
 
-                    return (
-                        <button
-                            key={cat}
-                            ref={isActive ? activeRef : undefined}
-                            onClick={() => onFilterChange(cat)}
-                            className={`group relative shrink-0 inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-300 font-medium rounded-full border
-                                ${isActive
-                                    ? 'bg-[#3E3E3E] text-white border-[#3E3E3E] shadow-sm'
-                                    : 'bg-transparent text-[#6A6A6A] border-[#919191]/30 hover:border-[#3E3E3E]/40 hover:text-[#3E3E3E] hover:bg-[#f5f5f5]'
+                        return (
+                            <button
+                                key={cat}
+                                ref={isActive ? activeRef : undefined}
+                                onClick={() => onFilterChange(cat)}
+                                className={`group shrink-0 inline-flex items-center gap-2.5 px-5 py-4 text-[10px] sm:text-xs uppercase tracking-[0.18em] whitespace-nowrap transition-all duration-200 border-r border-[#ebebeb] first:border-l ${
+                                    isActive
+                                        ? 'bg-[#1a1a1a] text-white font-medium'
+                                        : 'bg-transparent text-[#6A6A6A] hover:text-[#1a1a1a] hover:bg-[#fafafa]'
                                 }`}
-                        >
-                            <span>{cat}</span>
-                            {/* Count badge */}
-                            <span
-                                className={`inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full text-[9px] font-semibold transition-colors duration-300
-                                    ${isActive
-                                        ? 'bg-white/20 text-white'
-                                        : 'bg-[#919191]/10 text-[#919191] group-hover:bg-[#3E3E3E]/10 group-hover:text-[#3E3E3E]'
-                                    }`}
                             >
-                                {count}
-                            </span>
-                        </button>
-                    )
-                })}
-
-                {/* Fade right edge — ensures last pill is never hidden by overflow */}
-                <div className="shrink-0 w-4 sm:hidden" />
-            </div>
-
-            {/* Thin active-filter indicator bar */}
-            <div className="relative h-[2px] w-full bg-transparent">
-                <div className="absolute bottom-0 left-0 h-[2px] bg-[#3E3E3E] transition-all duration-300"
-                    style={{ width: `${(1 / categories.length) * 100}%`, opacity: 0 }}
-                />
+                                <span>{cat}</span>
+                                {/* Tabular Count Badge */}
+                                <span
+                                    className={`font-mono text-[9px] tracking-widest font-numeric-tabular transition-colors duration-200 ${
+                                        isActive
+                                            ? 'text-white/60'
+                                            : 'text-[#919191] group-hover:text-[#3E3E3E]'
+                                    }`}
+                                >
+                                    [{String(count).padStart(2, '0')}]
+                                </span>
+                            </button>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )
