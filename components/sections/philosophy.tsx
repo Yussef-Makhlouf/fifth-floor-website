@@ -3,23 +3,22 @@
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import ArchitecturalShapes from '@/components/ui/architectural-shapes'
-import GridBackground, { DotPattern } from '@/components/ui/grid-background'
 
 const philosophyPoints = [
   {
     id: 1,
     title: 'Strategic Foundation',
-    description: 'Every great brand begins with a clear understanding of purpose. We build foundations that endure.',
+    description: 'Every iconic brand begins with absolute clarity of purpose. We build enduring foundations that resist transient trends.',
   },
   {
     id: 2,
     title: 'Conceptual Depth',
-    description: 'Ideas that go beyond surface aesthetics. We craft narratives that resonate on multiple levels.',
+    description: 'Ideas that transcend superficial aesthetics. We engineer narrative systems that resonate deeply across digital and physical touchpoints.',
   },
   {
     id: 3,
     title: 'Refined Execution',
-    description: 'Precision in every detail. From concept to delivery, we maintain the highest standards.',
+    description: 'Relentless spatial and visual precision. From initial blueprint to final installation, we enforce uncompromising standards.',
   },
 ]
 
@@ -31,7 +30,7 @@ export default function Philosophy() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('opacity-100')
+            entry.target.classList.add('opacity-100', 'translate-y-0')
             entry.target.classList.remove('opacity-0', 'translate-y-6')
           }
         })
@@ -48,19 +47,17 @@ export default function Philosophy() {
   return (
     <section
       id="philosophy"
-      className="section-padding relative overflow-hidden"
+      className="py-28 md:py-40 bg-[#F7F6F3] text-[#1A1A1C] relative overflow-hidden hairline-grid-light"
     >
-      {/* Decorative Elements */}
+      {/* Background Decor */}
       <ArchitecturalShapes
         variant="rectangle"
         size="lg"
-        className="absolute top-20 -right-20 rotate-12"
-        opacity={0.05}
+        className="absolute top-20 -right-20 rotate-12 text-[#1A1A1C]"
+        opacity={0.06}
       />
-      <div className="absolute bottom-1/4 left-0 w-px h-48 bg-[#919191] opacity-20" />
-
-      {/* Background Decor */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] opacity-[0.03] pointer-events-none select-none">
+      
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] opacity-[0.03] pointer-events-none select-none">
         <Image
           src="/logos/fifth-decore-dark.png"
           alt=""
@@ -69,42 +66,26 @@ export default function Philosophy() {
         />
       </div>
 
-      {/* Fading Grid Background - Top */}
-      {/* <GridBackground
-        fadeFrom="top"
-        gridColor="#919191"
-        gridSizeX={22}
-        gridSizeY={30}
-        opacity={0.18}
-      /> */}
-
-      {/* Dot Pattern - Bottom Right Corner */}
-      <DotPattern
-        fadeFrom="corner-br"
-        dotColor="#6A6A6A"
-        dotSize={1}
-        spacing={30}
-        opacity={0.12}
-      />
-
-      <div className="max-w-7xl mx-auto" ref={sectionRef}>
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-          {/* Left Column - Header */}
-          <div className="lg:col-span-5">
-            <p className="section-label mb-4 text-[#6A6A6A]">Our Approach</p>
-            <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#3E3E3E] mb-6">
-              Philosophy
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 relative z-10" ref={sectionRef}>
+        {/* Two Column Asymmetric Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+          {/* Left Column - Sticky Section Header */}
+          <div className="lg:col-span-5 lg:sticky lg:top-36">
+            <span className="text-xs uppercase tracking-[0.35em] text-[#8E8D8A] font-mono mb-4 block">
+              // Our Mindset
+            </span>
+            <h2 className="text-5xl md:text-7xl font-bold font-syne-display tracking-tighter text-[#1A1A1C] mb-6 leading-[0.98]">
+              Core <br />
+              <span className="font-serif-accent text-[#55555A] font-normal italic">Philosophy.</span>
             </h2>
-            <div className="w-20 h-px bg-[#919191] mb-8" />
-            <p className="text-lg text-[#6A6A6A] leading-relaxed">
-              At Fifth Floor, we believe in the power of restraint.
-              Great ideas need space to breathe, and powerful brands
-              require a foundation of clarity and purpose.
+            <div className="w-16 h-[2px] bg-[#1A1A1C] mb-8 opacity-30" />
+            <p className="text-base text-[#55555A] leading-relaxed max-w-md font-sans">
+              At Fifth Floor, we believe in the power of calculated restraint.
+              Great concepts require breathing space, and powerful brands thrive on clarity, intent, and unyielding execution.
             </p>
           </div>
 
-          {/* Right Column - Philosophy Points */}
+          {/* Right Column - Accordion Editorial Items */}
           <div className="lg:col-span-7 space-y-0">
             {philosophyPoints.map((point, idx) => (
               <div
@@ -112,23 +93,23 @@ export default function Philosophy() {
                 className="philosophy-item opacity-0 translate-y-6 transition-all duration-700"
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
-                {/* Divider */}
-                <div className="h-px bg-[#919191] opacity-40" />
+                {/* Divider Line */}
+                <div className="h-px bg-[#1A1A1C]/15" />
 
-                {/* Content Row */}
-                <div className="py-10 md:py-12 group">
-                  <div className="flex gap-6 md:gap-8">
+                {/* Content Block */}
+                <div className="py-10 md:py-14 group">
+                  <div className="flex gap-6 md:gap-10 items-start">
                     {/* Number */}
-                    <span className="text-sm text-[#919191] font-light pt-1">
-                      {String(idx + 1).padStart(2, '0')}
+                    <span className="text-xs font-mono font-numeric-tabular text-[#8E8D8A] pt-1">
+                      0{idx + 1}
                     </span>
 
                     {/* Text */}
-                    <div>
-                      <h3 className="text-2xl md:text-3xl font-bold text-[#3E3E3E] mb-4 group-hover:translate-x-1 transition-transform duration-300">
+                    <div className="space-y-3">
+                      <h3 className="text-2xl md:text-4xl font-bold font-syne-display text-[#1A1A1C] group-hover:translate-x-2 transition-transform duration-300">
                         {point.title}
                       </h3>
-                      <p className="text-base text-[#6A6A6A] leading-relaxed max-w-lg">
+                      <p className="text-sm md:text-base text-[#55555A] leading-relaxed max-w-xl font-sans">
                         {point.description}
                       </p>
                     </div>
@@ -138,7 +119,7 @@ export default function Philosophy() {
             ))}
 
             {/* Final Divider */}
-            <div className="h-px bg-[#919191] opacity-40" />
+            <div className="h-px bg-[#1A1A1C]/15" />
           </div>
         </div>
       </div>

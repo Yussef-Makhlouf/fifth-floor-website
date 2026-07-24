@@ -74,6 +74,8 @@ const projects: ProjectData[] = [
   },
 ]
 
+import Link from 'next/link'
+
 export default function SelectedWork() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
@@ -86,7 +88,6 @@ export default function SelectedWork() {
 
   const handleClosePanel = () => {
     setIsPanelOpen(false)
-    // Optional delay to clear project content after slide-out animation completes
     setTimeout(() => {
       setSelectedProject(null)
     }, 700)
@@ -102,7 +103,7 @@ export default function SelectedWork() {
           }
         })
       },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     )
 
     const items = sectionRef.current?.querySelectorAll('.reveal-on-scroll')
@@ -114,53 +115,41 @@ export default function SelectedWork() {
   return (
     <section
       id="work"
-      className="py-24 md:py-32 bg-[#1A1A1A] relative overflow-hidden"
+      className="py-28 md:py-40 bg-[#0E0E10] text-[#F7F6F3] relative overflow-hidden hairline-grid-dark border-t border-white/10"
     >
-      {/* Dynamic Background Elements */}
-      <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-[#404040] to-transparent opacity-30" />
-      <div className="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-[#404040] to-transparent opacity-30" />
-      <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#404040] to-transparent opacity-20" />
-
-      {/* Decorative Blur Orbs */}
-      <div className="absolute top-[20%] right-[-10%] w-[40rem] h-[40rem] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[20%] left-[-10%] w-[30rem] h-[30rem] bg-white/5 rounded-full blur-[100px] pointer-events-none" />
+      {/* Dynamic Ambient Blur Flashes */}
+      <div className="absolute top-[15%] right-[-10%] w-[45rem] h-[45rem] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[15%] left-[-10%] w-[35rem] h-[35rem] bg-white/[0.02] rounded-full blur-[120px] pointer-events-none" />
 
       <ArchitecturalShapes
         variant="curve"
         size="xl"
-        className="absolute -bottom-20 -left-20"
-        opacity={0.03}
+        className="absolute -bottom-20 -left-20 text-[#8E8D8A]"
+        opacity={0.05}
       />
 
-      <GridBackground
-        fadeFrom="left"
-        gridColor="#555555"
-        gridSizeX={40}
-        gridSizeY={50}
-        opacity={0.08}
-      />
-
-      {/* Remove side padding on mobile (px-0) but keep on desktop (md:px-12) */}
-      <div className="max-w-7xl mx-auto px-0 md:px-12 relative z-10" ref={sectionRef}>
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 relative z-10" ref={sectionRef}>
         {/* Section Header */}
-        <div className="mb-16 md:mb-32 px-6 md:px-0 reveal-on-scroll opacity-0 translate-y-16 transition-all duration-1000 ease-out">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-2 h-2 rounded-full bg-[#CFCFCF] animate-pulse" />
-            <p className="tracking-[0.2em] uppercase text-sm font-medium text-[#A0A0A0]">Selected Work</p>
+        <div className="mb-20 md:mb-32 reveal-on-scroll opacity-0 translate-y-16 transition-all duration-1000 ease-out border-b border-white/10 pb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-2 h-2 rounded-full bg-[#F7F6F3] animate-pulse" />
+            <p className="tracking-[0.3em] uppercase text-xs font-semibold text-[#8E8D8A] font-mono">
+              // Selected Showcase
+            </p>
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-16">
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white leading-[1.1]">
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.02]">
               Featured <br />
-              <span className="text-[#6A6A6A] italic font-serif">Projects</span>
+              <span className="font-serif-accent text-[#8E8D8A] font-normal italic">Works.</span>
             </h2>
-            <p className="text-[#919191] max-w-sm text-lg md:text-xl md:pb-4 leading-relaxed">
-              Where strategic vision meets immaculate execution. A showcase of our finest defining moments.
+            <p className="text-[#8E8D8A] max-w-sm text-sm md:text-base leading-relaxed font-sans">
+              A curated selection of defining identity systems, spatial environments, and digital benchmarks for market leaders.
             </p>
           </div>
         </div>
 
-        {/* Projects List - Editorial Style */}
-        <div className="flex flex-col gap-0 md:gap-40">
+        {/* Projects List - Editorial Staggered Layout */}
+        <div className="flex flex-col gap-24 md:gap-40">
           {projects.map((project, idx) => (
             <div
               key={project.id}
@@ -170,67 +159,72 @@ export default function SelectedWork() {
               } md:gap-16 lg:gap-24 items-center group relative w-full h-[75vh] md:h-auto mb-2 md:mb-0`}
               style={{ transitionDelay: '100ms' }}
             >
-              {/* Image Container - Full bleed on mobile */}
+              {/* Image Frame Container */}
               <div className="w-full h-full md:w-[60%] lg:w-[65%] md:h-auto relative group z-20">
-                {/* Number Watermark (Desktop) */}
-                <div className={`hidden md:block absolute ${idx % 2 === 0 ? '-left-16' : '-right-16'} -bottom-20 text-[15rem] font-bold text-white/5 z-0 pointer-events-none select-none font-serif rotate-[-5deg] group-hover:rotate-0 transition-transform duration-1000`}>
+                {/* Oversized Number Watermark */}
+                <div
+                  className={`hidden md:block absolute ${
+                    idx % 2 === 0 ? '-left-16' : '-right-16'
+                  } -bottom-20 text-[14rem] font-bold text-white/[0.03] z-0 pointer-events-none select-none font-numeric-tabular font-syne-display rotate-[-4deg] group-hover:rotate-0 transition-transform duration-1000`}
+                >
                   0{idx + 1}
                 </div>
-                
-                <div className="relative w-full h-full md:aspect-[16/11] z-10 overflow-hidden md:rounded-sm bg-[#222]">
+
+                <div className="relative w-full h-full md:aspect-[16/11] z-10 overflow-hidden md:rounded-lg bg-[#18181B] border border-white/10 shadow-2xl">
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+                    className="object-cover transition-transform duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   />
-                  
-                  {/* Overlay Gradient (Always visible on mobile bottom, hover on desktop) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 ease-out" />
-                  
-                  {/* Central Hover Button (Desktop only) */}
+
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E10]/90 via-[#0E0E10]/30 to-transparent opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 ease-out" />
+
+                  {/* Central Hover Badge (Desktop) */}
                   <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] scale-90 group-hover:scale-100 pointer-events-none">
-                    <div className="w-32 h-32 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex flex-col items-center justify-center text-white transform group-hover:-translate-y-2 transition-transform duration-700 delay-100">
-                      <span className="text-xs font-semibold tracking-widest uppercase mb-1">View</span>
-                      <ArrowUpRight className="w-6 h-6" />
+                    <div className="w-28 h-28 rounded-full bg-white/15 backdrop-blur-xl border border-white/30 flex flex-col items-center justify-center text-[#F7F6F3] transform group-hover:-translate-y-1 transition-transform duration-500 shadow-2xl">
+                      <span className="text-[11px] font-semibold tracking-widest uppercase mb-1 font-mono">View Case</span>
+                      <ArrowUpRight className="w-5 h-5" />
                     </div>
                   </div>
-                  
-                  {/* Decorative Frame Lines triggered on hover (Desktop) */}
-                  <div className="hidden md:block absolute top-6 left-6 w-0 h-px bg-white/50 group-hover:w-16 transition-all duration-700 delay-100" />
-                  <div className="hidden md:block absolute top-6 left-6 w-px h-0 bg-white/50 group-hover:h-16 transition-all duration-700 delay-100" />
-                  <div className="hidden md:block absolute bottom-6 right-6 w-0 h-px bg-white/50 group-hover:w-16 transition-all duration-700 delay-100" />
-                  <div className="hidden md:block absolute bottom-6 right-6 w-px h-0 bg-white/50 group-hover:h-16 transition-all duration-700 delay-100" />
                 </div>
               </div>
 
-              {/* Text Content - Floating overlay on mobile, side text on desktop */}
-              <div className={`absolute bottom-0 left-0 w-full p-6 md:p-0 z-30 md:relative md:w-[40%] lg:w-[35%] flex flex-col justify-end md:justify-center ${idx % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
-                <div className="flex items-center gap-4 mb-4 md:mb-8">
-                  <span className="text-sm font-mono text-white/50 md:text-[#919191]">0{idx + 1}</span>
-                  <div className="h-px bg-white/30 md:bg-[#4A4A4A] w-12 md:group-hover:w-24 md:group-hover:bg-[#CFCFCF] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                  <span className="text-xs tracking-[0.2em] uppercase text-white font-medium">{project.category}</span>
+              {/* Text Content Block */}
+              <div className={`absolute bottom-0 left-0 w-full p-6 md:p-0 z-30 md:relative md:w-[40%] lg:w-[35%] flex flex-col justify-end md:justify-center ${idx % 2 === 0 ? 'md:pr-6' : 'md:pl-6'}`}>
+                <div className="flex items-center gap-4 mb-4 md:mb-6">
+                  <span className="text-xs font-mono text-[#8E8D8A] font-numeric-tabular">0{idx + 1}</span>
+                  <div className="h-px bg-white/20 w-12 md:group-hover:w-20 md:group-hover:bg-white transition-all duration-500" />
+                  <span className="text-xs tracking-[0.25em] uppercase text-[#F7F6F3] font-semibold font-mono">
+                    {project.category}
+                  </span>
                 </div>
-                
-                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-8 tracking-tight leading-[1.1] transition-all duration-700 md:group-hover:text-transparent md:group-hover:bg-clip-text md:group-hover:bg-gradient-to-r md:group-hover:from-white md:group-hover:to-[#6A6A6A]">
+
+                <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold font-syne-display text-[#F7F6F3] mb-4 md:mb-6 tracking-tighter leading-[1.05] transition-colors duration-500 group-hover:text-white">
                   {project.title}
                 </h3>
-                
-                <p className="text-white/70 md:text-[#919191] text-sm sm:text-base md:text-lg mb-6 md:mb-12 leading-relaxed max-w-md md:group-hover:text-[#B0B0B0] transition-colors duration-500 line-clamp-2 md:line-clamp-none">
-                   {project.description}
+
+                <p className="text-white/80 md:text-[#8E8D8A] text-xs sm:text-sm md:text-base mb-6 md:mb-8 leading-relaxed line-clamp-3 md:line-clamp-none font-sans">
+                  {project.description}
                 </p>
-                
+
+                {/* Key Metrics Banner */}
+                {project.metrics && project.metrics.length > 0 && (
+                  <div className="flex gap-6 mb-8 pt-4 border-t border-white/10 text-xs font-mono font-numeric-tabular text-[#8E8D8A]">
+                    {project.metrics.slice(0, 2).map((m) => (
+                      <div key={m.label}>
+                        <span className="text-[#F7F6F3] font-bold text-sm block">{m.value}</span>
+                        <span className="text-[10px] uppercase text-[#6E6E73]">{m.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 {/* Discover Link with hover line */}
-                <div className="flex flex-col items-start gap-2 w-fit cursor-pointer group/link">
-                  <div className="flex items-center gap-3">
-                    <span className="text-white md:text-[#CFCFCF] font-medium text-xs sm:text-sm md:text-base tracking-wide uppercase md:group-hover/link:text-white transition-colors duration-300">
-                      Discover Case Study
-                    </span>
-                    <ArrowUpRight className="w-4 h-4 text-white/70 md:text-[#919191] md:group-hover/link:text-white group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-all duration-300" />
-                  </div>
-                  <div className="h-px bg-white/30 md:bg-[#404040] w-full relative overflow-hidden hidden md:block">
-                     <div className="absolute top-0 left-0 h-full w-full bg-white -translate-x-full md:group-hover/link:translate-x-0 transition-transform duration-500 ease-out" />
-                  </div>
+                <div className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#F7F6F3] group-hover:text-white transition-colors duration-300">
+                  <span>Explore Case Study</span>
+                  <ArrowUpRight className="w-4 h-4 text-[#8E8D8A] group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                 </div>
               </div>
             </div>
@@ -238,23 +232,25 @@ export default function SelectedWork() {
         </div>
 
         {/* View All Button */}
-        <div className="mt-20 md:mt-48 mb-12 md:mb-0 text-center reveal-on-scroll opacity-0 translate-y-16 transition-all duration-1000 relative">
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-[#404040] to-transparent z-0 hidden md:block" />
-          
-          <a
-            href="#"
-            className="relative z-10 inline-flex items-center justify-center px-8 md:px-10 py-4 md:py-5 bg-[#222] md:bg-[#1A1A1A] border border-[#404040] hover:border-[#6A6A6A] rounded-full group transition-all duration-500 hover:scale-[1.02]"
+        <div className="mt-24 md:mt-40 text-center reveal-on-scroll opacity-0 translate-y-16 transition-all duration-1000 relative">
+          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full h-px bg-white/10 z-0 hidden md:block" />
+
+          <Link
+            href="/case-studies"
+            className="relative z-10 inline-flex items-center justify-center px-8 py-4 bg-[#18181B] border border-white/20 hover:border-white/40 text-[#F7F6F3] rounded-full group transition-all duration-300 active-press shadow-xl"
           >
-            <span className="text-white text-sm md:text-lg font-medium tracking-wide mr-4 md:mr-6 group-hover:mr-8 transition-all duration-500">View All Work</span>
-            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-[#333] md:bg-[#2A2A2A] flex items-center justify-center group-hover:bg-white transition-colors duration-500">
-              <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 text-white group-hover:text-black transition-colors duration-500" />
+            <span className="text-xs uppercase tracking-[0.25em] font-semibold mr-4 group-hover:mr-6 transition-all duration-300">
+              View All Case Studies
+            </span>
+            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-[#0E0E10] transition-colors duration-300">
+              <ArrowUpRight className="w-4 h-4" />
             </div>
-          </a>
+          </Link>
         </div>
       </div>
 
       {/* Side Panel Overlay */}
-      <ProjectPanel 
+      <ProjectPanel
         project={selectedProject}
         isOpen={isPanelOpen}
         onClose={handleClosePanel}

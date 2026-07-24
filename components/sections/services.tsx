@@ -2,48 +2,47 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import GridBackground from '@/components/ui/grid-background'
 
 const services = [
   {
     id: 1,
     title: 'Brand Strategy',
-    description: 'Strategic foundations that define your market position and drive meaningful growth. We analyze, position, and craft narratives that resonate.',
+    description: 'Strategic foundations that define your market position and drive meaningful growth. We analyze, position, and craft narratives that endure.',
     keywords: ['Research', 'Positioning', 'Narrative', 'Growth'],
     image: '/images/services/brand-strategy.png',
   },
   {
     id: 2,
-    title: 'Branding',
-    description: 'Visual identity systems that communicate your essence with clarity and distinction. From logos to comprehensive design guidelines.',
+    title: 'Branding Identity',
+    description: 'Visual identity systems that communicate your essence with distinction. From primary marks to comprehensive architectural design guidelines.',
     keywords: ['Identity', 'Design Systems', 'Guidelines', 'Typography'],
     image: '/images/services/branding.png',
   },
   {
     id: 3,
-    title: 'Marketing',
-    description: 'Campaigns and communications that resonate with your audience and inspire action. Data-driven strategies meets creative excellence.',
-    keywords: ['Campaigns', 'Digital', 'Content', 'Social'],
+    title: 'Strategic Marketing',
+    description: 'Campaigns and communications that resonate with your audience and inspire decisive action. Analytical strategy meets artistic excellence.',
+    keywords: ['Campaigns', 'Digital', 'Content', 'Media'],
     image: '/images/services/marketing.png',
   },
   {
     id: 4,
-    title: 'Events',
-    description: 'Immersive experiences that transform moments into lasting memories. We handle everything from concept to execution.',
+    title: 'Immersive Events',
+    description: 'Spatial experiences that transform moments into enduring brand equity. End-to-end conceptualization, staging, and execution.',
     keywords: ['Conferences', 'Exhibitions', 'Galas', 'Launches'],
     image: '/images/services/events.png',
   },
   {
     id: 5,
-    title: 'Booths',
-    description: 'Exhibition spaces that capture attention and embody your brand presence. Structural design that stands out in any venue.',
+    title: 'Architectural Booths',
+    description: 'Exhibition structures that command attention and embody physical presence. High-precision structural design and fabrication.',
     keywords: ['Design', 'Fabrication', 'Experience', 'Spatial'],
     image: '/images/services/booths.png',
   },
   {
     id: 6,
     title: 'Creative Concepts',
-    description: 'Bold ideas that challenge conventions and push creative boundaries. Innovation at the intersection of art and technology.',
+    description: 'Bold ideas that challenge conventions and push boundaries. Innovation at the intersection of spatial art, design, and technology.',
     keywords: ['Ideation', 'Art Direction', 'Innovation', 'Future'],
     image: '/images/services/creative.png',
   },
@@ -58,8 +57,8 @@ export default function Services() {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -20% 0px', // Trigger when element is in the middle 60% of viewport
-      threshold: 0.5,
+      rootMargin: '-25% 0px -25% 0px',
+      threshold: 0.4,
     }
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -81,34 +80,20 @@ export default function Services() {
   }, [])
 
   return (
-    <section id="services" className="relative bg-[#CFCFCF] min-h-screen">
-      <GridBackground
-        fadeFrom="right"
-        gridColor="#919191"
-        opacity={0.15}
-        className="fixed inset-0 z-0 pointer-events-none"
-      />
-
-      {/* Background Decor */}
-      <div className="absolute top-20 left-10 w-[500px] h-[500px] opacity-[0.04] pointer-events-none select-none z-0">
-        <Image
-          src="/logos/fifth-decore-dark.png"
-          alt=""
-          fill
-          className="object-contain"
-        />
-      </div>
-
+    <section id="services" className="relative bg-[#F7F6F3] text-[#1A1A1C] min-h-screen hairline-grid-light">
       <div className="max-w-[1400px] mx-auto relative z-10" ref={containerRef}>
         <div className="flex flex-col lg:flex-row">
           {/* Left Column - Scrollable Content */}
-          <div className="w-full lg:w-1/2 px-0 lg:px-20 py-16 lg:py-24 order-2 lg:order-1">
-            <div className="mb-12 lg:mb-20 px-6 lg:px-0">
-              <p className="section-label mb-4 text-[#6A6A6A]">What We Do</p>
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-[#3E3E3E]">
-                Our Services
+          <div className="w-full lg:w-1/2 px-6 lg:px-20 py-20 lg:py-32 order-2 lg:order-1">
+            <div className="mb-16 lg:mb-24">
+              <span className="text-xs uppercase tracking-[0.35em] text-[#8E8D8A] font-mono mb-4 block">
+                // Our Capabilities
+              </span>
+              <h2 className="text-5xl md:text-7xl font-bold font-syne-display tracking-tighter text-[#1A1A1C] leading-[0.98]">
+                Bespoke <br />
+                <span className="font-serif-accent text-[#55555A] font-normal italic">Services.</span>
               </h2>
-              <div className="w-20 h-px bg-[#3E3E3E] mt-6" />
+              <div className="w-16 h-[2px] bg-[#1A1A1C] mt-6 opacity-30" />
             </div>
 
             <div className="space-y-0 lg:space-y-32">
@@ -122,17 +107,17 @@ export default function Services() {
                     className={`transition-all duration-700 ${
                       activeService === idx
                         ? 'opacity-100 lg:translate-x-0'
-                        : 'opacity-100 lg:opacity-30 lg:blur-[1px]'
-                    } border-b border-[#3E3E3E]/10 lg:border-none text-[#3E3E3E]`}
+                        : 'opacity-100 lg:opacity-35 lg:blur-[0.5px]'
+                    } border-b border-[#1A1A1C]/15 lg:border-none text-[#1A1A1C]`}
                   >
                     {/* Mobile Accordion Header */}
                     <button
                       onClick={() => setExpandedMobileIdx(isExpanded ? null : idx)}
-                      className="lg:hidden w-full flex items-center justify-between py-6 px-6 text-left group"
+                      className="lg:hidden w-full flex items-center justify-between py-6 text-left group"
                     >
                       <h3
-                        className={`text-2xl sm:text-3xl font-bold tracking-tight transition-all duration-300 ${
-                          isExpanded ? 'text-[#3E3E3E]' : 'text-[#8A8A8A] group-hover:text-[#3E3E3E]'
+                        className={`text-2xl font-bold font-syne-display tracking-tight transition-colors duration-300 ${
+                          isExpanded ? 'text-[#1A1A1C]' : 'text-[#8E8D8A] group-hover:text-[#1A1A1C]'
                         }`}
                       >
                         {service.title}
@@ -140,14 +125,14 @@ export default function Services() {
                       <div className="relative w-4 h-4 flex items-center justify-center flex-shrink-0 ml-4">
                         <div
                           className={`w-full h-[2px] transition-colors duration-300 absolute ${
-                            isExpanded ? 'bg-[#3E3E3E]' : 'bg-[#8A8A8A] group-hover:bg-[#3E3E3E]'
+                            isExpanded ? 'bg-[#1A1A1C]' : 'bg-[#8E8D8A] group-hover:bg-[#1A1A1C]'
                           }`}
                         />
                         <div
                           className={`w-[2px] h-full absolute transition-all duration-300 ${
                             isExpanded
-                              ? 'rotate-90 opacity-0 bg-[#3E3E3E]'
-                              : 'rotate-0 opacity-100 bg-[#8A8A8A] group-hover:bg-[#3E3E3E]'
+                              ? 'rotate-90 opacity-0 bg-[#1A1A1C]'
+                              : 'rotate-0 opacity-100 bg-[#8E8D8A] group-hover:bg-[#1A1A1C]'
                           }`}
                         />
                       </div>
@@ -161,9 +146,9 @@ export default function Services() {
                           : 'max-h-0 opacity-0 lg:max-h-none lg:opacity-100 lg:pb-0'
                       }`}
                     >
-                      <div className="px-6 lg:px-0">
+                      <div>
                         {/* Mobile/Tablet Image */}
-                        <div className="lg:hidden relative w-full h-56 sm:h-72 mb-8 rounded-none overflow-hidden bg-[#E0E0E0]">
+                        <div className="lg:hidden relative w-full h-56 sm:h-72 mb-8 rounded-lg overflow-hidden bg-[#E0E0E0] border border-[#1A1A1C]/10 shadow-md">
                           <Image
                             src={service.image}
                             alt={service.title}
@@ -173,20 +158,20 @@ export default function Services() {
                           />
                         </div>
 
-                        <span className="hidden lg:block text-sm font-medium text-[#919191] mb-4">
+                        <span className="hidden lg:block text-xs font-mono font-numeric-tabular text-[#8E8D8A] mb-3">
                           0{service.id}
                         </span>
-                        <h3 className="hidden lg:block text-3xl md:text-4xl font-bold text-[#3E3E3E] mb-6">
+                        <h3 className="hidden lg:block text-3xl md:text-4xl font-bold font-syne-display text-[#1A1A1C] mb-5 tracking-tight">
                           {service.title}
                         </h3>
-                        <p className="text-base lg:text-lg text-[#6A6A6A] leading-relaxed mb-6 lg:mb-8 max-w-md">
+                        <p className="text-sm lg:text-base text-[#55555A] leading-relaxed mb-6 lg:mb-8 max-w-md font-sans">
                           {service.description}
                         </p>
-                        <div className="flex flex-wrap gap-2 lg:gap-3">
+                        <div className="flex flex-wrap gap-2 lg:gap-2.5">
                           {service.keywords.map((keyword) => (
                             <span
                               key={keyword}
-                              className="px-3 py-2 bg-[#3E3E3E] text-[#CFCFCF] text-[10px] lg:text-xs uppercase tracking-widest rounded-full"
+                              className="px-3.5 py-1.5 bg-[#1A1A1C] text-[#F7F6F3] text-[10px] uppercase tracking-widest font-mono rounded-full active-press shadow-sm"
                             >
                               {keyword}
                             </span>
@@ -199,11 +184,11 @@ export default function Services() {
               })}
             </div>
 
-            <div className="hidden lg:block h-[20vh]" /> {/* Spacer at bottom for desktop */}
+            <div className="hidden lg:block h-[20vh]" />
           </div>
 
           {/* Right Column - Sticky Images (Desktop Only) */}
-          <div className="hidden lg:block w-1/2 h-screen sticky top-0 right-0 order-1 lg:order-2 overflow-hidden border-l border-[#919191]/20">
+          <div className="hidden lg:block w-1/2 h-screen sticky top-0 right-0 order-1 lg:order-2 overflow-hidden border-l border-[#1A1A1C]/10">
             {services.map((service, idx) => (
               <div
                 key={service.id}
@@ -220,14 +205,13 @@ export default function Services() {
                   className="object-cover"
                   priority={idx === 0}
                 />
-                {/* Overlay Gradient for Text Contrast (just in case) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#CFCFCF]/20 to-transparent mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F3]/30 via-transparent to-transparent mix-blend-multiply" />
               </div>
             ))}
 
-            {/* Decorative Corner lines */}
-            <div className="absolute top-8 right-8 w-16 h-16 border-t border-r border-[#CFCFCF]/50 z-20" />
-            <div className="absolute bottom-8 right-8 w-16 h-16 border-b border-r border-[#CFCFCF]/50 z-20" />
+            {/* Corner Architectural Guidelines */}
+            <div className="absolute top-8 right-8 w-16 h-16 border-t border-r border-[#1A1A1C]/30 z-20" />
+            <div className="absolute bottom-8 right-8 w-16 h-16 border-b border-r border-[#1A1A1C]/30 z-20" />
           </div>
         </div>
       </div>

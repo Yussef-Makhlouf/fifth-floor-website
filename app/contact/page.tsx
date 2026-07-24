@@ -3,6 +3,7 @@
 import NavBar from '@/components/navbar'
 import ContactHero from '@/components/sections/contact-hero'
 import ContactForm from '@/components/sections/contact-form'
+import PartnershipForm from '@/components/sections/partnership-form'
 import ContactInfo from '@/components/sections/contact-info'
 import Footer from '@/components/footer'
 import { useState, useEffect } from 'react'
@@ -23,7 +24,8 @@ export default function ContactPage() {
       <NavBar isScrolled={isScrolled} />
       <main>
         <ContactHero />
-        <ContactForm />
+        {/* <ContactForm /> */}
+        <PartnershipForm />
         <ContactInfo />
       </main>
       <Footer />

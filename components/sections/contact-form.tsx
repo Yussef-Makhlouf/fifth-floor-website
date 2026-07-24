@@ -75,16 +75,23 @@ export default function ContactForm() {
     setSubmitStatus('idle')
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
 
-      setSubmitStatus('success')
-      setFormData(initialFormState)
-      setErrors({})
-      setTouched({})
+      const data = await res.json()
 
-      // Reset success message after 5 seconds
-      setTimeout(() => setSubmitStatus('idle'), 5000)
+      if (res.ok && data.success) {
+        setSubmitStatus('success')
+        setFormData(initialFormState)
+        setErrors({})
+        setTouched({})
+        setTimeout(() => setSubmitStatus('idle'), 6000)
+      } else {
+        setSubmitStatus('error')
+      }
     } catch {
       setSubmitStatus('error')
     } finally {

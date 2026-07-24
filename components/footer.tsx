@@ -7,98 +7,131 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-[#3e3e3e] text-[#cfcfcf] relative overflow-hidden">
-      {/* Decorative top line */}
-      <div className="h-px bg-[#6A6A6A]" />
+    <footer className="bg-[#0E0E10] text-[#8E8D8A] relative overflow-hidden border-t border-white/10">
+      {/* Ambient Lighting Flare */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[50rem] h-[25rem] bg-white/[0.02] rounded-full blur-[140px] pointer-events-none" />
 
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-24 md:py-32">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 py-24 md:py-32 relative z-10">
         {/* Large Brand Statement */}
-        <div className="mb-20 md:mb-32">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#CFCFCF] leading-tight">
-            Where Big Ideas
-            <br />
-            Take Shape
-          </h2>
+        <div className="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-16">
+          <div>
+            <span className="text-xs uppercase tracking-[0.35em] text-[#6E6E73] font-mono mb-4 block">
+              // Fifth Floor Creative House
+            </span>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.05]">
+              Where Big Ideas <br />
+              <span className="font-serif-accent text-[#8E8D8A]">Take Shape.</span>
+            </h2>
+          </div>
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center px-8 py-4 bg-[#F7F6F3] text-[#0E0E10] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all duration-300 active-press hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] w-fit shrink-0"
+          >
+            Start A Collaboration
+          </Link>
         </div>
 
         {/* Location & Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
-          {/* Brand */}
-          <div className="md:col-span-4">
-            <Link href="/" className="block mb-6 relative w-40 h-10">
-              <Image
-                src="/logos/fifth-icon-light.png"
-                alt="Fifth Floor"
-                fill
-                className="object-contain object-left rounded-full"
-              />
+          {/* Brand Column */}
+          <div className="md:col-span-4 space-y-4">
+            <Link href="/" className="flex items-center gap-3 w-fit group">
+              <div className="relative w-10 h-10 shrink-0">
+                <Image
+                  src="/logos/fifth-icon-light.png"
+                  alt="Fifth Floor"
+                  fill
+                  className="object-contain rounded-full"
+                />
+              </div>
+              <span className="text-lg font-bold font-syne-display tracking-[0.2em] text-[#F7F6F3]">
+                FIFTH FLOOR
+              </span>
             </Link>
-            <p className="text-sm leading-relaxed max-w-xs">
-              Premium creative house serving government entities, corporations,
-              cultural institutions, and luxury brands across the GCC.
+            <p className="text-xs text-[#8E8D8A] leading-relaxed max-w-sm">
+              Bespoke creative house operating in Kuwait and UAE. Strategy, spatial branding, marketing, events, and immersive experiences for forward-thinking brands.
             </p>
+            <div className="pt-2 text-xs font-mono text-[#6E6E73]">
+              KW 029.3759° N • UAE 025.2048° N
+            </div>
           </div>
 
-          {/* Services */}
+          {/* Quick Links */}
           <div className="md:col-span-3">
-            <p className="section-label mb-4">Services</p>
-            <ul className="space-y-2">
-              {['Brand Strategy', 'Branding', 'Marketing', 'Events', 'Booths', 'Creative Concepts'].map((service) => (
-                <li key={service}>
-                  <span className="text-sm hover:text-[#CFCFCF] transition-colors duration-300 cursor-default">
-                    {service}
-                  </span>
+            <p className="text-xs uppercase tracking-[0.3em] font-semibold text-[#F7F6F3] mb-4">
+              Navigation
+            </p>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'About Agency', href: '/about' },
+                { label: 'Selected Work', href: '/case-studies' },
+                { label: 'Capabilities', href: '/services' },
+                { label: 'Get in Touch', href: '/contact' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="text-xs text-[#8E8D8A] hover:text-[#F7F6F3] transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-[#8E8D8A] group-hover:bg-[#F7F6F3] group-hover:scale-150 transition-all duration-300" />
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Locations */}
-          <div className="md:col-span-2">
-            <p className="section-label mb-4 text-[#919191]">Locations</p>
-            <div className="flex items-center gap-3 text-sm text-[#CFCFCF]">
-              <span>Kuwait 🇰🇼</span>
-              <span className="text-[#919191]">|</span>
-              <span>UAE 🇦🇪</span>
-            </div>
+          {/* Services */}
+          <div className="md:col-span-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-semibold text-[#F7F6F3] mb-4">
+              Capabilities
+            </p>
+            <ul className="space-y-2 text-xs text-[#8E8D8A]">
+              {['Brand Strategy', 'Brand Identity', 'Marketing & Media', 'Events & Exhibitions', 'Spatial & Booths', 'Creative Concepts'].map((service) => (
+                <li key={service} className="hover:text-[#F7F6F3] transition-colors duration-300 cursor-default">
+                  {service}
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Contact */}
-          <div className="md:col-span-3">
-            <p className="section-label mb-4 text-[#919191]">Connect</p>
-            <div className="space-y-2">
-              <a
-                href="/contact"
-                className="text-sm text-[#919191] hover:text-[#CFCFCF] transition-colors duration-300 block hover-line-extend inline-block"
-              >
-                Get in Touch
-              </a>
+          <div className="md:col-span-2 space-y-3">
+            <p className="text-xs uppercase tracking-[0.3em] font-semibold text-[#F7F6F3] mb-4">
+              Connect
+            </p>
+            <a
+              href="mailto:hello@fifthfloor.com"
+              className="text-xs text-[#F7F6F3] hover:underline underline-offset-4 block"
+            >
+              hello@fifthfloor.com
+            </a>
+            <div className="text-xs text-[#8E8D8A] space-y-1 font-mono pt-2">
+              <p>Kuwait City, Al Hamra Tower</p>
+              <p>Dubai, DIFC Gate Precinct</p>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="h-px bg-[#6A6A6A] mb-8" />
-
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-[#919191]">
-            © {currentYear} Fifth Floor. All rights reserved.
-          </p>
-          <p className="text-xs text-[#919191]">
-            Designed & Developed by{' '}
-            <span className="text-[#CFCFCF]">Yussef Dev Studio</span>
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#6E6E73]">
+          <p>© {currentYear} Fifth Floor Creative House. All rights reserved.</p>
+          
+          <div className="flex items-center gap-6">
+            <span className="hover:text-[#8E8D8A] transition-colors cursor-pointer">
+              Privacy Policy
+            </span>
+            <span>•</span>
+            <span className="hover:text-[#8E8D8A] transition-colors cursor-pointer">
+              Terms of Service
+            </span>
+          </div>
+
+          <p className="font-mono text-[10px] tracking-wider uppercase">
+            Crafted by <span className="text-[#8E8D8A]">Yussef Dev Studio</span>
           </p>
         </div>
-      </div>
-
-      {/* Decorative Corner Shape */}
-      <div className="absolute bottom-0 right-0 opacity-5 pointer-events-none">
-        <svg width="300" height="300" viewBox="0 0 300 300" fill="none">
-          <circle cx="300" cy="300" r="280" stroke="#919191" strokeWidth="1" />
-          <circle cx="300" cy="300" r="200" stroke="#919191" strokeWidth="1" />
-        </svg>
       </div>
     </footer>
   )

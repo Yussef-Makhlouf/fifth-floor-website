@@ -1,43 +1,50 @@
 import { z } from 'zod'
 import { SERVICE_TITLES } from './contact-config'
 
+// Name Regex supporting English, Arabic, spaces, hyphens and apostrophes
+const NAME_REGEX = /^[a-zA-Z\s\u0600-\u06FF\u0750-\u077F'-]+$/
+// Phone Regex supporting GCC and international formats
+const PHONE_REGEX = /^\+?[0-9\s\-()]{7,20}$/
+// Handle Regex for Instagram/TikTok (@username or URL)
+const SOCIAL_HANDLE_REGEX = /^@?[a-zA-Z0-9._]{2,30}$|^https?:\/\/(www\.)?(instagram|tiktok)\.com\/[a-zA-Z0-9._]+\/?$/
+
 // ============================================================================
-// CONTACT FORM SCHEMA - Full form validation
+// CONTACT FORM SCHEMA - General Project Inquiries
 // ============================================================================
 
 export const contactFormSchema = z.object({
-    name: z
-        .string()
-        .min(1, 'Name is required')
-        .min(2, 'Name must be at least 2 characters')
-        .max(100, 'Name must be less than 100 characters')
-        .regex(/^[a-zA-Z\s\u0600-\u06FF\u0750-\u077F'-]+$/, 'Name can only contain letters, spaces, and hyphens'),
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must be less than 100 characters')
+    .regex(NAME_REGEX, 'Name can only contain letters, spaces, and hyphens'),
 
-    email: z
-        .string()
-        .min(1, 'Email is required')
-        .email('Please enter a valid email address')
-        .max(254, 'Email must be less than 254 characters'),
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .email('Please enter a valid email address')
+    .max(254, 'Email must be less than 254 characters'),
 
-    company: z
-        .string()
-        .max(100, 'Company name must be less than 100 characters')
-        .optional()
-        .or(z.literal('')),
+  company: z
+    .string()
+    .max(100, 'Company name must be less than 100 characters')
+    .optional()
+    .or(z.literal('')),
 
-    serviceType: z
-        .string()
-        .optional()
-        .refine(
-            (val) => !val || SERVICE_TITLES.includes(val as typeof SERVICE_TITLES[number]),
-            'Please select a valid service'
-        ),
+  serviceType: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || SERVICE_TITLES.includes(val as typeof SERVICE_TITLES[number]),
+      'Please select a valid service'
+    ),
 
-    message: z
-        .string()
-        .min(1, 'Message is required')
-        .min(10, 'Message must be at least 10 characters')
-        .max(2000, 'Message must be less than 2000 characters'),
+  message: z
+    .string()
+    .min(1, 'Message is required')
+    .min(10, 'Message must be at least 10 characters')
+    .max(2000, 'Message must be less than 2000 characters'),
 })
 
 export type ContactFormData = z.infer<typeof contactFormSchema>
@@ -47,52 +54,170 @@ export type ContactFormData = z.infer<typeof contactFormSchema>
 // ============================================================================
 
 export const emailOnlySchema = z.object({
-    email: z
-        .string()
-        .min(1, 'Email is required')
-        .email('Please enter a valid email address')
-        .max(254, 'Email must be less than 254 characters'),
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .email('Please enter a valid email address')
+    .max(254, 'Email must be less than 254 characters'),
 })
 
 export type EmailOnlyData = z.infer<typeof emailOnlySchema>
 
 // ============================================================================
-// HELPER FUNCTIONS
+// BRAND PARTNERSHIP SCHEMA - Strict Super Validation
+// ============================================================================
+
+export const brandPartnershipSchema = z
+  .object({
+    brandName: z
+      .string()
+      .min(1, 'Brand Name is required')
+      .min(2, 'Brand Name must be at least 2 characters')
+      .max(100, 'Brand Name cannot exceed 100 characters'),
+
+    contactPerson: z
+      .string()
+      .min(1, 'Contact Person is required')
+      .min(2, 'Contact Person must be at least 2 characters')
+      .max(100, 'Contact Person cannot exceed 100 characters')
+      .regex(NAME_REGEX, 'Contact Person can only contain letters and hyphens'),
+
+    industry: z
+      .string()
+      .max(100, 'Industry cannot exceed 100 characters')
+      .optional()
+      .or(z.literal('')),
+
+    website: z
+      .string()
+      .max(250, 'Website link cannot exceed 250 characters')
+      .optional()
+      .or(z.literal('')),
+
+    participationType: z
+      .array(z.string())
+      .min(1, 'Please select at least one participation type'),
+
+    projectGoals: z
+      .array(z.string())
+      .min(1, 'Please select at least one project goal'),
+
+    participationMethods: z
+      .array(z.string())
+      .min(1, 'Please select at least one participation method'),
+
+    otherParticipationMethod: z
+      .string()
+      .max(250, 'Details cannot exceed 250 characters')
+      .optional()
+      .or(z.literal('')),
+
+    eventCategories: z
+      .array(z.string())
+      .min(1, 'Please select at least one event category'),
+  })
+  .refine(
+    (data) => {
+      if (data.participationMethods.includes('other')) {
+        return (
+          !!data.otherParticipationMethod &&
+          data.otherParticipationMethod.trim().length >= 3
+        )
+      }
+      return true
+    },
+    {
+      message: 'Please specify details for your custom participation method (min 3 chars)',
+      path: ['otherParticipationMethod'],
+    }
+  )
+
+export type BrandPartnershipData = z.infer<typeof brandPartnershipSchema>
+
+// ============================================================================
+// CREATOR PARTNERSHIP SCHEMA - Strict Super Validation
+// ============================================================================
+
+export const creatorPartnershipSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name cannot exceed 100 characters')
+    .regex(NAME_REGEX, 'Name can only contain letters and hyphens'),
+
+  phone: z
+    .string()
+    .min(1, 'Phone number is required')
+    .regex(PHONE_REGEX, 'Please enter a valid phone number (e.g. +965 9999 8888)'),
+
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .email('Please enter a valid email address')
+    .max(254, 'Email cannot exceed 254 characters'),
+
+  socialHandle: z
+    .string()
+    .min(1, 'Social handle is required')
+    .regex(SOCIAL_HANDLE_REGEX, 'Please enter a valid handle (e.g. @username) or profile link'),
+
+  lookingFor: z
+    .array(z.string())
+    .min(1, 'Please select at least one partnership type you are looking for'),
+
+  interests: z
+    .array(z.string())
+    .min(1, 'Please select at least one interest area'),
+
+  paidCampaigns: z.array(z.string()).optional(),
+  nonPaidEvents: z.array(z.string()).optional(),
+  nonPaidRestaurant: z.array(z.string()).optional(),
+  nonPaidPR: z.array(z.string()).optional(),
+  nonPaidCommunity: z.array(z.string()).optional(),
+})
+
+export type CreatorPartnershipData = z.infer<typeof creatorPartnershipSchema>
+
+// ============================================================================
+// HELPER VALIDATION FUNCTIONS
 // ============================================================================
 
 export type FormErrors<T> = Partial<Record<keyof T, string>>
 
-export function validateForm<T extends z.ZodObject<z.ZodRawShape>>(
-    schema: T,
-    data: unknown
+export function validateForm<T extends z.ZodTypeAny>(
+  schema: T,
+  data: unknown
 ): { success: true; data: z.infer<T> } | { success: false; errors: FormErrors<z.infer<T>> } {
-    const result = schema.safeParse(data)
+  const result = schema.safeParse(data)
 
-    if (result.success) {
-        return { success: true, data: result.data }
+  if (result.success) {
+    return { success: true, data: result.data }
+  }
+
+  const errors: Record<string, string> = {}
+  result.error.errors.forEach((err) => {
+    const field = (err.path[0] as string) || 'general'
+    if (!errors[field]) {
+      errors[field] = err.message
     }
+  })
 
-    const errors: FormErrors<z.infer<T>> = {}
-    result.error.errors.forEach((err) => {
-        const field = err.path[0] as keyof z.infer<T>
-        if (!errors[field]) {
-            errors[field] = err.message
-        }
-    })
-
-    return { success: false, errors }
+  return { success: false, errors: errors as FormErrors<z.infer<T>> }
 }
 
-export function validateField<T extends z.ZodObject<z.ZodRawShape>>(
-    schema: T,
-    field: keyof z.infer<T>,
-    value: unknown
+export function validateSingleField<T extends z.ZodObject<z.ZodRawShape>>(
+  schema: T,
+  field: keyof z.infer<T>,
+  value: unknown
 ): string | null {
-    const fieldSchema = schema.shape[field as string]
-    if (!fieldSchema) return null
+  const fieldSchema = schema.shape[field as string]
+  if (!fieldSchema) return null
 
-    const result = fieldSchema.safeParse(value)
-    if (result.success) return null
+  const result = fieldSchema.safeParse(value)
+  if (result.success) return null
 
-    return result.error.errors[0]?.message || 'Invalid value'
+  return result.error.errors[0]?.message || 'Invalid value'
 }
+
+export const validateField = validateSingleField

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import DiagonalGrid from '@/components/ui/diagonal-grid'
 import ArchitecturalShapes, { CircleDecoration } from '@/components/ui/architectural-shapes'
-import GridBackground from '../ui/grid-background'
+import Link from 'next/link'
 
 export default function Hero() {
   const textRef = useRef<HTMLDivElement>(null)
@@ -13,8 +13,8 @@ export default function Hero() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('opacity-100')
-            entry.target.classList.remove('opacity-0')
+            entry.target.classList.add('opacity-100', 'translate-y-0')
+            entry.target.classList.remove('opacity-0', 'translate-y-8')
           }
         })
       },
@@ -29,109 +29,104 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-16">
+    <section className="relative w-full min-h-[100dvh] flex items-center justify-center overflow-hidden pt-32 pb-24 bg-[#F7F6F3] hairline-grid-light">
+      {/* Background Lighting Flare */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[45rem] h-[45rem] bg-[#1A1A1C]/[0.02] rounded-full blur-[140px] pointer-events-none" />
+
       {/* Diagonal Grid Background */}
       <DiagonalGrid
         position="top-left"
-        gridColor="#919191"
-        gridSize={40}
-        opacity={0.3}
+        gridColor="#1A1A1C"
+        gridSize={48}
+        opacity={0.12}
       />
-
-      {/* Fading Grid Background - Bottom Left */}
-      {/* <GridBackground
-        fadeFrom="corner-bl"
-        gridColor="#919191"
-        gridSizeX={24}
-        gridSizeY={32}
-        opacity={0.25}
-      /> */}
 
       {/* Architectural Decorations */}
       <CircleDecoration
-        className="absolute -top-20 -right-20 md:-top-32 md:-right-32"
+        className="absolute -top-24 -right-24 md:-top-32 md:-right-32 text-[#1A1A1C]"
         size="xl"
       />
       <CircleDecoration
-        className="absolute -bottom-24 -left-24"
+        className="absolute -bottom-24 -left-24 text-[#1A1A1C]"
         size="lg"
       />
 
-      {/* Vertical Line Decoration */}
-      <div className="absolute top-1/3 left-12 md:left-24 w-px h-32 bg-[#919191] opacity-20" />
-      <div className="absolute bottom-1/4 right-12 md:right-24 w-px h-24 bg-[#919191] opacity-20" />
+      {/* Vertical Structural Guidelines */}
+      <div className="absolute top-1/4 left-8 md:left-20 w-px h-48 bg-[#1A1A1C]/15 hidden sm:block" />
+      <div className="absolute bottom-1/4 right-8 md:right-20 w-px h-36 bg-[#1A1A1C]/15 hidden sm:block" />
 
-      {/* Horizontal Line */}
-      <div className="absolute top-1/2 left-0 w-24 md:w-40 h-px bg-[#919191] opacity-20" />
+      {/* Location Badge (Architectural Detail) */}
+      <div className="absolute top-28 right-8 md:right-20 hidden md:flex items-center gap-3 text-[11px] font-mono text-[#8E8D8A] uppercase tracking-widest border border-[#1A1A1C]/10 px-3.5 py-1.5 rounded-full bg-white/50 backdrop-blur-sm">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1C] animate-pulse" />
+        <span>KW 029.3759° • UAE 025.2048°</span>
+      </div>
 
-      {/* Content */}
+      {/* Content Container */}
       <div
         ref={textRef}
-        className="relative z-10 text-center max-w-5xl px-6 md:px-12 opacity-0 transition-opacity duration-1000"
+        className="relative z-10 text-center max-w-5xl px-6 md:px-12 opacity-0 translate-y-8 transition-all duration-1000 ease-out"
       >
         {/* Section Label */}
-        <div className="section-label mb-8 animate-fade-in text-[#6A6A6A]">
-          FIFTH FLOOR
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#1A1A1C]/10 bg-white/60 backdrop-blur-md mb-8 shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1C]" />
+          <span className="text-[11px] uppercase tracking-[0.3em] font-semibold text-[#55555A]">
+            Fifth Floor Creative House
+          </span>
         </div>
 
-        {/* Main Headline */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-10 text-[#3E3E3E] animate-slide-up">
-          Where Big Ideas
-          <br />
-          Take Shape
+        {/* Main Avant-Garde Headline */}
+        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-bold font-syne-display tracking-tighter leading-[0.98] mb-10 text-[#1A1A1C]">
+          Where Big Ideas <br />
+          <span className="font-serif-accent text-[#55555A] font-normal italic">
+            Take Shape.
+          </span>
         </h1>
 
-        {/* Subtle Divider */}
-        <div className="w-16 h-px bg-[#919191] mx-auto mb-10 animate-line-extend" />
+        {/* Subtle Horizontal Divider */}
+        <div className="w-20 h-[1.5px] bg-[#1A1A1C] mx-auto mb-10 opacity-30" />
 
         {/* Services Tagline */}
-        <p className="text-base md:text-lg text-[#6A6A6A] mb-14 font-light tracking-wide leading-relaxed animate-fade-in delay-200">
-          Brand Strategy • Branding • Marketing • Events • Booths • Creative Concepts
+        <p className="text-sm md:text-base text-[#55555A] mb-12 font-medium tracking-wider max-w-2xl mx-auto leading-relaxed">
+          Brand Identity • Spatial Design • Strategic Marketing • Immersive Events • Digital Concepts
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in delay-300">
-          <a
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Link
             href="#work"
-            className="px-8 py-4 border border-[#3E3E3E] text-[#3E3E3E] font-medium tracking-wide hover:bg-[#3E3E3E] hover:text-[#ffffff] transition-all duration-400 hover-lift"
+            className="w-full sm:w-auto px-9 py-4 border border-[#1A1A1C] text-[#1A1A1C] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#1A1A1C] hover:text-[#F7F6F3] transition-all duration-300 active-press shadow-sm"
           >
-            Explore Our Work
-          </a>
-          <a
+            Explore Selected Work
+          </Link>
+          <Link
             href="/contact"
-            className="px-8 py-4 bg-[#3E3E3E] text-[#ffffff] font-medium tracking-wide hover:bg-[#6A6A6A] transition-all duration-400 hover-lift"
+            className="w-full sm:w-auto px-9 py-4 bg-[#1A1A1C] text-[#F7F6F3] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#3E3E42] transition-all duration-300 active-press shadow-md"
           >
-            Get In Touch
-          </a>
+            Initiate Project
+          </Link>
         </div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-        <div className="flex flex-col items-center gap-3 animate-fade-in delay-500">
-          <span className="section-label text-[#919191]">Scroll</span>
-          <div className="w-px h-8 bg-[#919191] animate-pulse" />
-        </div>
+      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+        <a
+          href="#work"
+          className="flex flex-col items-center gap-2.5 group cursor-pointer"
+          aria-label="Scroll to work"
+        >
+          <span className="text-[10px] uppercase tracking-[0.3em] font-mono text-[#8E8D8A] group-hover:text-[#1A1A1C] transition-colors">
+            Scroll
+          </span>
+          <div className="w-px h-7 bg-[#1A1A1C]/30 group-hover:h-10 group-hover:bg-[#1A1A1C] transition-all duration-300" />
+        </a>
       </div>
 
-      {/* Hero Visual Image */}
-      <div className='absolute right-0 top-0 h-full w-1/2 sm:w-2/5 md:w-1/3 opacity-10 sm:opacity-15 lg:opacity-20 pointer-events-none mix-blend-multiply'>
-        <div className='relative w-full h-full'>
-          <img
-            src="/images/home-hero-visual.png"
-            alt="Architectural Abstract"
-            className='object-cover w-full h-full'
-          />
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/50 to-white/90" />
-        </div>
-      </div>
-
-      {/* Corner Decoration */}
+      {/* Corner Architectural Decoration */}
       <ArchitecturalShapes
         variant="corner"
         size="md"
-        className="absolute bottom-8 right-8 rotate-180"
-        opacity={0.1}
+        className="absolute bottom-8 right-8 rotate-180 text-[#1A1A1C]"
+        opacity={0.15}
       />
     </section>
   )

@@ -57,8 +57,10 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', 'Inter Fallback', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  --font-sans: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-syne), var(--font-outfit), sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-mono: 'Geist Mono', monospace;
 
   /* Fifth Floor Colors */
   --color-dark-grey: var(--dark-grey);
@@ -98,31 +100,33 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Typography Hierarchy - inherit color by default */
+  /* Avant-Garde Typography Hierarchy */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply font-bold tracking-tight;
-    line-height: 1.1;
+    font-family: var(--font-syne), var(--font-outfit), sans-serif;
+    @apply font-bold tracking-tighter;
+    line-height: 1.05;
+    text-wrap: balance;
   }
 
   h1 {
-    @apply text-6xl md:text-7xl lg:text-8xl;
+    @apply text-6xl md:text-8xl lg:text-9xl;
   }
 
   h2 {
-    @apply text-5xl md:text-6xl;
+    @apply text-5xl md:text-7xl lg:text-8xl;
   }
 
   h3 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-5xl;
   }
 
   h4 {
@@ -130,13 +134,17 @@
   }
 
   p {
+    font-family: var(--font-outfit), sans-serif;
     @apply leading-relaxed;
-    line-height: 1.8;
+    line-height: 1.75;
+    text-wrap: pretty;
+    max-width: 68ch;
   }
 
-  /* Section Labels (Uppercase) */
+  /* Section Labels (Uppercase Avant-Garde) */
   .section-label {
-    @apply uppercase text-xs tracking-[0.3em] font-medium;
+    font-family: var(--font-outfit), sans-serif;
+    @apply uppercase text-xs tracking-[0.35em] font-semibold;
   }
 }
 
@@ -303,8 +311,56 @@ html {
   background: #919191;
 }
 
-::-webkit-scrollbar-thumb:hover {
+  ::-webkit-scrollbar-thumb:hover {
   background: #6A6A6A;
+}
+
+/* Luxury Avant-Garde Utilities */
+.font-serif-accent {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-style: italic;
+}
+
+.font-syne-display {
+  font-family: var(--font-syne), sans-serif;
+}
+
+.font-numeric-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.active-press {
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.active-press:active {
+  transform: scale(0.97);
+}
+
+.hairline-grid-dark {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.hairline-grid-light {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
 }
 
 /* Global Custom Cursor Hide (applied by JS on desktop only) */

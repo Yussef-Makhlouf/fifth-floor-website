@@ -4,8 +4,27 @@ import { Analytics } from '@vercel/analytics/next'
 import GlobalCursor from '@/components/ui/global-cursor'
 import './globals.css'
 
-// Using system font stack for reliability - no network dependency
-const fontClass = 'font-sans'
+import { Outfit, Syne, Playfair_Display } from 'next/font/google'
+import './globals.css'
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+})
+
+const syne = Syne({
+  subsets: ['latin'],
+  variable: '--font-syne',
+  display: 'swap',
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-playfair',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'FIFTH FLOOR – Where Big Ideas Take Shape',
@@ -31,7 +50,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#3E3E3E',
+  themeColor: '#0E0E10',
 }
 
 export default function RootLayout({
@@ -40,10 +59,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${fontClass} antialiased overflow-x-hidden`}>
+    <html lang="en" className={`${outfit.variable} ${syne.variable} ${playfair.variable}`}>
+      <body className="font-sans antialiased overflow-x-hidden bg-[#F7F6F3] text-[#1A1A1C] selection:bg-[#1A1A1C] selection:text-[#F7F6F3]">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-[#0E0E10] focus:text-[#F7F6F3] focus:border focus:border-white/20 focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <GlobalCursor />
-        {children}
+        <div id="main-content">
+          {children}
+        </div>
         <Analytics />
       </body>
     </html>
