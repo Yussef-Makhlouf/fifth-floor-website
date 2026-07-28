@@ -87,9 +87,9 @@ interface SuccessReceipt {
 
 const BRAND_STEPS = [
   { id: 1, title: 'Company Identity', desc: 'Company details & contact info' },
-  { id: 2, title: 'Target Audience', desc: 'Demographics & target segments' },
-  { id: 3, title: 'Project Goals', desc: 'Objectives & campaign goals' },
-  { id: 4, title: 'Participation Format & Event Categories', desc: 'Participation method & categories' },
+  { id: 2, title: 'Participation Format', desc: 'Participation method & options' },
+  { id: 3, title: 'Target Audience', desc: 'Demographics & target segments' },
+  { id: 4, title: 'Project Goals', desc: 'Objectives & campaign goals' },
   { id: 5, title: 'Additional Notes', desc: 'Event preferences & details' },
 ]
 
@@ -109,15 +109,6 @@ const PARTICIPATION_TYPES = [
   { id: 'Entertainment / Activity', label: 'Entertainment / Activity', icon: Tv },
   { id: 'Workshop / Experience', label: 'Workshop / Experience', icon: Compass },
   { id: 'Other Special Request', label: 'Other Special Request', icon: Sparkles },
-]
-
-const PREFERRED_EVENT_CATEGORIES = [
-  { id: 'Sports & Fitness', label: 'Sports & Fitness', icon: Compass },
-  { id: 'Entertainment & Festivals', label: 'Entertainment & Festivals', icon: Tv },
-  { id: 'Food & Culinary', label: 'Food & Culinary', icon: Utensils },
-  { id: 'Fashion & Lifestyle', label: 'Fashion & Lifestyle', icon: Crown },
-  { id: 'Corporate & B2B', label: 'Corporate & B2B', icon: Briefcase },
-  { id: 'Youth & Educational', label: 'Youth & Educational', icon: GraduationCap },
 ]
 
 const TARGET_AUDIENCE_OPTIONS = [
@@ -321,20 +312,20 @@ export default function PartnershipForm() {
       }
 
       if (step === 2 || viewMode === 'express') {
+        if (brandData.participationType.length === 0) {
+          newErrors.participationType = 'Please select at least one participation type'
+        }
+      }
+
+      if (step === 3 || viewMode === 'express') {
         if (brandData.targetAudience.length === 0) {
           newErrors.targetAudience = 'Please select at least one target audience category'
         }
       }
 
-      if (step === 3 || viewMode === 'express') {
+      if (step === 4 || viewMode === 'express') {
         if (brandData.projectGoals.length === 0) {
           newErrors.projectGoals = 'Please select at least one project goal'
-        }
-      }
-
-      if (step === 4 || viewMode === 'express') {
-        if (brandData.participationType.length === 0) {
-          newErrors.participationType = 'Please select at least one participation type'
         }
       }
     } else {
@@ -376,9 +367,9 @@ export default function PartnershipForm() {
       const stepErrorKeys: Record<string, Record<number, string[]>> = {
         brand: {
           1: ['brandName', 'industry', 'contactPerson', 'email', 'phone', 'website', 'instagramLink'],
-          2: ['targetAudience'],
-          3: ['projectGoals', 'goalOther'],
-          4: ['participationType'],
+          2: ['participationType'],
+          3: ['targetAudience'],
+          4: ['projectGoals', 'goalOther'],
         },
         creator: {
           1: ['fullName', 'instagram', 'otherSocials', 'followers', 'email', 'phone'],
@@ -449,9 +440,9 @@ export default function PartnershipForm() {
         const errKeys = Object.keys(validation.errors)
         if (activeTab === 'brand') {
           if (errKeys.some(k => ['brandName', 'contactPerson', 'industry', 'website', 'email', 'phone'].includes(k))) setStep(1)
-          else if (errKeys.includes('targetAudience')) setStep(2)
-          else if (errKeys.some(k => ['projectGoals', 'goalOther'].includes(k))) setStep(3)
-          else if (errKeys.includes('participationType')) setStep(4)
+          else if (errKeys.includes('participationType')) setStep(2)
+          else if (errKeys.includes('targetAudience')) setStep(3)
+          else if (errKeys.some(k => ['projectGoals', 'goalOther'].includes(k))) setStep(4)
           else if (errKeys.includes('notes')) setStep(5)
         } else {
           if (errKeys.some(k => ['fullName', 'instagram', 'otherSocials', 'followers', 'email', 'phone'].includes(k))) setStep(1)
@@ -889,12 +880,46 @@ export default function PartnershipForm() {
                     </div>
                   )}
 
-                  {/* Step 2: Target Audience */}
+                  {/* Step 2: Participation Format */}
                   {(viewMode === 'express' || step === 2) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          2. <span className="font-bold">Target Audience</span> <span className="text-red-400">*</span>
+                          2. <span className="font-bold">Participation Format</span> <span className="text-red-400">*</span>
+                        </h3>
+                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
+                          How would you like to contribute or participate with us? Select all that apply.
+                        </p>
+                      </div>
+
+                      {fieldErrors.participationType && (
+                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          {fieldErrors.participationType}
+                        </p>
+                      )}
+
+                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {PARTICIPATION_TYPES.map(item => (
+                          <RichOptionCard
+                            key={item.id}
+                            label={item.label}
+                            icon={item.icon}
+                            selected={brandData.participationType.includes(item.id)}
+                            onClick={() => handleBrandToggle('participationType', item.id)}
+                            error={!!fieldErrors.participationType}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3: Target Audience */}
+                  {(viewMode === 'express' || step === 3) && (
+                    <div className="space-y-6">
+                      <div className="border-b border-[#3E3E3E]/10 pb-3">
+                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
+                          3. <span className="font-bold">Target Audience</span> <span className="text-red-400">*</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
                           Who is your target audience? Select all segments that apply.
@@ -924,12 +949,12 @@ export default function PartnershipForm() {
                     </div>
                   )}
 
-                  {/* Step 3: Project Goals */}
-                  {(viewMode === 'express' || step === 3) && (
+                  {/* Step 4: Project Goals */}
+                  {(viewMode === 'express' || step === 4) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          3. <span className="font-bold">Project Goals</span> <span className="text-red-400">*</span>
+                          4. <span className="font-bold">Project Goals</span> <span className="text-red-400">*</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
                           What are your primary goals for participating? Select all that apply.
@@ -968,66 +993,6 @@ export default function PartnershipForm() {
                           placeholder="e.g. Specific KPI targets, product launch timeframe..."
                           className="w-full py-2.5 px-0 bg-transparent border-b border-[#919191]/40 text-sm text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] transition-colors"
                         />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 4: Participation Format & Event Categories */}
-                  {(viewMode === 'express' || step === 4) && (
-                    <div className="space-y-8">
-                      <div className="border-b border-[#3E3E3E]/10 pb-3">
-                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          4. <span className="font-bold">Participation Format & Event Categories</span>
-                        </h3>
-                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          How would you like to contribute and in which categories?
-                        </p>
-                      </div>
-
-                      {/* Section 1: PARTICIPATION METHOD */}
-                      <div className="space-y-4">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#919191]">
-                          PARTICIPATION METHOD <span className="text-red-400">*</span>
-                        </h4>
-
-                        {fieldErrors.participationType && (
-                          <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
-                            <AlertCircle className="w-3.5 h-3.5" />
-                            {fieldErrors.participationType}
-                          </p>
-                        )}
-
-                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                          {PARTICIPATION_TYPES.map(item => (
-                            <RichOptionCard
-                              key={item.id}
-                              label={item.label}
-                              icon={item.icon}
-                              selected={brandData.participationType.includes(item.id)}
-                              onClick={() => handleBrandToggle('participationType', item.id)}
-                              error={!!fieldErrors.participationType}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Section 2: PREFERRED EVENT CATEGORIES */}
-                      <div className="space-y-4">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#919191]">
-                          PREFERRED EVENT CATEGORIES <span className="text-red-400">*</span>
-                        </h4>
-
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                          {PREFERRED_EVENT_CATEGORIES.map(item => (
-                            <RichOptionCard
-                              key={item.id}
-                              label={item.label}
-                              icon={item.icon}
-                              selected={brandData.eventCategories?.includes(item.id) ?? false}
-                              onClick={() => handleBrandToggle('eventCategories', item.id)}
-                            />
-                          ))}
-                        </div>
                       </div>
                     </div>
                   )}
