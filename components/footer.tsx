@@ -135,7 +135,7 @@ export default function Footer() {
           </div>
 
           <p className="font-mono text-[10px] tracking-wider uppercase">
-            Crafted by <span className="text-[#8E8D8A]">Yussef Dev Studio</span>
+            Crafted by <span className="text-[#8E8D8A]">Fifth Floor Creative Club</span>
           </p>
         </div>
       </div>

@@ -30,8 +30,8 @@ export const metadata: Metadata = {
   title: 'FIFTH FLOOR – Where Big Ideas Take Shape',
   description: 'Premium creative house operating in Kuwait and UAE. Brand strategy, branding, marketing, events, booths & creative concepts for government entities, corporations, cultural institutions, and luxury brands.',
   keywords: ['creative agency', 'brand strategy', 'branding', 'marketing', 'events', 'Kuwait', 'UAE', 'GCC', 'luxury brands', 'creative concepts'],
-  authors: [{ name: 'Yussef Dev Studio' }],
-  creator: 'Yussef Dev Studio',
+  authors: [{ name: 'Fifth Floor Creative Club' }],
+  creator: 'Fifth Floor Creative Club',
   icons: {
     icon: '/logos/fifith-favicon.png',
     shortcut: '/logos/fifith-favicon.png',
