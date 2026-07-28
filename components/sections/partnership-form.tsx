@@ -56,7 +56,7 @@ interface BrandForm {
   projectGoals: string[]
   goalOther: string
   participationType: string[]
-  estimatedBudget: string
+  eventCategories: string[]
   notes: string
 }
 
@@ -89,9 +89,8 @@ const BRAND_STEPS = [
   { id: 1, title: 'Company Identity', desc: 'Company details & contact info' },
   { id: 2, title: 'Target Audience', desc: 'Demographics & target segments' },
   { id: 3, title: 'Project Goals', desc: 'Objectives & campaign goals' },
-  { id: 4, title: 'Participation Type', desc: 'Sponsorship & booth options' },
-  { id: 5, title: 'Estimated Budget', desc: 'Budget allocation tier' },
-  { id: 6, title: 'Additional Notes', desc: 'Event preferences & details' },
+  { id: 4, title: 'Participation Format & Event Categories', desc: 'Participation method & categories' },
+  { id: 5, title: 'Additional Notes', desc: 'Event preferences & details' },
 ]
 
 const CREATOR_STEPS = [
@@ -102,11 +101,23 @@ const CREATOR_STEPS = [
 ]
 
 const PARTICIPATION_TYPES = [
-  { id: 'Sponsor', label: 'Sponsor — Sponsorship', desc: 'Financial or in-kind sponsorship', icon: Crown },
-  { id: 'Booth', label: 'Booth — Exhibition Space', desc: 'Exhibition space & physical booth at the event', icon: Sliders },
-  { id: 'Collaboration', label: 'Collaboration — Joint Program', desc: 'Joint content creation or program design', icon: Megaphone },
-  { id: 'Strategic Partner', label: 'Strategic Partner — Long-term', desc: 'Ongoing, multi-event partnership', icon: Sparkles },
-  { id: 'Not Sure', label: 'Not Sure — Walk Us Through', desc: 'Not sure yet — walk us through available options', icon: Compass },
+  { id: 'Financial Sponsorship', label: 'Financial Sponsorship', icon: DollarSign },
+  { id: 'Products / Gifts', label: 'Products / Gifts', icon: Gift },
+  { id: 'Discount Vouchers', label: 'Discount Vouchers', icon: Ticket },
+  { id: 'Food & Beverage', label: 'Food & Beverage', icon: Utensils },
+  { id: 'Interactive Booth', label: 'Interactive Booth', icon: Sliders },
+  { id: 'Entertainment / Activity', label: 'Entertainment / Activity', icon: Tv },
+  { id: 'Workshop / Experience', label: 'Workshop / Experience', icon: Compass },
+  { id: 'Other Special Request', label: 'Other Special Request', icon: Sparkles },
+]
+
+const PREFERRED_EVENT_CATEGORIES = [
+  { id: 'Sports & Fitness', label: 'Sports & Fitness', icon: Compass },
+  { id: 'Entertainment & Festivals', label: 'Entertainment & Festivals', icon: Tv },
+  { id: 'Food & Culinary', label: 'Food & Culinary', icon: Utensils },
+  { id: 'Fashion & Lifestyle', label: 'Fashion & Lifestyle', icon: Crown },
+  { id: 'Corporate & B2B', label: 'Corporate & B2B', icon: Briefcase },
+  { id: 'Youth & Educational', label: 'Youth & Educational', icon: GraduationCap },
 ]
 
 const TARGET_AUDIENCE_OPTIONS = [
@@ -124,13 +135,6 @@ const PROJECT_GOALS = [
   { id: 'Customer Acquisition', label: 'Customer Acquisition', icon: Star },
   { id: 'Sales Promotion', label: 'Sales Promotion', icon: DollarSign },
   { id: 'CSR Initiative', label: 'CSR Initiative', icon: HeartHandshake },
-]
-
-const ESTIMATED_BUDGET_OPTIONS = [
-  { id: 'Under 500 KD', label: 'Under 500 KD', desc: 'Entry level & activation tier (< 500 KD)', icon: Coins },
-  { id: '500–1,000 KD', label: '500 – 1,000 KD', desc: 'Standard event sponsorship tier', icon: DollarSign },
-  { id: '1,000–3,000 KD', label: '1,000 – 3,000 KD', desc: 'Major event partner level', icon: Sparkles },
-  { id: '3,000+ KD', label: '3,000+ KD', desc: 'Title & strategic multi-event partner', icon: Crown },
 ]
 
 // ─── Creator Config ──────────────────────────────────────────────────────────
@@ -208,28 +212,32 @@ function RichOptionCard({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative flex flex-col justify-between p-5 border text-left transition-all duration-300 rounded-sm cursor-pointer select-none
+      className={`group relative flex flex-col justify-between p-5 md:p-6 border text-left transition-all duration-200 rounded-sm cursor-pointer select-none min-h-[130px]
         ${selected
-          ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white shadow-lg shadow-black/10 translate-y-[-1px]'
+          ? 'border-[#3E3E3E] bg-white text-[#3E3E3E] shadow-md shadow-black/5 ring-1 ring-[#3E3E3E]'
           : error
           ? 'border-red-400 bg-red-50/20 text-[#3E3E3E]'
-          : 'border-[#919191]/25 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]/60 hover:bg-[#3E3E3E]/[0.02]'
+          : 'border-[#919191]/25 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]/60 hover:shadow-sm'
         }`}
     >
-      <div className="flex items-start justify-between gap-3 mb-3">
-        {Icon && (
-          <div className={`p-2.5 rounded-sm transition-colors ${selected ? 'bg-white/10 text-white' : 'bg-[#3E3E3E]/5 text-[#3E3E3E]'}`}>
-            <Icon className="w-4 h-4" />
+      <div className="flex items-start justify-between gap-3 w-full mb-6">
+        {Icon ? (
+          <div className={`w-9 h-9 rounded-sm flex items-center justify-center transition-colors ${
+            selected ? 'bg-[#3E3E3E] text-white' : 'bg-[#F4F4F4] group-hover:bg-[#EAEAEA] text-[#3E3E3E]'
+          }`}>
+            <Icon className="w-4 h-4 stroke-[2]" />
           </div>
-        )}
-        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${selected ? 'border-white bg-white text-[#3E3E3E]' : 'border-[#919191]/40 group-hover:border-[#3E3E3E]'}`}>
+        ) : <div />}
+        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+          selected ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white' : 'border-[#D1D1D1] group-hover:border-[#3E3E3E]'
+        }`}>
           {selected && <Check className="w-3 h-3 stroke-[3]" />}
         </div>
       </div>
       <div>
-        <h4 className="text-sm font-semibold tracking-wide mb-1">{label}</h4>
+        <h4 className="text-sm font-semibold tracking-tight text-[#3E3E3E] leading-snug">{label}</h4>
         {desc && (
-          <p className={`text-xs font-light leading-relaxed ${selected ? 'text-white/80' : 'text-[#6A6A6A]'}`}>
+          <p className="text-xs font-light text-[#6A6A6A] leading-relaxed mt-1">
             {desc}
           </p>
         )}
@@ -258,7 +266,7 @@ export default function PartnershipForm() {
     projectGoals: [],
     goalOther: '',
     participationType: [],
-    estimatedBudget: '',
+    eventCategories: [],
     notes: '',
   })
 
@@ -371,7 +379,6 @@ export default function PartnershipForm() {
           2: ['targetAudience'],
           3: ['projectGoals', 'goalOther'],
           4: ['participationType'],
-          5: ['estimatedBudget'],
         },
         creator: {
           1: ['fullName', 'instagram', 'otherSocials', 'followers', 'email', 'phone'],
@@ -414,14 +421,6 @@ export default function PartnershipForm() {
     })
   }
 
-  const handleBrandSingleSelect = (field: keyof BrandForm, value: string) => {
-    setFieldErrors(prev => ({ ...prev, [field]: '' }))
-    setBrandData(prev => ({
-      ...prev,
-      [field]: prev[field] === value ? '' : value,
-    }))
-  }
-
   const handleCreatorToggle = (field: keyof CreatorForm, id: string) => {
     setFieldErrors(prev => ({ ...prev, [field]: '' }))
     setCreatorData(prev => {
@@ -453,8 +452,7 @@ export default function PartnershipForm() {
           else if (errKeys.includes('targetAudience')) setStep(2)
           else if (errKeys.some(k => ['projectGoals', 'goalOther'].includes(k))) setStep(3)
           else if (errKeys.includes('participationType')) setStep(4)
-          else if (errKeys.includes('estimatedBudget')) setStep(5)
-          else if (errKeys.includes('notes')) setStep(6)
+          else if (errKeys.includes('notes')) setStep(5)
         } else {
           if (errKeys.some(k => ['fullName', 'instagram', 'otherSocials', 'followers', 'email', 'phone'].includes(k))) setStep(1)
           else if (errKeys.includes('categories')) setStep(2)
@@ -522,7 +520,7 @@ export default function PartnershipForm() {
       projectGoals: [],
       goalOther: '',
       participationType: [],
-      estimatedBudget: '',
+      eventCategories: [],
       notes: '',
     })
     setCreatorData({
@@ -974,74 +972,72 @@ export default function PartnershipForm() {
                     </div>
                   )}
 
-                  {/* Step 4: Participation Type */}
+                  {/* Step 4: Participation Format & Event Categories */}
                   {(viewMode === 'express' || step === 4) && (
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          4. <span className="font-bold">Participation Type</span> <span className="text-red-400">*</span>
+                          4. <span className="font-bold">Participation Format & Event Categories</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          Select the type of participation that interests you most.
+                          How would you like to contribute and in which categories?
                         </p>
                       </div>
 
-                      {fieldErrors.participationType && (
-                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          {fieldErrors.participationType}
-                        </p>
-                      )}
+                      {/* Section 1: PARTICIPATION METHOD */}
+                      <div className="space-y-4">
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#919191]">
+                          PARTICIPATION METHOD <span className="text-red-400">*</span>
+                        </h4>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {PARTICIPATION_TYPES.map(item => (
-                          <RichOptionCard
-                            key={item.id}
-                            label={item.label}
-                            desc={item.desc}
-                            icon={item.icon}
-                            selected={brandData.participationType.includes(item.id)}
-                            onClick={() => handleBrandToggle('participationType', item.id)}
-                            error={!!fieldErrors.participationType}
-                          />
-                        ))}
+                        {fieldErrors.participationType && (
+                          <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            {fieldErrors.participationType}
+                          </p>
+                        )}
+
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                          {PARTICIPATION_TYPES.map(item => (
+                            <RichOptionCard
+                              key={item.id}
+                              label={item.label}
+                              icon={item.icon}
+                              selected={brandData.participationType.includes(item.id)}
+                              onClick={() => handleBrandToggle('participationType', item.id)}
+                              error={!!fieldErrors.participationType}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Section 2: PREFERRED EVENT CATEGORIES */}
+                      <div className="space-y-4">
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#919191]">
+                          PREFERRED EVENT CATEGORIES <span className="text-red-400">*</span>
+                        </h4>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                          {PREFERRED_EVENT_CATEGORIES.map(item => (
+                            <RichOptionCard
+                              key={item.id}
+                              label={item.label}
+                              icon={item.icon}
+                              selected={brandData.eventCategories?.includes(item.id) ?? false}
+                              onClick={() => handleBrandToggle('eventCategories', item.id)}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Step 5: Estimated Budget */}
+                  {/* Step 5: Additional Notes */}
                   {(viewMode === 'express' || step === 5) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          5. <span className="font-bold">Estimated Budget</span> <span className="text-[#919191] font-normal text-sm">(Optional)</span>
-                        </h3>
-                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          What is your approximate budget allocation for this partnership?
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                        {ESTIMATED_BUDGET_OPTIONS.map(item => (
-                          <RichOptionCard
-                            key={item.id}
-                            label={item.label}
-                            desc={item.desc}
-                            icon={item.icon}
-                            selected={brandData.estimatedBudget === item.id}
-                            onClick={() => handleBrandSingleSelect('estimatedBudget', item.id)}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 6: Additional Notes */}
-                  {(viewMode === 'express' || step === 6) && (
-                    <div className="space-y-6">
-                      <div className="border-b border-[#3E3E3E]/10 pb-3">
-                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          6. <span className="font-bold">Additional Notes</span> <span className="text-[#919191] font-normal text-sm">(Optional)</span>
+                          5. <span className="font-bold">Additional Notes</span> <span className="text-[#919191] font-normal text-sm">(Optional)</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
                           Do you have a specific event in mind or preferred timeframe? Let us know.

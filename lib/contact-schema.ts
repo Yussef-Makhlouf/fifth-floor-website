@@ -125,12 +125,11 @@ export const brandPartnershipSchema = z.object({
 
   participationType: z
     .array(z.string())
-    .min(1, 'Please select at least one participation type'),
+    .min(1, 'Please select at least one participation method'),
 
-  estimatedBudget: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  eventCategories: z
+    .array(z.string())
+    .optional(),
 
   notes: z
     .string()

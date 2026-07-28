@@ -107,7 +107,7 @@ interface BrandData {
   projectGoals: string[]
   goalOther?: string
   participationType: string[]
-  estimatedBudget?: string
+  eventCategories?: string[]
   notes?: string
 }
 
@@ -156,8 +156,8 @@ export function brandNotificationEmail(data: BrandData, refId: string, receivedA
     ${section('Campaign Details', [
       ['Target Audience', data.targetAudience.map(badge).join('')],
       ['Project Goals', [...data.projectGoals, ...(data.goalOther ? [data.goalOther] : [])].map(badge).join('')],
-      ['Participation Type', data.participationType.map(badge).join('')],
-      ['Estimated Budget', data.estimatedBudget ? badge(data.estimatedBudget) : undefined],
+      ['Participation Method', data.participationType.map(badge).join('')],
+      ['Event Categories', data.eventCategories && data.eventCategories.length > 0 ? data.eventCategories.map(badge).join('') : undefined],
     ])}
     ${data.notes ? section('Additional Notes', [['Notes', data.notes]]) : ''}
     <div style="margin-top:32px;text-align:center;">
