@@ -20,7 +20,7 @@ export default function Footer() {
           <div className="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/10 pb-16">
             <div>
               <span className="text-xs uppercase tracking-[0.35em] text-[#6E6E73] font-mono mb-4 block">
-                // Fifth Floor Creative House
+                // Fifth Floor Creative Club
               </span>
               <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.05]">
                 Where Big Ideas <br />
@@ -122,8 +122,8 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#6E6E73]">
-          <p>© {currentYear} Fifth Floor Creative House. All rights reserved.</p>
-          
+          <p>© {currentYear} Fifth Floor Creative Club. All rights reserved.</p>
+
           <div className="flex items-center gap-6">
             <span className="hover:text-[#8E8D8A] transition-colors cursor-pointer">
               Privacy Policy

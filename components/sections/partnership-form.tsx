@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   Crown,
   Sparkles,
@@ -29,6 +29,7 @@ import {
   Layers,
   ArrowRight,
   AlertCircle,
+  Coins,
 } from 'lucide-react'
 import { CurveDecoration } from '@/components/ui/architectural-shapes'
 import {
@@ -36,8 +37,6 @@ import {
   creatorPartnershipSchema,
   validateForm,
   validateSingleField,
-  type BrandPartnershipData,
-  type CreatorPartnershipData,
 } from '@/lib/contact-schema'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -50,25 +49,31 @@ interface BrandForm {
   contactPerson: string
   industry: string
   website: string
-  participationType: string[]
+  instagramLink: string
+  email: string
+  phone: string
+  targetAudience: string[]
   projectGoals: string[]
-  participationMethods: string[]
-  otherParticipationMethod: string
-  eventCategories: string[]
+  goalOther: string
+  participationType: string[]
+  estimatedBudget: string
+  notes: string
 }
 
 interface CreatorForm {
-  name: string
-  phone: string
+  fullName: string
+  instagram: string
+  otherSocials: string
+  followers: string
   email: string
-  socialHandle: string
-  lookingFor: string[]
-  interests: string[]
-  paidCampaigns: string[]
-  nonPaidEvents: string[]
-  nonPaidRestaurant: string[]
-  nonPaidPR: string[]
-  nonPaidCommunity: string[]
+  phone: string
+  categories: string[]
+  collabType: string[]
+  paidDeliverables: string[]
+  paidNotes: string
+  freeCollabTypes: string[]
+  freeDeliverables: string[]
+  notes: string
 }
 
 interface SuccessReceipt {
@@ -81,85 +86,99 @@ interface SuccessReceipt {
 // ─── Options with Icons ───────────────────────────────────────────────────────
 
 const BRAND_STEPS = [
-  { id: 1, title: 'Brand Identity', desc: 'Who you are & contact details' },
-  { id: 2, title: 'Sponsorship Level', desc: 'Title, Main, or Activation' },
-  { id: 3, title: 'Strategic Goals', desc: 'Awareness, Launch, or Sales' },
-  { id: 4, title: 'Format & Categories', desc: 'Methods & target sectors' },
+  { id: 1, title: 'Company Identity', desc: 'Company details & contact info' },
+  { id: 2, title: 'Target Audience', desc: 'Demographics & target segments' },
+  { id: 3, title: 'Project Goals', desc: 'Objectives & campaign goals' },
+  { id: 4, title: 'Participation Type', desc: 'Sponsorship & booth options' },
+  { id: 5, title: 'Estimated Budget', desc: 'Budget allocation tier' },
+  { id: 6, title: 'Additional Notes', desc: 'Event preferences & details' },
 ]
 
 const CREATOR_STEPS = [
-  { id: 1, title: 'Creator Profile', desc: 'Personal details & handle' },
-  { id: 2, title: 'Collaboration Scope', desc: 'Paid, PR, or Events' },
-  { id: 3, title: 'Niche & Interests', desc: 'Content focus areas' },
-  { id: 4, title: 'Deliverables', desc: 'Reels, Stories, & Posts' },
+  { id: 1, title: 'Creator Profile', desc: 'Contact details & handles' },
+  { id: 2, title: 'Content Categories', desc: 'Niche & focus topics' },
+  { id: 3, title: 'Collaboration Scope', desc: 'Paid & free preferences' },
+  { id: 4, title: 'Additional Details', desc: 'Past work & preferences' },
 ]
 
 const PARTICIPATION_TYPES = [
-  { id: 'title', label: 'Title Sponsor', desc: 'Exclusive header branding', icon: Crown },
-  { id: 'main', label: 'Main Sponsor', desc: 'Prime placement across event', icon: Sparkles },
-  { id: 'activation', label: 'Activation Partner', desc: 'Interactive on-ground experience', icon: Layers },
-  { id: 'marketing', label: 'Marketing Collab', desc: 'Cross-promotional media', icon: Megaphone },
-  { id: 'community', label: 'Community Partner', desc: 'Local engagement focus', icon: Users },
+  { id: 'Sponsor', label: 'Sponsor — Sponsorship', desc: 'Financial or in-kind sponsorship', icon: Crown },
+  { id: 'Booth', label: 'Booth — Exhibition Space', desc: 'Exhibition space & physical booth at the event', icon: Sliders },
+  { id: 'Collaboration', label: 'Collaboration — Joint Program', desc: 'Joint content creation or program design', icon: Megaphone },
+  { id: 'Strategic Partner', label: 'Strategic Partner — Long-term', desc: 'Ongoing, multi-event partnership', icon: Sparkles },
+  { id: 'Not Sure', label: 'Not Sure — Walk Us Through', desc: 'Not sure yet — walk us through available options', icon: Compass },
+]
+
+const TARGET_AUDIENCE_OPTIONS = [
+  { id: 'Families & Kids', label: 'Families & Kids', desc: 'Families, children & parents', icon: Users },
+  { id: 'Youth & Athletes', label: 'Youth & Athletes', desc: 'Young adults, athletes & fitness enthusiasts', icon: Compass },
+  { id: 'Students & Educational', label: 'Students & Educational', desc: 'School & university students', icon: GraduationCap },
+  { id: 'Corporate & B2B', label: 'Corporate & B2B', desc: 'Business executives & corporate clients', icon: Briefcase },
+  { id: 'General Audience', label: 'General Audience', desc: 'All segments & general public audience', icon: Star },
 ]
 
 const PROJECT_GOALS = [
-  { id: 'awareness', label: 'Brand Awareness', icon: Target },
-  { id: 'launch', label: 'Product Launch', icon: Rocket },
-  { id: 'engagement', label: 'Community Engagement', icon: Users },
-  { id: 'acquisition', label: 'Customer Acquisition', icon: Star },
-  { id: 'sales', label: 'Sales Promotion', icon: DollarSign },
-  { id: 'csr', label: 'CSR Initiative', icon: HeartHandshake },
+  { id: 'Brand Awareness', label: 'Brand Awareness', icon: Target },
+  { id: 'Product Launch', label: 'Product Launch', icon: Rocket },
+  { id: 'Community Engagement', label: 'Community Engagement', icon: Users },
+  { id: 'Customer Acquisition', label: 'Customer Acquisition', icon: Star },
+  { id: 'Sales Promotion', label: 'Sales Promotion', icon: DollarSign },
+  { id: 'CSR Initiative', label: 'CSR Initiative', icon: HeartHandshake },
 ]
 
-const PARTICIPATION_METHODS = [
-  { id: 'financial', label: 'Financial Sponsorship', icon: DollarSign },
-  { id: 'products', label: 'Products / Gifts', icon: Gift },
-  { id: 'vouchers', label: 'Discount Vouchers', icon: Ticket },
-  { id: 'fnb', label: 'Food & Beverage', icon: Utensils },
-  { id: 'booth', label: 'Interactive Booth', icon: Sliders },
-  { id: 'entertainment', label: 'Entertainment / Activity', icon: Tv },
-  { id: 'workshop', label: 'Workshop / Experience', icon: Compass },
-  { id: 'other', label: 'Other Special Request', icon: Sparkles },
+const ESTIMATED_BUDGET_OPTIONS = [
+  { id: 'Under 500 KD', label: 'Under 500 KD', desc: 'Entry level & activation tier (< 500 KD)', icon: Coins },
+  { id: '500–1,000 KD', label: '500 – 1,000 KD', desc: 'Standard event sponsorship tier', icon: DollarSign },
+  { id: '1,000–3,000 KD', label: '1,000 – 3,000 KD', desc: 'Major event partner level', icon: Sparkles },
+  { id: '3,000+ KD', label: '3,000+ KD', desc: 'Title & strategic multi-event partner', icon: Crown },
 ]
 
-const EVENT_CATEGORIES = [
-  { id: 'family', label: 'Family', icon: Users },
-  { id: 'kids', label: 'Kids', icon: Star },
-  { id: 'sports', label: 'Sports', icon: Compass },
-  { id: 'entertainment', label: 'Entertainment', icon: Tv },
-  { id: 'fashion', label: 'Fashion', icon: Crown },
-  { id: 'business', label: 'Business', icon: Briefcase },
-  { id: 'wellness', label: 'Wellness', icon: HeartHandshake },
-  { id: 'education', label: 'Education', icon: GraduationCap },
+// ─── Creator Config ──────────────────────────────────────────────────────────
+
+const CREATOR_CATEGORIES = [
+  { id: 'Food & Restaurants', label: 'Food & Restaurants', desc: 'Dining, cafes & culinary reviews', icon: Utensils },
+  { id: 'Fashion & Style', label: 'Fashion & Style', desc: 'Apparel, outfits & styling', icon: Crown },
+  { id: 'Beauty & Skincare', label: 'Beauty & Skincare', desc: 'Cosmetics, skincare & hair', icon: Sparkles },
+  { id: 'Fitness & Wellness', label: 'Fitness & Wellness', desc: 'Gyms, health & nutrition', icon: Compass },
+  { id: 'Family & Parenting', label: 'Family & Parenting', desc: 'Kids, parenting & home life', icon: Users },
+  { id: 'Travel', label: 'Travel', desc: 'Destinations, hotels & adventure', icon: Compass },
+  { id: 'Lifestyle & Vlogging', label: 'Lifestyle & Vlogging', desc: 'Daily routines & personal vlogs', icon: Star },
+  { id: 'Tech & Gaming', label: 'Tech & Gaming', desc: 'Gadgets, gaming & tech reviews', icon: Tv },
+  { id: 'Home & Interior', label: 'Home & Interior', desc: 'Decor, design & living spaces', icon: Sliders },
+  { id: 'Finance & Business', label: 'Finance & Business', desc: 'Investing, career & business', icon: Briefcase },
+  { id: 'Comedy & Entertainment', label: 'Comedy & Entertainment', desc: 'Humor, skits & pop culture', icon: Megaphone },
 ]
 
-const LOOKING_FOR = [
-  { id: 'paid', label: 'Paid Campaigns', desc: 'Commercial deliverables', icon: DollarSign },
-  { id: 'event_invite', label: 'Non-Paid Event Invitations', desc: 'VIP access & red carpets', icon: Ticket },
-  { id: 'restaurant', label: 'Non-Paid Restaurant Invitations', desc: 'Tastings & openings', icon: Utensils },
-  { id: 'pr_packages', label: 'Non-Paid PR Packages', desc: 'Product reviews & unboxing', icon: Package },
-  { id: 'community', label: 'Non-Paid Community Events', desc: 'Local meetups & talks', icon: Users },
-  { id: 'longterm', label: 'Long-term Brand Partnerships', desc: 'Ambassador relationships', icon: Crown },
+const CREATOR_COLLAB_TYPES = [
+  { id: 'Paid Ad', label: 'Paid Ad — Sponsored Content', desc: 'Commercial deliverables with set fee/compensation', icon: DollarSign },
+  { id: 'Free Collab', label: 'Free Collab — Invitations & Gifting', desc: 'VIP invitations, gifting, product & service testing', icon: Gift },
 ]
 
-const CREATOR_INTERESTS = [
-  { id: 'fnb', label: 'Food & Beverage', icon: Utensils },
-  { id: 'family', label: 'Family & Kids', icon: Users },
-  { id: 'entertainment', label: 'Entertainment', icon: Tv },
-  { id: 'fashion', label: 'Fashion', icon: Crown },
-  { id: 'beauty', label: 'Beauty', icon: Sparkles },
-  { id: 'sports', label: 'Sports & Fitness', icon: Compass },
-  { id: 'travel', label: 'Travel', icon: Compass },
-  { id: 'business', label: 'Business & Finance', icon: Briefcase },
+const PAID_DELIVERABLES = [
+  { id: 'Instagram Story', label: 'Instagram Story' },
+  { id: 'Instagram Reel', label: 'Instagram Reel' },
+  { id: 'Instagram Post', label: 'Instagram Post' },
+  { id: 'TikTok Video', label: 'TikTok Video' },
+  { id: 'Snapchat Story', label: 'Snapchat Story' },
+  { id: 'YouTube Mention/Video', label: 'YouTube Mention / Video' },
+  { id: 'UGC Content (unposted)', label: 'UGC Content (unposted)', desc: 'Raw or edited content without posting' },
+  { id: 'Event Appearance', label: 'Event Appearance', desc: 'On-ground presence & coverage' },
 ]
 
-const COLLAB_FORMATS = [
-  { id: 'reel', label: 'Reel' },
-  { id: 'post', label: 'Post' },
-  { id: 'stories', label: 'Stories' },
-  { id: 'reel_stories', label: 'Reel + Stories' },
-  { id: 'post_stories', label: 'Post + Stories' },
-  { id: 'custom', label: 'Custom' },
+const FREE_COLLAB_TYPES = [
+  { id: 'Restaurant/Café Testing', label: 'Restaurant / Café Testing', desc: 'Tastings & venue launches', icon: Utensils },
+  { id: 'Event Invitation', label: 'Event Invitation', desc: 'VIP events & launches', icon: Ticket },
+  { id: 'Product Gifting', label: 'Product Gifting', desc: 'PR packages & unboxing', icon: Package },
+  { id: 'Store/Location Visit', label: 'Store or Location Visit', desc: 'In-store visits & tours', icon: Compass },
+  { id: 'Service Trial', label: 'Service Trial', desc: 'Spa, gym, courses & trials', icon: Star },
+]
+
+const FREE_DELIVERABLES = [
+  { id: 'Instagram Story', label: 'Instagram Story' },
+  { id: 'Instagram Reel', label: 'Instagram Reel' },
+  { id: 'Instagram Post', label: 'Instagram Post' },
+  { id: 'Story Mention Only', label: 'Story Mention Only' },
+  { id: 'Google/Platform Review', label: 'Google / Platform Review' },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -219,56 +238,6 @@ function RichOptionCard({
   )
 }
 
-// ─── Format Pill Group Component ─────────────────────────────────────────────
-
-function FormatPillGroup({
-  title,
-  selected,
-  onToggle,
-  allowedFormats,
-}: {
-  title: string
-  selected: string[]
-  onToggle: (formatId: string) => void
-  allowedFormats?: string[]
-}) {
-  const formats = allowedFormats
-    ? COLLAB_FORMATS.filter(f => allowedFormats.includes(f.id))
-    : COLLAB_FORMATS
-
-  return (
-    <div className="p-4 border border-[#919191]/20 bg-[#fafafa]/50 rounded-sm space-y-3">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#3E3E3E]">
-          {title}
-        </span>
-        <span className="text-[10px] text-[#919191] uppercase tracking-widest">
-          {selected.length} selected
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {formats.map(fmt => {
-          const isSelected = selected.includes(fmt.id)
-          return (
-            <button
-              key={fmt.id}
-              type="button"
-              onClick={() => onToggle(fmt.id)}
-              className={`px-3.5 py-1.5 text-xs font-medium tracking-wide border transition-all duration-200 rounded-sm
-                ${isSelected
-                  ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white'
-                  : 'border-[#919191]/30 text-[#6A6A6A] hover:border-[#3E3E3E] hover:text-[#3E3E3E] bg-white'
-                }`}
-            >
-              {fmt.label}
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PartnershipForm() {
@@ -282,31 +251,38 @@ export default function PartnershipForm() {
     contactPerson: '',
     industry: '',
     website: '',
-    participationType: [],
+    instagramLink: '',
+    email: '',
+    phone: '',
+    targetAudience: [],
     projectGoals: [],
-    participationMethods: [],
-    otherParticipationMethod: '',
-    eventCategories: [],
+    goalOther: '',
+    participationType: [],
+    estimatedBudget: '',
+    notes: '',
   })
 
   const [creatorData, setCreatorData] = useState<CreatorForm>({
-    name: '',
-    phone: '',
+    fullName: '',
+    instagram: '',
+    otherSocials: '',
+    followers: '',
     email: '',
-    socialHandle: '',
-    lookingFor: [],
-    interests: [],
-    paidCampaigns: [],
-    nonPaidEvents: [],
-    nonPaidRestaurant: [],
-    nonPaidPR: [],
-    nonPaidCommunity: [],
+    phone: '',
+    categories: [],
+    collabType: [],
+    paidDeliverables: [],
+    paidNotes: '',
+    freeCollabTypes: [],
+    freeDeliverables: [],
+    notes: '',
   })
 
   // Touch and Error tracking
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'validating' | 'sending' | 'error'>('idle')
   const [receipt, setReceipt] = useState<SuccessReceipt | null>(null)
   const [copiedRef, setCopiedRef] = useState(false)
 
@@ -320,16 +296,25 @@ export default function PartnershipForm() {
     if (activeTab === 'brand') {
       if (step === 1 || viewMode === 'express') {
         if (!brandData.brandName || brandData.brandName.trim().length < 2) {
-          newErrors.brandName = 'Brand Name is required (min 2 characters)'
+          newErrors.brandName = 'Company Name is required (min 2 characters)'
+        }
+        if (!brandData.industry || brandData.industry.trim().length < 1) {
+          newErrors.industry = 'Industry / Activity is required'
         }
         if (!brandData.contactPerson || brandData.contactPerson.trim().length < 2) {
           newErrors.contactPerson = 'Contact Person is required (min 2 characters)'
         }
+        if (!brandData.email || !brandData.email.includes('@')) {
+          newErrors.email = 'Valid email address is required'
+        }
+        if (!brandData.phone || brandData.phone.trim().length < 6) {
+          newErrors.phone = 'Valid phone number is required (e.g. +965 9999 8888)'
+        }
       }
 
       if (step === 2 || viewMode === 'express') {
-        if (brandData.participationType.length === 0) {
-          newErrors.participationType = 'Please select at least one participation level'
+        if (brandData.targetAudience.length === 0) {
+          newErrors.targetAudience = 'Please select at least one target audience category'
         }
       }
 
@@ -340,41 +325,35 @@ export default function PartnershipForm() {
       }
 
       if (step === 4 || viewMode === 'express') {
-        if (brandData.participationMethods.length === 0) {
-          newErrors.participationMethods = 'Please select at least one participation method'
-        }
-        if (brandData.participationMethods.includes('other') && (!brandData.otherParticipationMethod || brandData.otherParticipationMethod.trim().length < 3)) {
-          newErrors.otherParticipationMethod = 'Please specify details for custom method (min 3 characters)'
-        }
-        if (brandData.eventCategories.length === 0) {
-          newErrors.eventCategories = 'Please select at least one event category'
+        if (brandData.participationType.length === 0) {
+          newErrors.participationType = 'Please select at least one participation type'
         }
       }
     } else {
       if (step === 1 || viewMode === 'express') {
-        if (!creatorData.name || creatorData.name.trim().length < 2) {
-          newErrors.name = 'Full Name is required (min 2 characters)'
+        if (!creatorData.fullName || creatorData.fullName.trim().length < 2) {
+          newErrors.fullName = 'Full Name is required (min 2 characters)'
         }
-        if (!creatorData.phone || creatorData.phone.trim().length < 6) {
-          newErrors.phone = 'Valid phone number is required (e.g. +965 9999 8888)'
+        if (!creatorData.instagram || creatorData.instagram.trim().length < 2) {
+          newErrors.instagram = 'Instagram handle is required (e.g. @username)'
         }
         if (!creatorData.email || !creatorData.email.includes('@')) {
           newErrors.email = 'Valid email address is required'
         }
-        if (!creatorData.socialHandle || creatorData.socialHandle.trim().length < 2) {
-          newErrors.socialHandle = 'Social handle or link is required (e.g. @yourhandle)'
+        if (!creatorData.phone || creatorData.phone.trim().length < 6) {
+          newErrors.phone = 'Valid phone number is required (e.g. +965 9999 8888)'
         }
       }
 
       if (step === 2 || viewMode === 'express') {
-        if (creatorData.lookingFor.length === 0) {
-          newErrors.lookingFor = 'Please select at least one partnership type'
+        if (creatorData.categories.length === 0) {
+          newErrors.categories = 'Please select at least one content category'
         }
       }
 
       if (step === 3 || viewMode === 'express') {
-        if (creatorData.interests.length === 0) {
-          newErrors.interests = 'Please select at least one interest category'
+        if (creatorData.collabType.length === 0) {
+          newErrors.collabType = 'Please select at least one collaboration type'
         }
       }
     }
@@ -385,11 +364,33 @@ export default function PartnershipForm() {
 
   const handleNextStep = () => {
     if (validateCurrentStep()) {
+      // Clear errors from the current step before advancing so they don't bleed visually
+      const stepErrorKeys: Record<string, Record<number, string[]>> = {
+        brand: {
+          1: ['brandName', 'industry', 'contactPerson', 'email', 'phone', 'website', 'instagramLink'],
+          2: ['targetAudience'],
+          3: ['projectGoals', 'goalOther'],
+          4: ['participationType'],
+          5: ['estimatedBudget'],
+        },
+        creator: {
+          1: ['fullName', 'instagram', 'otherSocials', 'followers', 'email', 'phone'],
+          2: ['categories'],
+          3: ['collabType', 'paidDeliverables', 'paidNotes', 'freeCollabTypes', 'freeDeliverables'],
+        },
+      }
+      const keysToRemove: string[] = stepErrorKeys[activeTab]?.[step] ?? []
+      setFieldErrors(prev => {
+        const next = { ...prev }
+        keysToRemove.forEach((k: string) => delete next[k])
+        return next
+      })
       setStep(prev => Math.min(maxSteps, prev + 1))
     }
   }
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFieldErrors(prev => ({ ...prev, [name]: '' }))
     setTouched(prev => ({ ...prev, [name]: true }))
@@ -413,6 +414,14 @@ export default function PartnershipForm() {
     })
   }
 
+  const handleBrandSingleSelect = (field: keyof BrandForm, value: string) => {
+    setFieldErrors(prev => ({ ...prev, [field]: '' }))
+    setBrandData(prev => ({
+      ...prev,
+      [field]: prev[field] === value ? '' : value,
+    }))
+  }
+
   const handleCreatorToggle = (field: keyof CreatorForm, id: string) => {
     setFieldErrors(prev => ({ ...prev, [field]: '' }))
     setCreatorData(prev => {
@@ -424,6 +433,7 @@ export default function PartnershipForm() {
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     setIsSubmitting(true)
+    setSubmitStatus('validating')
     setFieldErrors({})
 
     // Full schema validation
@@ -439,20 +449,24 @@ export default function PartnershipForm() {
       if (viewMode === 'wizard') {
         const errKeys = Object.keys(validation.errors)
         if (activeTab === 'brand') {
-          if (errKeys.some(k => ['brandName', 'contactPerson'].includes(k))) setStep(1)
-          else if (errKeys.includes('participationType')) setStep(2)
-          else if (errKeys.includes('projectGoals')) setStep(3)
-          else if (errKeys.some(k => ['participationMethods', 'otherParticipationMethod', 'eventCategories'].includes(k))) setStep(4)
+          if (errKeys.some(k => ['brandName', 'contactPerson', 'industry', 'website', 'email', 'phone'].includes(k))) setStep(1)
+          else if (errKeys.includes('targetAudience')) setStep(2)
+          else if (errKeys.some(k => ['projectGoals', 'goalOther'].includes(k))) setStep(3)
+          else if (errKeys.includes('participationType')) setStep(4)
+          else if (errKeys.includes('estimatedBudget')) setStep(5)
+          else if (errKeys.includes('notes')) setStep(6)
         } else {
-          if (errKeys.some(k => ['name', 'phone', 'email', 'socialHandle'].includes(k))) setStep(1)
-          else if (errKeys.includes('lookingFor')) setStep(2)
-          else if (errKeys.includes('interests')) setStep(3)
+          if (errKeys.some(k => ['fullName', 'instagram', 'otherSocials', 'followers', 'email', 'phone'].includes(k))) setStep(1)
+          else if (errKeys.includes('categories')) setStep(2)
+          else if (errKeys.some(k => ['collabType', 'paidDeliverables', 'paidNotes', 'freeCollabTypes', 'freeDeliverables'].includes(k))) setStep(3)
+          else if (errKeys.includes('notes')) setStep(4)
         }
       }
       return
     }
 
     try {
+      setSubmitStatus('sending')
       const res = await fetch('/api/partnership', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -462,19 +476,23 @@ export default function PartnershipForm() {
       const responseData = await res.json()
 
       if (res.ok && responseData.success) {
+        setSubmitStatus('idle')
         setReceipt({
           refId: responseData.refId,
           type: activeTab,
-          name: activeTab === 'brand' ? brandData.brandName : creatorData.name,
+          name: activeTab === 'brand' ? brandData.brandName : creatorData.fullName,
           receivedAt: responseData.receivedAt,
         })
       } else if (responseData.errors) {
+        setSubmitStatus('error')
         setFieldErrors(responseData.errors)
       } else {
-        setFieldErrors({ general: responseData.message || 'Submission failed' })
+        setSubmitStatus('error')
+        setFieldErrors({ general: responseData.message || 'Submission failed. Please try again.' })
       }
     } catch {
-      setFieldErrors({ general: 'Network connection failed. Please try again.' })
+      setSubmitStatus('error')
+      setFieldErrors({ general: 'Network connection failed. Please check your connection and try again.' })
     } finally {
       setIsSubmitting(false)
     }
@@ -497,24 +515,30 @@ export default function PartnershipForm() {
       contactPerson: '',
       industry: '',
       website: '',
-      participationType: [],
+      instagramLink: '',
+      email: '',
+      phone: '',
+      targetAudience: [],
       projectGoals: [],
-      participationMethods: [],
-      otherParticipationMethod: '',
-      eventCategories: [],
+      goalOther: '',
+      participationType: [],
+      estimatedBudget: '',
+      notes: '',
     })
     setCreatorData({
-      name: '',
-      phone: '',
+      fullName: '',
+      instagram: '',
+      otherSocials: '',
+      followers: '',
       email: '',
-      socialHandle: '',
-      lookingFor: [],
-      interests: [],
-      paidCampaigns: [],
-      nonPaidEvents: [],
-      nonPaidRestaurant: [],
-      nonPaidPR: [],
-      nonPaidCommunity: [],
+      phone: '',
+      categories: [],
+      collabType: [],
+      paidDeliverables: [],
+      paidNotes: '',
+      freeCollabTypes: [],
+      freeDeliverables: [],
+      notes: '',
     })
   }
 
@@ -562,7 +586,7 @@ export default function PartnershipForm() {
                 }`}
             >
               <Crown className="w-4 h-4" />
-              Brand & Sponsor
+              Brand & Partner
             </button>
             <button
               type="button"
@@ -619,7 +643,7 @@ export default function PartnershipForm() {
                 Thank You, <span className="font-bold">{receipt.name}</span>
               </h3>
               <p className="text-sm text-[#6A6A6A] mt-2 max-w-md mx-auto leading-relaxed">
-                Your partnership brief has been logged and assigned to a Fifth Floor Director.
+                Your partnership submission has been logged. Our team will review your details and reach out soon to discuss potential collaboration opportunities.
               </p>
             </div>
 
@@ -669,7 +693,7 @@ export default function PartnershipForm() {
                 </div>
 
                 {/* Step Indicators */}
-                <div className="grid grid-cols-4 gap-2 mt-4">
+                <div className={`grid gap-2 mt-4 ${maxSteps === 6 ? 'grid-cols-2 sm:grid-cols-6' : maxSteps === 5 ? 'grid-cols-5' : 'grid-cols-4'}`}>
                   {steps.map(s => (
                     <button
                       key={s.id}
@@ -695,9 +719,20 @@ export default function PartnershipForm() {
             )}
 
             {fieldErrors.general && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold tracking-wide flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-600" />
-                {fieldErrors.general}
+              <div className="mb-6 p-4 bg-red-50 border border-red-300 text-red-700 text-sm flex items-start gap-3 rounded-sm animate-fade-in">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 text-red-500 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-xs uppercase tracking-wider text-red-600 mb-0.5">Submission Failed</p>
+                  <p className="text-xs font-medium text-red-700 leading-relaxed">{fieldErrors.general}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setFieldErrors(prev => ({ ...prev, general: '' }))}
+                  className="text-red-400 hover:text-red-600 transition-colors flex-shrink-0 text-lg leading-none"
+                  aria-label="Dismiss error"
+                >
+                  ×
+                </button>
               </div>
             )}
 
@@ -707,22 +742,22 @@ export default function PartnershipForm() {
                  ───────────────────────────────────────────────────────────── */}
               {activeTab === 'brand' && (
                 <div className="space-y-10">
-                  {/* Step 1: Basic Info */}
+                  {/* Step 1: Company Identity */}
                   {(viewMode === 'express' || step === 1) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          1. <span className="font-bold">Brand Information</span>
+                          1. <span className="font-bold">Company Information</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          Tell us about your organization and main point of contact.
+                          Tell us about your organization and main contact person.
                         </p>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Brand Name <span className="text-red-400">*</span>
+                            Company Name <span className="text-red-400">*</span>
                           </label>
                           <input
                             type="text"
@@ -743,6 +778,55 @@ export default function PartnershipForm() {
 
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                            Industry / Activity <span className="text-red-400">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="industry"
+                            value={brandData.industry}
+                            onChange={handleTextChange}
+                            placeholder="e.g. Sportswear, Healthy Food, Banking..."
+                            className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
+                              ${fieldErrors.industry ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
+                          />
+                          {fieldErrors.industry && (
+                            <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
+                              <AlertCircle className="w-3 h-3" />
+                              {fieldErrors.industry}
+                            </p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                            Website
+                          </label>
+                          <input
+                            type="text"
+                            name="website"
+                            value={brandData.website}
+                            onChange={handleTextChange}
+                            placeholder="e.g. www.yourbrand.com"
+                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                            Instagram Link
+                          </label>
+                          <input
+                            type="text"
+                            name="instagramLink"
+                            value={brandData.instagramLink}
+                            onChange={handleTextChange}
+                            placeholder="instagram.com/yourbrand"
+                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
                             Contact Person <span className="text-red-400">*</span>
                           </label>
                           <input
@@ -750,7 +834,7 @@ export default function PartnershipForm() {
                             name="contactPerson"
                             value={brandData.contactPerson}
                             onChange={handleTextChange}
-                            placeholder="Full Name & Title"
+                            placeholder="Full Name & Position"
                             className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
                               ${fieldErrors.contactPerson ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
                           />
@@ -764,44 +848,141 @@ export default function PartnershipForm() {
 
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Industry / Sector
+                            Email Address <span className="text-red-400">*</span>
                           </label>
                           <input
-                            type="text"
-                            name="industry"
-                            value={brandData.industry}
+                            type="email"
+                            name="email"
+                            value={brandData.email}
                             onChange={handleTextChange}
-                            placeholder="e.g. Hospitality, Automotive, Tech"
-                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                            placeholder="partner@company.com"
+                            className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
+                              ${fieldErrors.email ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
                           />
+                          {fieldErrors.email && (
+                            <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
+                              <AlertCircle className="w-3 h-3" />
+                              {fieldErrors.email}
+                            </p>
+                          )}
                         </div>
 
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Website / Social Link
+                            Contact Phone <span className="text-red-400">*</span>
                           </label>
                           <input
-                            type="text"
-                            name="website"
-                            value={brandData.website}
+                            type="tel"
+                            name="phone"
+                            value={brandData.phone}
                             onChange={handleTextChange}
-                            placeholder="https://yourbrand.com"
-                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                            placeholder="+965 9999 8888"
+                            className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
+                              ${fieldErrors.phone ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
                           />
+                          {fieldErrors.phone && (
+                            <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
+                              <AlertCircle className="w-3 h-3" />
+                              {fieldErrors.phone}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Step 2: Sponsorship Level */}
+                  {/* Step 2: Target Audience */}
                   {(viewMode === 'express' || step === 2) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          2. <span className="font-bold">Participation Type</span> <span className="text-red-400">*</span>
+                          2. <span className="font-bold">Target Audience</span> <span className="text-red-400">*</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          Select the level of brand presence you are seeking.
+                          Who is your target audience? Select all segments that apply.
+                        </p>
+                      </div>
+
+                      {fieldErrors.targetAudience && (
+                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          {fieldErrors.targetAudience}
+                        </p>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {TARGET_AUDIENCE_OPTIONS.map(item => (
+                          <RichOptionCard
+                            key={item.id}
+                            label={item.label}
+                            desc={item.desc}
+                            icon={item.icon}
+                            selected={brandData.targetAudience.includes(item.id)}
+                            onClick={() => handleBrandToggle('targetAudience', item.id)}
+                            error={!!fieldErrors.targetAudience}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3: Project Goals */}
+                  {(viewMode === 'express' || step === 3) && (
+                    <div className="space-y-6">
+                      <div className="border-b border-[#3E3E3E]/10 pb-3">
+                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
+                          3. <span className="font-bold">Project Goals</span> <span className="text-red-400">*</span>
+                        </h3>
+                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
+                          What are your primary goals for participating? Select all that apply.
+                        </p>
+                      </div>
+
+                      {fieldErrors.projectGoals && (
+                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          {fieldErrors.projectGoals}
+                        </p>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {PROJECT_GOALS.map(item => (
+                          <RichOptionCard
+                            key={item.id}
+                            label={item.label}
+                            icon={item.icon}
+                            selected={brandData.projectGoals.includes(item.id)}
+                            onClick={() => handleBrandToggle('projectGoals', item.id)}
+                            error={!!fieldErrors.projectGoals}
+                          />
+                        ))}
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                          Anything else you want to add regarding goals? <span className="text-[#919191] font-normal">(Optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="goalOther"
+                          value={brandData.goalOther}
+                          onChange={handleTextChange}
+                          placeholder="e.g. Specific KPI targets, product launch timeframe..."
+                          className="w-full py-2.5 px-0 bg-transparent border-b border-[#919191]/40 text-sm text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] transition-colors"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 4: Participation Type */}
+                  {(viewMode === 'express' || step === 4) && (
+                    <div className="space-y-6">
+                      <div className="border-b border-[#3E3E3E]/10 pb-3">
+                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
+                          4. <span className="font-bold">Participation Type</span> <span className="text-red-400">*</span>
+                        </h3>
+                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
+                          Select the type of participation that interests you most.
                         </p>
                       </div>
 
@@ -828,122 +1009,54 @@ export default function PartnershipForm() {
                     </div>
                   )}
 
-                  {/* Step 3: Project Goals */}
-                  {(viewMode === 'express' || step === 3) && (
+                  {/* Step 5: Estimated Budget */}
+                  {(viewMode === 'express' || step === 5) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          3. <span className="font-bold">Project Goal</span> <span className="text-red-400">*</span>
+                          5. <span className="font-bold">Estimated Budget</span> <span className="text-[#919191] font-normal text-sm">(Optional)</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          What is your primary objective for this activation?
+                          What is your approximate budget allocation for this partnership?
                         </p>
                       </div>
 
-                      {fieldErrors.projectGoals && (
-                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          {fieldErrors.projectGoals}
-                        </p>
-                      )}
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {PROJECT_GOALS.map(item => (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        {ESTIMATED_BUDGET_OPTIONS.map(item => (
                           <RichOptionCard
                             key={item.id}
                             label={item.label}
+                            desc={item.desc}
                             icon={item.icon}
-                            selected={brandData.projectGoals.includes(item.id)}
-                            onClick={() => handleBrandToggle('projectGoals', item.id)}
-                            error={!!fieldErrors.projectGoals}
+                            selected={brandData.estimatedBudget === item.id}
+                            onClick={() => handleBrandSingleSelect('estimatedBudget', item.id)}
                           />
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Step 4: Methods & Categories */}
-                  {(viewMode === 'express' || step === 4) && (
-                    <div className="space-y-8">
+                  {/* Step 6: Additional Notes */}
+                  {(viewMode === 'express' || step === 6) && (
+                    <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          4. <span className="font-bold">Participation Format & Event Categories</span>
+                          6. <span className="font-bold">Additional Notes</span> <span className="text-[#919191] font-normal text-sm">(Optional)</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          How would you like to contribute and in which categories?
+                          Do you have a specific event in mind or preferred timeframe? Let us know.
                         </p>
                       </div>
 
-                      {/* Participation Methods */}
                       <div>
-                        <span className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-3">
-                          Participation Method <span className="text-red-400">*</span>
-                        </span>
-                        {fieldErrors.participationMethods && (
-                          <p className="text-xs text-red-500 flex items-center gap-1 font-medium mb-3">
-                            <AlertCircle className="w-3.5 h-3.5" />
-                            {fieldErrors.participationMethods}
-                          </p>
-                        )}
-
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                          {PARTICIPATION_METHODS.map(item => (
-                            <RichOptionCard
-                              key={item.id}
-                              label={item.label}
-                              icon={item.icon}
-                              selected={brandData.participationMethods.includes(item.id)}
-                              onClick={() => handleBrandToggle('participationMethods', item.id)}
-                              error={!!fieldErrors.participationMethods}
-                            />
-                          ))}
-                        </div>
-
-                        {brandData.participationMethods.includes('other') && (
-                          <div className="mt-4">
-                            <input
-                              type="text"
-                              name="otherParticipationMethod"
-                              value={brandData.otherParticipationMethod}
-                              onChange={handleTextChange}
-                              placeholder="Please describe your custom participation method..."
-                              className={`w-full py-2.5 px-0 bg-transparent border-b text-sm text-[#3E3E3E] placeholder-[#919191] focus:outline-none
-                                ${fieldErrors.otherParticipationMethod ? 'border-red-500' : 'border-[#3E3E3E]'}`}
-                            />
-                            {fieldErrors.otherParticipationMethod && (
-                              <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
-                                <AlertCircle className="w-3 h-3" />
-                                {fieldErrors.otherParticipationMethod}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Preferred Categories */}
-                      <div>
-                        <span className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-3">
-                          Preferred Event Categories <span className="text-red-400">*</span>
-                        </span>
-                        {fieldErrors.eventCategories && (
-                          <p className="text-xs text-red-500 flex items-center gap-1 font-medium mb-3">
-                            <AlertCircle className="w-3.5 h-3.5" />
-                            {fieldErrors.eventCategories}
-                          </p>
-                        )}
-
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                          {EVENT_CATEGORIES.map(item => (
-                            <RichOptionCard
-                              key={item.id}
-                              label={item.label}
-                              icon={item.icon}
-                              selected={brandData.eventCategories.includes(item.id)}
-                              onClick={() => handleBrandToggle('eventCategories', item.id)}
-                              error={!!fieldErrors.eventCategories}
-                            />
-                          ))}
-                        </div>
+                        <textarea
+                          name="notes"
+                          value={brandData.notes}
+                          onChange={handleTextChange}
+                          rows={4}
+                          placeholder="Write any details you'd like us to know before reaching out..."
+                          className="w-full p-4 bg-transparent border border-[#919191]/40 text-sm text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] rounded-sm transition-colors"
+                        />
                       </div>
                     </div>
                   )}
@@ -970,44 +1083,72 @@ export default function PartnershipForm() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Name <span className="text-red-400">*</span>
+                            Full Name <span className="text-red-400">*</span>
                           </label>
                           <input
                             type="text"
-                            name="name"
-                            value={creatorData.name}
+                            name="fullName"
+                            value={creatorData.fullName}
                             onChange={handleTextChange}
-                            placeholder="Full Name"
+                            placeholder="e.g. Sarah Al-Sabah"
                             className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
-                              ${fieldErrors.name ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
+                              ${fieldErrors.fullName ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
                           />
-                          {fieldErrors.name && (
+                          {fieldErrors.fullName && (
                             <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
                               <AlertCircle className="w-3 h-3" />
-                              {fieldErrors.name}
+                              {fieldErrors.fullName}
                             </p>
                           )}
                         </div>
 
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Phone Number <span className="text-red-400">*</span>
+                            Instagram Handle <span className="text-red-400">*</span>
                           </label>
                           <input
-                            type="tel"
-                            name="phone"
-                            value={creatorData.phone}
+                            type="text"
+                            name="instagram"
+                            value={creatorData.instagram}
                             onChange={handleTextChange}
-                            placeholder="+965 9999 8888"
+                            placeholder="@username"
                             className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
-                              ${fieldErrors.phone ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
+                              ${fieldErrors.instagram ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
                           />
-                          {fieldErrors.phone && (
+                          {fieldErrors.instagram && (
                             <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
                               <AlertCircle className="w-3 h-3" />
-                              {fieldErrors.phone}
+                              {fieldErrors.instagram}
                             </p>
                           )}
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                            TikTok / YouTube / Snapchat <span className="text-[#919191] font-normal">(Optional)</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="otherSocials"
+                            value={creatorData.otherSocials}
+                            onChange={handleTextChange}
+                            placeholder="e.g. TikTok @handle, YouTube Channel"
+                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                            Approximate Followers <span className="text-[#919191] font-normal">(Optional)</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="followers"
+                            value={creatorData.followers}
+                            onChange={handleTextChange}
+                            placeholder="e.g. 45,000"
+                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                          />
                         </div>
 
                         <div>
@@ -1033,21 +1174,21 @@ export default function PartnershipForm() {
 
                         <div>
                           <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Instagram / TikTok Handle <span className="text-red-400">*</span>
+                            Phone Number <span className="text-red-400">*</span>
                           </label>
                           <input
-                            type="text"
-                            name="socialHandle"
-                            value={creatorData.socialHandle}
+                            type="tel"
+                            name="phone"
+                            value={creatorData.phone}
                             onChange={handleTextChange}
-                            placeholder="@yourhandle"
+                            placeholder="+965 9999 8888"
                             className={`w-full py-3 px-0 bg-transparent border-b text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none text-base transition-colors
-                              ${fieldErrors.socialHandle ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
+                              ${fieldErrors.phone ? 'border-red-500' : 'border-[#919191]/40 focus:border-[#3E3E3E]'}`}
                           />
-                          {fieldErrors.socialHandle && (
+                          {fieldErrors.phone && (
                             <p className="text-xs text-red-500 flex items-center gap-1 font-medium mt-1">
                               <AlertCircle className="w-3 h-3" />
-                              {fieldErrors.socialHandle}
+                              {fieldErrors.phone}
                             </p>
                           )}
                         </div>
@@ -1055,118 +1196,297 @@ export default function PartnershipForm() {
                     </div>
                   )}
 
-                  {/* Step 2: What you are looking for */}
+                  {/* Step 2: Categories */}
                   {(viewMode === 'express' || step === 2) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          2. <span className="font-bold">I'm Looking For</span> <span className="text-red-400">*</span>
+                          2. <span className="font-bold">Content Categories</span> <span className="text-red-400">*</span>
+                        </h3>
+                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
+                          Which topics do you focus on the most? Select all that apply.
+                        </p>
+                      </div>
+
+                      {fieldErrors.categories && (
+                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          {fieldErrors.categories}
+                        </p>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        {CREATOR_CATEGORIES.map(item => (
+                          <RichOptionCard
+                            key={item.id}
+                            label={item.label}
+                            desc={item.desc}
+                            icon={item.icon}
+                            selected={creatorData.categories.includes(item.id)}
+                            onClick={() => handleCreatorToggle('categories', item.id)}
+                            error={!!fieldErrors.categories}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3: Collaboration Scope & Branch Panels */}
+                  {(viewMode === 'express' || step === 3) && (
+                    <div className="space-y-8">
+                      <div className="border-b border-[#3E3E3E]/10 pb-3">
+                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
+                          3. <span className="font-bold">Collaboration Type & Deliverables</span> <span className="text-red-400">*</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
                           Select the types of collaborations you are open to.
                         </p>
                       </div>
 
-                      {fieldErrors.lookingFor && (
+                      {fieldErrors.collabType && (
                         <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
                           <AlertCircle className="w-3.5 h-3.5" />
-                          {fieldErrors.lookingFor}
+                          {fieldErrors.collabType}
                         </p>
                       )}
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {LOOKING_FOR.map(item => (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {CREATOR_COLLAB_TYPES.map(item => (
                           <RichOptionCard
                             key={item.id}
                             label={item.label}
                             desc={item.desc}
                             icon={item.icon}
-                            selected={creatorData.lookingFor.includes(item.id)}
-                            onClick={() => handleCreatorToggle('lookingFor', item.id)}
-                            error={!!fieldErrors.lookingFor}
+                            selected={creatorData.collabType.includes(item.id)}
+                            onClick={() => handleCreatorToggle('collabType', item.id)}
+                            error={!!fieldErrors.collabType}
                           />
                         ))}
                       </div>
-                    </div>
-                  )}
 
-                  {/* Step 3: Interests */}
-                  {(viewMode === 'express' || step === 3) && (
-                    <div className="space-y-6">
-                      <div className="border-b border-[#3E3E3E]/10 pb-3">
-                        <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          3. <span className="font-bold">My Content Interests</span> <span className="text-red-400">*</span>
-                        </h3>
-                        <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          Which categories best align with your audience?
-                        </p>
-                      </div>
+                      {/* PAID AD BRANCH */}
+                      {creatorData.collabType.includes('Paid Ad') && (
+                        <div className="p-6 border border-[#9E8651]/30 bg-[#9E8651]/[0.03] rounded-sm space-y-6 animate-fade-in">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#9E8651]/15 text-[#6E5930] text-[11px] font-mono font-semibold uppercase tracking-wider rounded-full border border-[#9E8651]/30">
+                            <DollarSign className="w-3.5 h-3.5" />
+                            Paid Ad Options & Deliverables
+                          </div>
 
-                      {fieldErrors.interests && (
-                        <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
-                          <AlertCircle className="w-3.5 h-3.5" />
-                          {fieldErrors.interests}
-                        </p>
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-3">
+                              Select Deliverables You Provide:
+                            </label>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                              {PAID_DELIVERABLES.map(item => {
+                                const isSel = creatorData.paidDeliverables.includes(item.id)
+                                return (
+                                  <button
+                                    key={item.id}
+                                    type="button"
+                                    onClick={() => handleCreatorToggle('paidDeliverables', item.id)}
+                                    className={`p-3 text-left border rounded-sm transition-all text-xs font-medium ${
+                                      isSel
+                                        ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white shadow-sm'
+                                        : 'border-[#919191]/30 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span>{item.label}</span>
+                                      {isSel && <Check className="w-3.5 h-3.5" />}
+                                    </div>
+                                    {item.desc && (
+                                      <span className={`block text-[10px] mt-1 font-light ${isSel ? 'text-white/80' : 'text-[#6A6A6A]'}`}>
+                                        {item.desc}
+                                      </span>
+                                    )}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-2">
+                              Package Notes or Rates Info <span className="text-[#919191] font-normal">(Optional — rates discussed upon opportunity)</span>
+                            </label>
+                            <textarea
+                              name="paidNotes"
+                              value={creatorData.paidNotes}
+                              onChange={handleTextChange}
+                              rows={3}
+                              placeholder="e.g. Package bundles like 1 Reel + 3 Stories, usage rights policies..."
+                              className="w-full p-3 bg-white border border-[#919191]/30 text-xs text-[#3E3E3E] placeholder-[#919191]/60 focus:outline-none focus:border-[#3E3E3E] rounded-sm transition-colors"
+                            />
+                          </div>
+                        </div>
                       )}
 
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {CREATOR_INTERESTS.map(item => (
-                          <RichOptionCard
-                            key={item.id}
-                            label={item.label}
-                            icon={item.icon}
-                            selected={creatorData.interests.includes(item.id)}
-                            onClick={() => handleCreatorToggle('interests', item.id)}
-                            error={!!fieldErrors.interests}
-                          />
-                        ))}
-                      </div>
+                      {/* FREE COLLAB BRANCH */}
+                      {creatorData.collabType.includes('Free Collab') && (
+                        <div className="p-6 border border-[#4A6B5A]/30 bg-[#4A6B5A]/[0.03] rounded-sm space-y-6 animate-fade-in">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#4A6B5A]/15 text-[#325242] text-[11px] font-mono font-semibold uppercase tracking-wider rounded-full border border-[#4A6B5A]/30">
+                            <Gift className="w-3.5 h-3.5" />
+                            Free Collab Preferences
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-3">
+                              What Types of Free Collabs Interest You?
+                            </label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                              {FREE_COLLAB_TYPES.map(item => (
+                                <RichOptionCard
+                                  key={item.id}
+                                  label={item.label}
+                                  desc={item.desc}
+                                  icon={item.icon}
+                                  selected={creatorData.freeCollabTypes.includes(item.id)}
+                                  onClick={() => handleCreatorToggle('freeCollabTypes', item.id)}
+                                />
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-3">
+                              Deliverables You Offer in Exchange for Free Collabs:
+                            </label>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                              {FREE_DELIVERABLES.map(item => {
+                                const isSel = creatorData.freeDeliverables.includes(item.id)
+                                return (
+                                  <button
+                                    key={item.id}
+                                    type="button"
+                                    onClick={() => handleCreatorToggle('freeDeliverables', item.id)}
+                                    className={`p-3 text-left border rounded-sm transition-all text-xs font-medium ${
+                                      isSel
+                                        ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white shadow-sm'
+                                        : 'border-[#919191]/30 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <span>{item.label}</span>
+                                      {isSel && <Check className="w-3.5 h-3.5" />}
+                                    </div>
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  {/* Step 4: Deliverable Formats */}
+                  {/* Step 4: Additional Notes — Enhanced */}
                   {(viewMode === 'express' || step === 4) && (
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          4. <span className="font-bold">Collaboration Deliverable Preferences</span>
+                          4. <span className="font-bold">Additional Information</span>
+                          <span className="ml-2 inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#919191]/10 text-[#919191] rounded-full">Optional</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          Configure your preferred output formats for each collaboration type.
+                          Help us prepare — share any past work, preferences, or scheduling details before we reach out.
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormatPillGroup
-                          title="Paid Campaigns"
-                          selected={creatorData.paidCampaigns}
-                          onToggle={id => handleCreatorToggle('paidCampaigns', id)}
-                        />
-                        <FormatPillGroup
-                          title="Non-Paid Event Invitations"
-                          selected={creatorData.nonPaidEvents}
-                          onToggle={id => handleCreatorToggle('nonPaidEvents', id)}
-                          allowedFormats={['reel', 'post', 'stories', 'reel_stories', 'stories_only']}
-                        />
-                        <FormatPillGroup
-                          title="Non-Paid Restaurant Invitations"
-                          selected={creatorData.nonPaidRestaurant}
-                          onToggle={id => handleCreatorToggle('nonPaidRestaurant', id)}
-                          allowedFormats={['reel', 'post', 'stories', 'reel_stories', 'stories_only']}
-                        />
-                        <FormatPillGroup
-                          title="Non-Paid PR Packages"
-                          selected={creatorData.nonPaidPR}
-                          onToggle={id => handleCreatorToggle('nonPaidPR', id)}
-                          allowedFormats={['reel', 'post', 'stories', 'reel_stories']}
-                        />
-                        <FormatPillGroup
-                          title="Non-Paid Community Events"
-                          selected={creatorData.nonPaidCommunity}
-                          onToggle={id => handleCreatorToggle('nonPaidCommunity', id)}
-                          allowedFormats={['reel', 'post', 'stories', 'reel_stories']}
-                        />
+                      {/* Quick Prompt Chips */}
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#919191] mb-3">Quick prompts — click to add:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            'I have worked with brands like…',
+                            'Best time to reach me is…',
+                            'I prefer Kuwait-based collaborations',
+                            'I am available for events',
+                            'I produce content in Arabic & English',
+                          ].map(prompt => (
+                            <button
+                              key={prompt}
+                              type="button"
+                              onClick={() => {
+                                const current = creatorData.notes ?? ''
+                                const separator = current.trim() ? '\n' : ''
+                                setCreatorData(prev => ({ ...prev, notes: current + separator + prompt + ' ' }))
+                              }}
+                              className="px-3 py-1.5 text-[11px] font-medium border border-[#919191]/30 text-[#6A6A6A] hover:border-[#3E3E3E] hover:text-[#3E3E3E] hover:bg-[#3E3E3E]/[0.03] rounded-sm transition-all"
+                            >
+                              + {prompt}
+                            </button>
+                          ))}
+                        </div>
                       </div>
+
+                      {/* Textarea with character counter */}
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                          Notes, Past Brand Collaborations, or Specific Preferences
+                        </label>
+                        <div className="relative">
+                          <textarea
+                            name="notes"
+                            value={creatorData.notes}
+                            onChange={handleTextChange}
+                            rows={5}
+                            maxLength={1000}
+                            placeholder="e.g. Brands you've previously collaborated with, location preferences, scheduling details, content style..."
+                            className="w-full p-4 bg-[#FAFAF8] border border-[#919191]/40 text-sm text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] focus:bg-white rounded-sm transition-all resize-none leading-relaxed"
+                          />
+                          <div className="absolute bottom-3 right-3 flex items-center gap-2">
+                            <span className={`text-[10px] font-mono tabular-nums ${
+                              (creatorData.notes?.length ?? 0) > 900 ? 'text-red-400' :
+                              (creatorData.notes?.length ?? 0) > 700 ? 'text-amber-400' :
+                              'text-[#919191]/60'
+                            }`}>
+                              {creatorData.notes?.length ?? 0}/1000
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-[#919191] mt-2 font-light">
+                          This is optional — feel free to skip and submit directly. We will follow up with questions.
+                        </p>
+                      </div>
+
+                      {/* Pre-submit summary strip */}
+                      {viewMode === 'wizard' && (
+                        <div className="border border-[#3E3E3E]/10 bg-[#F3F0EB]/50 p-4 rounded-sm">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-[#919191] mb-3">Your Submission Summary</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-xs">
+                            {creatorData.fullName && (
+                              <div className="flex gap-2">
+                                <span className="text-[#919191] font-medium min-w-[80px]">Name:</span>
+                                <span className="text-[#3E3E3E] font-semibold truncate">{creatorData.fullName}</span>
+                              </div>
+                            )}
+                            {creatorData.instagram && (
+                              <div className="flex gap-2">
+                                <span className="text-[#919191] font-medium min-w-[80px]">Instagram:</span>
+                                <span className="text-[#3E3E3E] font-semibold truncate">{creatorData.instagram}</span>
+                              </div>
+                            )}
+                            {creatorData.email && (
+                              <div className="flex gap-2">
+                                <span className="text-[#919191] font-medium min-w-[80px]">Email:</span>
+                                <span className="text-[#3E3E3E] truncate">{creatorData.email}</span>
+                              </div>
+                            )}
+                            {creatorData.categories.length > 0 && (
+                              <div className="flex gap-2">
+                                <span className="text-[#919191] font-medium min-w-[80px]">Categories:</span>
+                                <span className="text-[#3E3E3E]">{creatorData.categories.length} selected</span>
+                              </div>
+                            )}
+                            {creatorData.collabType.length > 0 && (
+                              <div className="flex gap-2">
+                                <span className="text-[#919191] font-medium min-w-[80px]">Collab:</span>
+                                <span className="text-[#3E3E3E]">{creatorData.collabType.join(', ')}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -1200,10 +1520,18 @@ export default function PartnershipForm() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="px-10 py-4 bg-[#3E3E3E] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-[#2a2a2a] transition-all shadow-lg shadow-black/10"
+                        className={`px-10 py-4 text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3 transition-all shadow-lg shadow-black/10 ${
+                          submitStatus === 'error'
+                            ? 'bg-red-600 hover:bg-red-700'
+                            : 'bg-[#3E3E3E] hover:bg-[#2a2a2a]'
+                        } disabled:opacity-70 disabled:cursor-not-allowed`}
                       >
-                        {isSubmitting ? (
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        {submitStatus === 'validating' ? (
+                          <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Validating…</>
+                        ) : submitStatus === 'sending' ? (
+                          <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sending…</>
+                        ) : submitStatus === 'error' ? (
+                          <><AlertCircle className="w-4 h-4" /> Try Again</>
                         ) : (
                           <>
                             Submit Partnership Brief
@@ -1218,13 +1546,21 @@ export default function PartnershipForm() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full sm:w-auto px-12 py-4 bg-[#3E3E3E] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#2a2a2a] transition-all shadow-lg"
+                      className={`w-full sm:w-auto px-12 py-4 text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all shadow-lg ${
+                        submitStatus === 'error'
+                          ? 'bg-red-600 hover:bg-red-700'
+                          : 'bg-[#3E3E3E] hover:bg-[#2a2a2a]'
+                      } disabled:opacity-70 disabled:cursor-not-allowed`}
                     >
-                      {isSubmitting ? (
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      {submitStatus === 'validating' ? (
+                        <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Validating…</>
+                      ) : submitStatus === 'sending' ? (
+                        <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sending…</>
+                      ) : submitStatus === 'error' ? (
+                        <><AlertCircle className="w-4 h-4" /> Try Again</>
                       ) : (
                         <>
-                          Submit Inquiry
+                          Submit Profile Application
                           <ArrowRight className="w-4 h-4" />
                         </>
                       )}

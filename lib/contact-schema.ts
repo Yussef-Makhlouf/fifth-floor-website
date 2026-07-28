@@ -67,70 +67,77 @@ export type EmailOnlyData = z.infer<typeof emailOnlySchema>
 // BRAND PARTNERSHIP SCHEMA - Strict Super Validation
 // ============================================================================
 
-export const brandPartnershipSchema = z
-  .object({
-    brandName: z
-      .string()
-      .min(1, 'Brand Name is required')
-      .min(2, 'Brand Name must be at least 2 characters')
-      .max(100, 'Brand Name cannot exceed 100 characters'),
+export const brandPartnershipSchema = z.object({
+  brandName: z
+    .string()
+    .min(1, 'Company Name is required')
+    .min(2, 'Company Name must be at least 2 characters')
+    .max(100, 'Company Name cannot exceed 100 characters'),
 
-    contactPerson: z
-      .string()
-      .min(1, 'Contact Person is required')
-      .min(2, 'Contact Person must be at least 2 characters')
-      .max(100, 'Contact Person cannot exceed 100 characters')
-      .regex(NAME_REGEX, 'Contact Person can only contain letters and hyphens'),
+  contactPerson: z
+    .string()
+    .min(1, 'Contact Person is required')
+    .min(2, 'Contact Person must be at least 2 characters')
+    .max(100, 'Contact Person cannot exceed 100 characters')
+    .regex(NAME_REGEX, 'Contact Person can only contain letters, spaces, and hyphens'),
 
-    industry: z
-      .string()
-      .max(100, 'Industry cannot exceed 100 characters')
-      .optional()
-      .or(z.literal('')),
+  industry: z
+    .string()
+    .min(1, 'Industry / Activity is required')
+    .max(100, 'Industry cannot exceed 100 characters'),
 
-    website: z
-      .string()
-      .max(250, 'Website link cannot exceed 250 characters')
-      .optional()
-      .or(z.literal('')),
+  website: z
+    .string()
+    .max(250, 'Website link cannot exceed 250 characters')
+    .optional()
+    .or(z.literal('')),
 
-    participationType: z
-      .array(z.string())
-      .min(1, 'Please select at least one participation type'),
+  instagramLink: z
+    .string()
+    .max(250, 'Instagram link cannot exceed 250 characters')
+    .optional()
+    .or(z.literal('')),
 
-    projectGoals: z
-      .array(z.string())
-      .min(1, 'Please select at least one project goal'),
+  email: z
+    .string()
+    .min(1, 'Email is required')
+    .email('Please enter a valid email address')
+    .max(254, 'Email cannot exceed 254 characters'),
 
-    participationMethods: z
-      .array(z.string())
-      .min(1, 'Please select at least one participation method'),
+  phone: z
+    .string()
+    .min(1, 'Phone number is required')
+    .regex(PHONE_REGEX, 'Please enter a valid phone number (e.g. +965 9999 8888)'),
 
-    otherParticipationMethod: z
-      .string()
-      .max(250, 'Details cannot exceed 250 characters')
-      .optional()
-      .or(z.literal('')),
+  targetAudience: z
+    .array(z.string())
+    .min(1, 'Please select at least one target audience category'),
 
-    eventCategories: z
-      .array(z.string())
-      .min(1, 'Please select at least one event category'),
-  })
-  .refine(
-    (data) => {
-      if (data.participationMethods.includes('other')) {
-        return (
-          !!data.otherParticipationMethod &&
-          data.otherParticipationMethod.trim().length >= 3
-        )
-      }
-      return true
-    },
-    {
-      message: 'Please specify details for your custom participation method (min 3 chars)',
-      path: ['otherParticipationMethod'],
-    }
-  )
+  projectGoals: z
+    .array(z.string())
+    .min(1, 'Please select at least one project goal'),
+
+  goalOther: z
+    .string()
+    .max(500, 'Additional goal details cannot exceed 500 characters')
+    .optional()
+    .or(z.literal('')),
+
+  participationType: z
+    .array(z.string())
+    .min(1, 'Please select at least one participation type'),
+
+  estimatedBudget: z
+    .string()
+    .optional()
+    .or(z.literal('')),
+
+  notes: z
+    .string()
+    .max(1000, 'Notes cannot exceed 1000 characters')
+    .optional()
+    .or(z.literal('')),
+})
 
 export type BrandPartnershipData = z.infer<typeof brandPartnershipSchema>
 
@@ -139,17 +146,29 @@ export type BrandPartnershipData = z.infer<typeof brandPartnershipSchema>
 // ============================================================================
 
 export const creatorPartnershipSchema = z.object({
-  name: z
+  fullName: z
     .string()
-    .min(1, 'Name is required')
-    .min(2, 'Name must be at least 2 characters')
-    .max(100, 'Name cannot exceed 100 characters')
-    .regex(NAME_REGEX, 'Name can only contain letters and hyphens'),
+    .min(1, 'Full name is required')
+    .min(2, 'Full name must be at least 2 characters')
+    .max(100, 'Full name cannot exceed 100 characters')
+    .regex(NAME_REGEX, 'Name can only contain letters, spaces, and hyphens'),
 
-  phone: z
+  instagram: z
     .string()
-    .min(1, 'Phone number is required')
-    .regex(PHONE_REGEX, 'Please enter a valid phone number (e.g. +965 9999 8888)'),
+    .min(1, 'Instagram handle is required')
+    .regex(SOCIAL_HANDLE_REGEX, 'Please enter a valid handle (e.g. @username) or profile link'),
+
+  otherSocials: z
+    .string()
+    .max(200, 'Other social platforms detail cannot exceed 200 characters')
+    .optional()
+    .or(z.literal('')),
+
+  followers: z
+    .string()
+    .max(50, 'Followers count cannot exceed 50 characters')
+    .optional()
+    .or(z.literal('')),
 
   email: z
     .string()
@@ -157,24 +176,36 @@ export const creatorPartnershipSchema = z.object({
     .email('Please enter a valid email address')
     .max(254, 'Email cannot exceed 254 characters'),
 
-  socialHandle: z
+  phone: z
     .string()
-    .min(1, 'Social handle is required')
-    .regex(SOCIAL_HANDLE_REGEX, 'Please enter a valid handle (e.g. @username) or profile link'),
+    .min(1, 'Phone number is required')
+    .regex(PHONE_REGEX, 'Please enter a valid phone number (e.g. +965 9999 8888)'),
 
-  lookingFor: z
+  categories: z
     .array(z.string())
-    .min(1, 'Please select at least one partnership type you are looking for'),
+    .min(1, 'Please select at least one content category'),
 
-  interests: z
+  collabType: z
     .array(z.string())
-    .min(1, 'Please select at least one interest area'),
+    .min(1, 'Please select at least one collaboration type'),
 
-  paidCampaigns: z.array(z.string()).optional(),
-  nonPaidEvents: z.array(z.string()).optional(),
-  nonPaidRestaurant: z.array(z.string()).optional(),
-  nonPaidPR: z.array(z.string()).optional(),
-  nonPaidCommunity: z.array(z.string()).optional(),
+  paidDeliverables: z.array(z.string()).optional(),
+
+  paidNotes: z
+    .string()
+    .max(1000, 'Notes cannot exceed 1000 characters')
+    .optional()
+    .or(z.literal('')),
+
+  freeCollabTypes: z.array(z.string()).optional(),
+
+  freeDeliverables: z.array(z.string()).optional(),
+
+  notes: z
+    .string()
+    .max(1000, 'Notes cannot exceed 1000 characters')
+    .optional()
+    .or(z.literal('')),
 })
 
 export type CreatorPartnershipData = z.infer<typeof creatorPartnershipSchema>

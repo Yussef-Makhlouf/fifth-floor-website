@@ -93,7 +93,7 @@ export default function Hero() {
         <div ref={badgeRef} className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#1A1A1C]/10 bg-white/60 backdrop-blur-md mb-8 shadow-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1C]" />
           <span className="text-[11px] uppercase tracking-[0.3em] font-semibold text-[#55555A]">
-            Fifth Floor Creative House
+            Fifth Floor Creative Club
           </span>
         </div>
 
