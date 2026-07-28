@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/resend'
 import { contactFormSchema } from '@/lib/contact-schema'
 import { contactNotificationEmail, contactConfirmationEmail } from '@/lib/email-templates'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 const FROM_EMAIL = process.env.FROM_EMAIL ?? 'onboarding@resend.dev'
 const FROM = `${process.env.FROM_NAME ?? 'Fifth Floor Agency'} <${FROM_EMAIL}>`
@@ -14,6 +12,7 @@ const IS_TEST_MODE = FROM_EMAIL === 'onboarding@resend.dev'
 
 export async function POST(req: NextRequest) {
   try {
+    const resend = getResendClient()
     const body = await req.json()
     const validation = contactFormSchema.safeParse(body)
 
