@@ -8,12 +8,10 @@ import {
   creatorConfirmationEmail,
 } from '@/lib/email-templates'
 
-const FROM_EMAIL = process.env.FROM_EMAIL ?? 'onboarding@resend.dev'
+const FROM_EMAIL = process.env.FROM_EMAIL ?? 'info@fifthflooragency.com'
 const FROM = `${process.env.FROM_NAME ?? 'Fifth Floor Agency'} <${FROM_EMAIL}>`
-const TEAM_EMAIL = process.env.TEAM_EMAIL ?? 'info@fifth-floor.agency'
+const TEAM_EMAIL = process.env.TEAM_EMAIL ?? 'info.fifthfloorcc@gmail.com'
 
-// In Resend test mode (no verified domain), we can only send to the account owner's email.
-// Client auto-replies are skipped until a domain is verified at resend.com/domains.
 const IS_TEST_MODE = FROM_EMAIL === 'onboarding@resend.dev'
 
 export async function POST(req: NextRequest) {
@@ -41,6 +39,7 @@ export async function POST(req: NextRequest) {
         resend.emails.send({
           from: FROM,
           to: [TEAM_EMAIL],
+          replyTo: d.email,
           subject: `[Brand Inquiry] ${d.brandName} — Ref: ${refId}`,
           html: brandNotificationEmail(d, refId, receivedAt),
         }),
