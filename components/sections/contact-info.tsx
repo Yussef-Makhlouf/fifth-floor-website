@@ -52,60 +52,59 @@ export default function ContactInfo() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-            {/* Left: Interactive Map */}
-            <div className="lg:col-span-7 xl:col-span-8 order-2 lg:order-1">
-              <CustomMap
-                activeLocationIndex={activeLocation}
-                className="shadow-2xl shadow-black/5"
-              />
-            </div>
+          {/* MAP COMPONENT - COMMENTED OUT */}
+          {/* 
+          <div className="mb-12">
+            <CustomMap
+              activeLocationIndex={activeLocation}
+              className="shadow-2xl shadow-black/5"
+            />
+          </div>
+          */}
 
-            {/* Right: Location Cards */}
-            <div className="lg:col-span-5 xl:col-span-4 order-1 lg:order-2 flex flex-col gap-6">
-              {OFFICE_LOCATIONS.map((location, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setActiveLocation(idx)}
-                  className={`group p-8 border transition-all duration-500 cursor-pointer relative overflow-hidden ${activeLocation === idx
-                    ? 'bg-[#3E3E3E] border-[#3E3E3E] text-white shadow-xl scale-105'
-                    : 'bg-white border-[#919191]/20 text-[#3E3E3E] hover:border-[#3E3E3E] hover:shadow-lg'
-                    }`}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl">{location.country}</span>
-                      <h3 className={`text-2xl font-bold ${activeLocation === idx ? 'text-white' : 'text-[#3E3E3E]'}`}>
-                        {location.region}
-                      </h3>
-                    </div>
-                    {activeLocation === idx && (
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                    )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            {OFFICE_LOCATIONS.map((location, idx) => (
+              <div
+                key={idx}
+                onClick={() => setActiveLocation(idx)}
+                className={`group p-8 border transition-all duration-500 cursor-pointer relative overflow-hidden ${activeLocation === idx
+                  ? 'bg-[#3E3E3E] border-[#3E3E3E] text-white shadow-xl scale-105'
+                  : 'bg-white border-[#919191]/20 text-[#3E3E3E] hover:border-[#3E3E3E] hover:shadow-lg'
+                  }`}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{location.country}</span>
+                    <h3 className={`text-2xl font-bold ${activeLocation === idx ? 'text-white' : 'text-[#3E3E3E]'}`}>
+                      {location.region}
+                    </h3>
                   </div>
-
-                  <div className={`space-y-4 text-sm ${activeLocation === idx ? 'text-white/80' : 'text-[#6A6A6A]'}`}>
-                    <div>
-                      <p className={`text-[10px] uppercase tracking-widest font-bold mb-1 ${activeLocation === idx ? 'text-white/60' : 'text-[#3E3E3E]/60'}`}>Address</p>
-                      <p className="font-light">{location.office}</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className={`text-[10px] uppercase tracking-widest font-bold mb-1 ${activeLocation === idx ? 'text-white/60' : 'text-[#3E3E3E]/60'}`}>Email</p>
-                        <p className="font-light">{location.email}</p>
-                      </div>
-                      <div>
-                        <p className={`text-[10px] uppercase tracking-widest font-bold mb-1 ${activeLocation === idx ? 'text-white/60' : 'text-[#3E3E3E]/60'}`}>Phone</p>
-                        <p className="font-light">{location.phone}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Decorative corner for active state */}
-                  <div className={`absolute -bottom-4 -right-4 w-12 h-12 bg-white/10 rotate-45 transform transition-transform duration-500 ${activeLocation === idx ? 'translate-y-0 translate-x-0' : 'translate-y-full translate-x-full'}`} />
+                  {activeLocation === idx && (
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                  )}
                 </div>
-              ))}
-            </div>
+
+                <div className={`space-y-4 text-sm ${activeLocation === idx ? 'text-white/80' : 'text-[#6A6A6A]'}`}>
+                  <div>
+                    <p className={`text-[10px] uppercase tracking-widest font-bold mb-1 ${activeLocation === idx ? 'text-white/60' : 'text-[#3E3E3E]/60'}`}>Address</p>
+                    <p className="font-light">{location.office}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className={`text-[10px] uppercase tracking-widest font-bold mb-1 ${activeLocation === idx ? 'text-white/60' : 'text-[#3E3E3E]/60'}`}>Email</p>
+                      <p className="font-light">{location.email}</p>
+                    </div>
+                    <div>
+                      <p className={`text-[10px] uppercase tracking-widest font-bold mb-1 ${activeLocation === idx ? 'text-white/60' : 'text-[#3E3E3E]/60'}`}>Phone</p>
+                      <p className="font-light">{location.phone}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Decorative corner for active state */}
+                <div className={`absolute -bottom-4 -right-4 w-12 h-12 bg-white/10 rotate-45 transform transition-transform duration-500 ${activeLocation === idx ? 'translate-y-0 translate-x-0' : 'translate-y-full translate-x-full'}`} />
+              </div>
+            ))}
           </div>
         </div>
 

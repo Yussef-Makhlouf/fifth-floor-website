@@ -95,7 +95,7 @@ export default function VisualEvidence() {
             <div>
               <p className="text-[9px] uppercase tracking-[0.28em] text-[#b0b0b0] font-medium mb-4">Selected works</p>
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-light text-[#1a1a1a] leading-[1.05] tracking-tight">
-                Visual atmosphere
+                Visual Creatives
               </h2>
             </div>
             <div className="sm:text-right pb-1">

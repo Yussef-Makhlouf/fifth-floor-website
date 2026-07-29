@@ -5,7 +5,7 @@ export const COMPANY_INFO = {
     name: 'Fifth Floor',
     tagline: 'Where Big Ideas Take Shape',
     website: 'https://fifthfloor.agency',
-    mainEmail: 'hello@fifthfloor.agency',
+    mainEmail: 'info.fifthfloorcc@gmail.com',
     responseTime: 'within 2 business days',
 } as const
 
@@ -15,8 +15,8 @@ export const OFFICE_LOCATIONS = [
         country: '🇰🇼',
         countryCode: 'KW',
         office: 'Fifth Floor Office - Kuwait City',
-        email: 'hello@fifthfloor.agency',
-        phone: '+965 XXXX XXXX',
+        email: 'info.fifthfloorcc@gmail.com',
+        phone: '+965 554 004 30',
         hours: 'Sunday - Thursday, 9 AM - 6 PM',
     },
     {
@@ -24,7 +24,7 @@ export const OFFICE_LOCATIONS = [
         country: '🇦🇪',
         countryCode: 'AE',
         office: 'Fifth Floor Creative Club - Abu Dhabi',
-        email: 'hello@fifthfloor.agency',
+        email: 'info.fifthfloorcc@gmail.com',
         phone: '+971 XXXX XXXX',
         hours: 'Sunday - Thursday, 9 AM - 6 PM',
     },
