@@ -32,7 +32,7 @@ export default function Footer() {
                 href="/contact"
                 className="inline-flex items-center justify-center px-8 py-4 bg-[#F7F6F3] text-[#0E0E10] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all duration-300 active-press hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] shrink-0"
               >
-                Start A Collaboration
+                Let's Talk
               </Link>
             </MagneticButton>
           </div>
@@ -108,10 +108,10 @@ export default function Footer() {
               Connect
             </p>
             <a
-              href="mailto:hello@fifthfloor.com"
+              href="mailto:info.fifthfloorcc@gmail.com"
               className="text-xs text-[#F7F6F3] hover:underline underline-offset-4 block"
             >
-              hello@fifthfloor.com
+info.fifthfloorcc@gmail.com
             </a>
             <div className="text-xs text-[#8E8D8A] space-y-1 font-mono pt-2">
               <p>Kuwait City, Al Hamra Tower</p>

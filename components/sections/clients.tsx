@@ -36,8 +36,8 @@ export default function Clients() {
                 </p>
               </div>
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold font-syne-display tracking-tighter text-[#F7F6F3] leading-[1.02]">
-                Trusted by <span className="font-serif-accent font-normal italic text-[#8E8D8A]">Visionaries</span> <br />
-                and GCC Market Leaders.
+                Trusted by World Wide Top <span className="font-serif-accent font-normal italic text-[#8E8D8A]"> Visionaries</span> <br />
+                
               </h2>
             </div>
             <div className="hidden md:block">

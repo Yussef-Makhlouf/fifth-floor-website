@@ -81,11 +81,11 @@ export default function Hero() {
       <div className="absolute top-1/4 left-8 md:left-20 w-px h-48 bg-[#1A1A1C]/15 hidden sm:block" />
       <div className="absolute bottom-1/4 right-8 md:right-20 w-px h-36 bg-[#1A1A1C]/15 hidden sm:block" />
 
-      {/* Location Badge */}
+      {/* Location Badge
       <div className="absolute top-28 right-8 md:right-20 hidden md:flex items-center gap-3 text-[11px] font-mono text-[#8E8D8A] uppercase tracking-widest border border-[#1A1A1C]/10 px-3.5 py-1.5 rounded-full bg-white/50 backdrop-blur-sm">
         <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1C] animate-pulse" />
         <span>KW 029.3759° • UAE 025.2048°</span>
-      </div>
+      </div> */}
 
       {/* Content Container */}
       <div className="relative z-10 text-center max-w-5xl px-6 md:px-12">
@@ -109,9 +109,9 @@ export default function Hero() {
         <div ref={lineRef} className="w-20 h-[1.5px] bg-[#1A1A1C] mx-auto mb-10 opacity-30 origin-center" />
 
         {/* Services Tagline */}
-        <p ref={subtitleRef} className="text-sm md:text-base text-[#55555A] mb-12 font-medium tracking-wider max-w-2xl mx-auto leading-relaxed">
+        {/* <p ref={subtitleRef} className="text-sm md:text-base text-[#55555A] mb-12 font-medium tracking-wider max-w-2xl mx-auto leading-relaxed">
           Brand Identity • Spatial Design • Strategic Marketing • Immersive Events • Digital Concepts
-        </p>
+        </p> */}
 
         {/* CTA Buttons */}
         <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -120,18 +120,10 @@ export default function Hero() {
               href="#work"
               className="w-full sm:w-auto px-9 py-4 border border-[#1A1A1C] text-[#1A1A1C] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#1A1A1C] hover:text-[#F7F6F3] transition-all duration-300 active-press shadow-sm inline-block"
             >
-              Explore Selected Work
+              Explore Creatives
             </Link>
           </MagneticButton>
 
-          <MagneticButton strength={0.3}>
-            <Link
-              href="/contact"
-              className="w-full sm:w-auto px-9 py-4 bg-[#1A1A1C] text-[#F7F6F3] font-semibold text-xs uppercase tracking-[0.2em] rounded-full hover:bg-[#3E3E42] transition-all duration-300 active-press shadow-md inline-block"
-            >
-              Initiate Project
-            </Link>
-          </MagneticButton>
         </div>
       </div>
 

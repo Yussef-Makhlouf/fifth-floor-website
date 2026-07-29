@@ -114,7 +114,7 @@ const PARTICIPATION_TYPES = [
   { id: 'Not sure yet', label: 'Not sure yet — walk us through it', desc: 'Our team will guide you to the best fit', icon: Compass },
 ]
 
-const EVENT_CATEGORIES = [
+const TARGET_AUDIENCE_OPTIONS = [
   { id: 'Family', label: 'Family', icon: Users },
   { id: 'Kids', label: 'Kids', icon: Baby },
   { id: 'Sports', label: 'Sports', icon: Dumbbell },
@@ -123,14 +123,6 @@ const EVENT_CATEGORIES = [
   { id: 'Business', label: 'Business', icon: Briefcase },
   { id: 'Wellness', label: 'Wellness', icon: Heart },
   { id: 'Education', label: 'Education', icon: BookOpen },
-]
-
-const TARGET_AUDIENCE_OPTIONS = [
-  { id: 'Families & Kids', label: 'Families & Kids', desc: 'Families, children & parents', icon: Users },
-  { id: 'Youth & Athletes', label: 'Youth & Athletes', desc: 'Young adults, athletes & fitness enthusiasts', icon: Compass },
-  { id: 'Students & Educational', label: 'Students & Educational', desc: 'School & university students', icon: GraduationCap },
-  { id: 'Corporate & B2B', label: 'Corporate & B2B', desc: 'Business executives & corporate clients', icon: Briefcase },
-  { id: 'General Audience', label: 'General Audience', desc: 'All segments & general public audience', icon: Star },
 ]
 
 const PROJECT_GOALS = [
@@ -221,21 +213,19 @@ function RichOptionCard({
         ${selected
           ? 'border-[#3E3E3E] bg-white text-[#3E3E3E] shadow-md shadow-black/5 ring-1 ring-[#3E3E3E]'
           : error
-          ? 'border-red-400 bg-red-50/20 text-[#3E3E3E]'
-          : 'border-[#919191]/25 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]/60 hover:shadow-sm'
+            ? 'border-red-400 bg-red-50/20 text-[#3E3E3E]'
+            : 'border-[#919191]/25 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]/60 hover:shadow-sm'
         }`}
     >
       <div className="flex items-start justify-between gap-3 w-full mb-6">
         {Icon ? (
-          <div className={`w-9 h-9 rounded-sm flex items-center justify-center transition-colors ${
-            selected ? 'bg-[#3E3E3E] text-white' : 'bg-[#F4F4F4] group-hover:bg-[#EAEAEA] text-[#3E3E3E]'
-          }`}>
+          <div className={`w-9 h-9 rounded-sm flex items-center justify-center transition-colors ${selected ? 'bg-[#3E3E3E] text-white' : 'bg-[#F4F4F4] group-hover:bg-[#EAEAEA] text-[#3E3E3E]'
+            }`}>
             <Icon className="w-4 h-4 stroke-[2]" />
           </div>
         ) : <div />}
-        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
-          selected ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white' : 'border-[#D1D1D1] group-hover:border-[#3E3E3E]'
-        }`}>
+        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${selected ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white' : 'border-[#D1D1D1] group-hover:border-[#3E3E3E]'
+          }`}>
           {selected && <Check className="w-3 h-3 stroke-[3]" />}
         </div>
       </div>
@@ -704,13 +694,12 @@ export default function PartnershipForm() {
                       key={s.id}
                       type="button"
                       onClick={() => setStep(s.id)}
-                      className={`text-left p-2.5 border transition-all text-xs ${
-                        step === s.id
+                      className={`text-left p-2.5 border transition-all text-xs ${step === s.id
                           ? 'border-[#3E3E3E] bg-[#3E3E3E]/5 font-bold text-[#3E3E3E]'
                           : s.id < step
-                          ? 'border-[#3E3E3E]/40 text-[#3E3E3E]'
-                          : 'border-[#919191]/20 text-[#919191]'
-                      }`}
+                            ? 'border-[#3E3E3E]/40 text-[#3E3E3E]'
+                            : 'border-[#919191]/20 text-[#919191]'
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-[10px]">0{s.id}</span>
@@ -928,29 +917,6 @@ export default function PartnershipForm() {
                           />
                         ))}
                       </div>
-
-                      {/* Preferred Event Categories */}
-                      <div className="pt-6 border-t border-[#3E3E3E]/10 space-y-4">
-                        <div>
-                          <h4 className="text-base font-semibold tracking-tight text-[#3E3E3E]">
-                            Preferred Event Categories <span className="text-xs font-light text-[#919191] ml-1">(Optional)</span>
-                          </h4>
-                          <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                            Which event types are most relevant to your brand? Select all that apply.
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                          {EVENT_CATEGORIES.map(item => (
-                            <RichOptionCard
-                              key={item.id}
-                              label={item.label}
-                              icon={item.icon}
-                              selected={brandData.eventCategories.includes(item.id)}
-                              onClick={() => handleBrandToggle('eventCategories', item.id)}
-                            />
-                          ))}
-                        </div>
-                      </div>
                     </div>
                   )}
 
@@ -974,12 +940,11 @@ export default function PartnershipForm() {
                         </p>
                       )}
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {TARGET_AUDIENCE_OPTIONS.map(item => (
                           <RichOptionCard
                             key={item.id}
                             label={item.label}
-                            desc={item.desc}
                             icon={item.icon}
                             selected={brandData.targetAudience.includes(item.id)}
                             onClick={() => handleBrandToggle('targetAudience', item.id)}
@@ -1286,11 +1251,10 @@ export default function PartnershipForm() {
                                     key={item.id}
                                     type="button"
                                     onClick={() => handleCreatorToggle('paidDeliverables', item.id)}
-                                    className={`p-3 text-left border rounded-sm transition-all text-xs font-medium ${
-                                      isSel
+                                    className={`p-3 text-left border rounded-sm transition-all text-xs font-medium ${isSel
                                         ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white shadow-sm'
                                         : 'border-[#919191]/30 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]'
-                                    }`}
+                                      }`}
                                   >
                                     <div className="flex items-center justify-between">
                                       <span>{item.label}</span>
@@ -1361,11 +1325,10 @@ export default function PartnershipForm() {
                                     key={item.id}
                                     type="button"
                                     onClick={() => handleCreatorToggle('freeDeliverables', item.id)}
-                                    className={`p-3 text-left border rounded-sm transition-all text-xs font-medium ${
-                                      isSel
+                                    className={`p-3 text-left border rounded-sm transition-all text-xs font-medium ${isSel
                                         ? 'border-[#3E3E3E] bg-[#3E3E3E] text-white shadow-sm'
                                         : 'border-[#919191]/30 bg-white text-[#3E3E3E] hover:border-[#3E3E3E]'
-                                    }`}
+                                      }`}
                                   >
                                     <div className="flex items-center justify-between">
                                       <span>{item.label}</span>
@@ -1437,11 +1400,10 @@ export default function PartnershipForm() {
                             className="w-full p-4 bg-[#FAFAF8] border border-[#919191]/40 text-sm text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] focus:bg-white rounded-sm transition-all resize-none leading-relaxed"
                           />
                           <div className="absolute bottom-3 right-3 flex items-center gap-2">
-                            <span className={`text-[10px] font-mono tabular-nums ${
-                              (creatorData.notes?.length ?? 0) > 900 ? 'text-red-400' :
-                              (creatorData.notes?.length ?? 0) > 700 ? 'text-amber-400' :
-                              'text-[#919191]/60'
-                            }`}>
+                            <span className={`text-[10px] font-mono tabular-nums ${(creatorData.notes?.length ?? 0) > 900 ? 'text-red-400' :
+                                (creatorData.notes?.length ?? 0) > 700 ? 'text-amber-400' :
+                                  'text-[#919191]/60'
+                              }`}>
                               {creatorData.notes?.length ?? 0}/1000
                             </span>
                           </div>
@@ -1522,11 +1484,10 @@ export default function PartnershipForm() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`px-10 py-4 text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3 transition-all shadow-lg shadow-black/10 ${
-                          submitStatus === 'error'
+                        className={`px-10 py-4 text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-3 transition-all shadow-lg shadow-black/10 ${submitStatus === 'error'
                             ? 'bg-red-600 hover:bg-red-700'
                             : 'bg-[#3E3E3E] hover:bg-[#2a2a2a]'
-                        } disabled:opacity-70 disabled:cursor-not-allowed`}
+                          } disabled:opacity-70 disabled:cursor-not-allowed`}
                       >
                         {submitStatus === 'validating' ? (
                           <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Validating…</>
@@ -1548,11 +1509,10 @@ export default function PartnershipForm() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full sm:w-auto px-12 py-4 text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all shadow-lg ${
-                        submitStatus === 'error'
+                      className={`w-full sm:w-auto px-12 py-4 text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all shadow-lg ${submitStatus === 'error'
                           ? 'bg-red-600 hover:bg-red-700'
                           : 'bg-[#3E3E3E] hover:bg-[#2a2a2a]'
-                      } disabled:opacity-70 disabled:cursor-not-allowed`}
+                        } disabled:opacity-70 disabled:cursor-not-allowed`}
                     >
                       {submitStatus === 'validating' ? (
                         <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Validating…</>

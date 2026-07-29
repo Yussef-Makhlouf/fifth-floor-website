@@ -23,7 +23,7 @@ export const OFFICE_LOCATIONS = [
         region: 'UAE',
         country: '🇦🇪',
         countryCode: 'AE',
-        office: 'Fifth Floor Studio - Abu Dhabi',
+        office: 'Fifth Floor Creative Club - Abu Dhabi',
         email: 'hello@fifthfloor.agency',
         phone: '+971 XXXX XXXX',
         hours: 'Sunday - Thursday, 9 AM - 6 PM',

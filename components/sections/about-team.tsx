@@ -196,7 +196,7 @@ export default function AboutTeam() {
                         className="group relative inline-flex items-center gap-4 px-10 py-5 bg-[#3E3E3E] text-white uppercase tracking-widest text-sm font-semibold overflow-hidden transition-colors duration-500 hover:text-[#3E3E3E]"
                     >
                         <span className="relative z-10 flex items-center gap-4">
-                            Join Our Studio
+                            Join Our Club!
                             <svg
                                 className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
                                 viewBox="0 0 24 24"

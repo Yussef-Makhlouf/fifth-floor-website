@@ -126,7 +126,7 @@ export default function AboutValues() {
                         <div>
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="w-12 h-px bg-[#CFCFCF]" />
-                                <p className="section-label text-[#CFCFCF] m-0">Studio Philosophy</p>
+                                <p className="section-label text-[#CFCFCF] m-0">FIFTH FLOOR Club Philosophy</p>
                             </div>
 
                             <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6">
