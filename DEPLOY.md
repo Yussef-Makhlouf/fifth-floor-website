@@ -149,7 +149,7 @@ mkdir -p /var/www
 cd /var/www
 
 # Clone your repository (replace with your actual repo URL)
-git clone https://github.com/YOUR_USERNAME/creative-agency-website.git fifthfloor
+git clone https://github.com/Yussef-Makhlouf/fifth-floor-website.git fifthfloor
 cd fifthfloor
 
 # Install dependencies
