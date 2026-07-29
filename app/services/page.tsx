@@ -20,7 +20,7 @@ export default function ServicesPage() {
       <main>
         <ServicesHero />
         <ServicesOverview />
-        <ServiceBreakdown />
+        {/* <ServiceBreakdown /> */}
         <ProcessSection />
         <VisualEvidence />
         <Differentiation />
