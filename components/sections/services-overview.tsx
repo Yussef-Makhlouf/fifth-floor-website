@@ -1,20 +1,69 @@
 'use client'
 
 import Image from 'next/image'
-import { creativeServices, digitalServices, ServiceItem } from '@/lib/data/services'
+import { useState } from 'react'
+import {
+  allServices,
+  serviceCategories,
+  ServiceCategory,
+  ServiceItem,
+} from '@/lib/data/services'
 
-/* ─── Creative Card: Editorial zig-zag layout ─── */
-function CreativeServiceCard({ service, index }: { service: ServiceItem; index: number }) {
+const categoryMeta: Record<
+  ServiceCategory | 'All',
+  { label: string; description: string }
+> = {
+  All: {
+    label: 'All Services',
+    description: 'The full spectrum of what FIFTH FLOOR builds, crafts, and deploys for ambitious brands.',
+  },
+  Identity: {
+    label: 'Identity',
+    description: 'Brand strategy and visual identity systems that define how the world perceives you.',
+  },
+  Marketing: {
+    label: 'Marketing',
+    description: 'Social media, digital marketing, and campaign production that moves markets.',
+  },
+  Digital: {
+    label: 'Digital',
+    description: 'UI and UX for mobile and web — designed with precision, built for humans.',
+  },
+  Creative: {
+    label: 'Creative',
+    description: 'Offline design, printing, and physical productions that make brands tangible.',
+  },
+  Production: {
+    label: 'Production',
+    description: 'Photo, video, voice, modeling, and CGI — cinematic quality at every frame.',
+  },
+  Technology: {
+    label: 'Technology',
+    description: 'AI solutions and business development for the future-ready enterprise.',
+  },
+}
+
+const categoryOrder: (ServiceCategory | 'All')[] = [
+  'All',
+  ...serviceCategories,
+]
+
+/* ─── Editorial Zig-Zag Service Card (Previous Premium Design) ─── */
+function EditorialServiceCard({ service, index }: { service: ServiceItem; index: number }) {
   const isReversed = index % 2 !== 0
+
   return (
     <article
       className="group animate-slide-up"
-      style={{ animationDelay: `${index * 0.12}s` }}
+      style={{ animationDelay: `${index * 0.08}s` }}
     >
-      <div className={`relative flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} bg-white hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.08)] transition-all duration-700 overflow-hidden border border-[#f0f0f0] hover:border-[#e0e0e0]`}>
-
+      <div
+        className={`relative flex flex-col ${
+          isReversed ? 'md:flex-row-reverse' : 'md:flex-row'
+        } bg-white hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.08)] transition-all duration-700 overflow-hidden border border-[#f0f0f0] hover:border-[#e0e0e0]`}
+      >
         {/* Image Side */}
-        <div className="relative w-full md:w-1/2 aspect-[4/3] md:aspect-auto md:min-h-[380px] overflow-hidden">
+        <div className="relative w-full md:w-1/2 aspect-[4/3] md:aspect-auto md:min-h-[380px] overflow-hidden bg-[#f5f5f5]">
           <Image
             src={service.image}
             alt={service.title}
@@ -23,12 +72,16 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           />
           {/* Gradient overlay */}
-          <div className={`absolute inset-0 ${isReversed ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-transparent via-transparent to-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+          <div
+            className={`absolute inset-0 ${
+              isReversed ? 'bg-gradient-to-l' : 'bg-gradient-to-r'
+            } from-transparent via-transparent to-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700`}
+          />
 
           {/* Category label */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 left-4 z-10">
             <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] text-[#3E3E3E] font-medium">
-              Creative
+              {service.category}
             </span>
           </div>
         </div>
@@ -71,8 +124,18 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
             className="inline-flex items-center gap-2.5 text-[10px] uppercase tracking-[0.2em] text-[#919191] group-hover:text-[#1a1a1a] transition-all duration-300 mt-auto"
           >
             <span>Explore service</span>
-            <svg className="w-3 h-3 transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              className="w-3 h-3 transform group-hover:translate-x-1.5 transition-transform duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
             <span className="block w-0 group-hover:w-8 h-px bg-[#1a1a1a] transition-all duration-500" />
           </a>
@@ -82,178 +145,118 @@ function CreativeServiceCard({ service, index }: { service: ServiceItem; index: 
   )
 }
 
-/* ─── Digital Service: Bento card ─── */
-interface DigitalBentoCardProps {
-  service: ServiceItem
-  index: number
-  featured?: boolean
-}
-
-function DigitalBentoCard({ service, index, featured = false }: DigitalBentoCardProps) {
-  return (
-    <article
-      className={`group animate-slide-up relative overflow-hidden bg-[#0f0f0f] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-500 ${featured ? 'flex flex-col sm:flex-row' : 'flex flex-col'}`}
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
-      {/* Image section */}
-      <div className={`relative overflow-hidden flex-shrink-0 ${featured ? 'w-full sm:w-1/2 aspect-[16/10] sm:aspect-auto' : 'aspect-[16/10]'}`}>
-        <Image
-          src={service.image}
-          alt={service.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-700 group-hover:scale-[1.03] scale-100 transition-transform"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/30 to-transparent" />
-
-        {/* Category badge */}
-        <div className="absolute top-4 left-4">
-          <span className="px-2.5 py-1 bg-white/10 backdrop-blur-sm text-[9px] uppercase tracking-[0.18em] text-white/70 font-medium">
-            Digital
-          </span>
-        </div>
-
-        {/* Service number watermark */}
-        <div className="absolute bottom-3 right-4 font-mono text-[10px] tracking-widest text-white/20 font-numeric-tabular">
-          {String(index + 1).padStart(2, '0')}
-        </div>
-      </div>
-
-      {/* Content section */}
-      <div className={`relative p-6 sm:p-7 flex flex-col flex-1 ${featured ? '' : ''}`}>
-        {/* Left border accent */}
-        <div className="absolute left-0 top-4 bottom-4 w-px bg-white/0 group-hover:bg-white/10 transition-colors duration-500" />
-
-        {/* Icon */}
-        <div className="inline-flex items-center justify-center w-9 h-9 mb-5 bg-white/[0.06] text-white/60 group-hover:bg-white/[0.12] group-hover:text-white transition-all duration-300">
-          {service.icon}
-        </div>
-
-        <h3 className={`font-light text-white leading-snug tracking-tight mb-3 group-hover:text-white transition-colors duration-300 ${featured ? 'text-xl sm:text-2xl' : 'text-lg'}`}>
-          {service.title}
-        </h3>
-
-        <p className={`text-white/40 leading-relaxed mb-5 flex-1 group-hover:text-white/60 transition-colors duration-300 ${featured ? 'text-sm' : 'text-xs'}`}>
-          {service.description}
-        </p>
-
-        {/* Keywords */}
-        <div className="flex flex-wrap gap-2 pt-4 border-t border-white/[0.06] mb-4">
-          {service.keywords.slice(0, featured ? 4 : 2).map((k) => (
-            <span key={k} className="text-[8px] uppercase tracking-widest text-white/30 group-hover:text-white/50 transition-colors">
-              {k}
-            </span>
-          ))}
-        </div>
-
-        {/* Link */}
-        <a
-          href={`/services/${service.slug}`}
-          className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-white/30 group-hover:text-white/70 transition-all duration-300"
-        >
-          <span>Explore</span>
-          <svg className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </a>
-      </div>
-    </article>
-  )
-}
-
 export default function ServicesOverview() {
+  const [activeCategory, setActiveCategory] = useState<ServiceCategory | 'All'>('All')
+
+  const filtered =
+    activeCategory === 'All'
+      ? allServices
+      : allServices.filter((s) => s.category === activeCategory)
+
+  const meta = categoryMeta[activeCategory]
+
   return (
-    <section id="services-overview" className="relative py-24 sm:py-32 bg-white border-t border-[#f0f0f0] overflow-hidden">
+    <section id="services-overview" className="relative bg-white border-t border-[#f0f0f0] overflow-hidden">
+      {/* ── Sticky Category Filter Bar ── */}
+      <div className="sticky top-[64px] sm:top-[72px] z-30 bg-white/95 backdrop-blur-xl border-b border-[#e5e5e5]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24">
+          <div
+            className="flex items-center gap-0 overflow-x-auto scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {/* Filter eyebrow */}
+            <div className="hidden md:flex items-center gap-3 pr-6 py-4 border-r border-[#ebebeb] mr-2 shrink-0">
+              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#919191] font-medium">
+                Filter
+              </span>
+            </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24">
+            {categoryOrder.map((cat) => {
+              const isActive = activeCategory === cat
+              const count =
+                cat === 'All'
+                  ? allServices.length
+                  : allServices.filter((s) => s.category === cat).length
 
-        {/* ─── CREATIVE SERVICES ─── */}
-        <div className="mb-24 sm:mb-32">
-          {/* Section intro */}
-          <div className="mb-14 sm:mb-18 animate-slide-up">
-            <div className="flex items-center gap-3 mb-7">
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`group shrink-0 inline-flex items-center gap-2.5 px-5 py-4 text-[10px] sm:text-xs uppercase tracking-[0.18em] whitespace-nowrap transition-all duration-200 border-r border-[#ebebeb] first:border-l ${
+                    isActive
+                      ? 'bg-[#1a1a1a] text-white font-medium'
+                      : 'bg-transparent text-[#6A6A6A] hover:text-[#1a1a1a] hover:bg-[#fafafa]'
+                  }`}
+                >
+                  <span>{cat === 'All' ? 'All' : categoryMeta[cat].label}</span>
+                  <span
+                    className={`font-mono text-[9px] tracking-widest transition-colors duration-200 ${
+                      isActive ? 'text-white/60' : 'text-[#919191] group-hover:text-[#3E3E3E]'
+                    }`}
+                  >
+                    [{String(count).padStart(2, '0')}]
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Section intro ── */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24 pt-16 sm:pt-20 pb-10 sm:pb-14">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-px bg-[#3E3E3E]" />
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#6A6A6A] font-medium">Creative services</p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <h2 className="text-4xl sm:text-5xl font-light leading-tight text-[#1a1a1a] tracking-tight">
-                Strategic creativity
-              </h2>
-              <p className="text-sm text-[#6A6A6A] max-w-sm leading-relaxed sm:text-right">
-                Brand strategy, experiential design, and creative direction for discerning brands and cultural institutions.
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#6A6A6A] font-medium">
+                {activeCategory === 'All' ? 'Full Service Portfolio' : `${activeCategory} Services`}
               </p>
             </div>
+            <h2 className="text-4xl sm:text-5xl font-light leading-tight text-[#1a1a1a] tracking-tight">
+              {activeCategory === 'All' ? (
+                <>What we <span className="text-[#919191]">build.</span></>
+              ) : (
+                <>{categoryMeta[activeCategory].label} <span className="text-[#919191]">excellence.</span></>
+              )}
+            </h2>
           </div>
-
-          {/* Creative — editorial stacked zig-zag */}
-          <div className="space-y-6 sm:space-y-8">
-            {creativeServices.map((service, idx) => (
-              <CreativeServiceCard key={service.slug} service={service} index={idx} />
-            ))}
-          </div>
+          <p className="text-sm text-[#6A6A6A] max-w-sm leading-relaxed sm:text-right">
+            {meta.description}
+          </p>
         </div>
+      </div>
 
-        {/* ─── Divider ─── */}
-        <div className="flex items-center gap-4 mb-24 sm:mb-32">
-          <div className="flex-1 h-px bg-[#f0f0f0]" />
-          <div className="w-1 h-1 bg-[#c8c8c8] rotate-45" />
-          <div className="flex-1 h-px bg-[#f0f0f0]" />
-        </div>
+      {/* ── Services Stacked Editorial Cards ── */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24 pb-24 sm:pb-32 space-y-6 sm:space-y-8">
+        {filtered.map((service, idx) => (
+          <EditorialServiceCard key={service.slug} service={service} index={idx} />
+        ))}
 
-        {/* ─── DIGITAL SERVICES ─── */}
-        <div>
-          {/* Section intro */}
-          <div className="mb-14 sm:mb-18 animate-slide-up">
-            <div className="flex items-center gap-3 mb-7">
-              <div className="w-8 h-px bg-[#6A6A6A]" />
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#6A6A6A] font-medium">Digital services</p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <h2 className="text-4xl sm:text-5xl font-light leading-tight text-[#1a1a1a] tracking-tight">
-                Digital infrastructure
-              </h2>
-              <p className="text-sm text-[#6A6A6A] max-w-sm leading-relaxed sm:text-right">
-                Development, hosting, SEO, and product consulting — powered by modern technologies for sustainable growth.
-              </p>
-            </div>
+        {filtered.length === 0 && (
+          <div className="py-32 text-center">
+            <p className="text-sm font-mono text-[#919191]">No services in this category.</p>
           </div>
+        )}
+      </div>
 
-          {/* Digital — Asymmetric bento grid */}
-          <div className="space-y-3 sm:space-y-4">
-
-            {/* Row 1: 1 featured wide card */}
-            <DigitalBentoCard service={digitalServices[0]} index={0} featured />
-
-            {/* Row 2: 2-col split — wide left + narrow right */}
-            <div className="grid grid-cols-1 sm:grid-cols-[1.5fr_1fr] gap-3 sm:gap-4">
-              <DigitalBentoCard service={digitalServices[1]} index={1} />
-              <DigitalBentoCard service={digitalServices[2]} index={2} />
-            </div>
-
-            {/* Row 3: narrow left + wide right (flip) */}
-            <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.5fr] gap-3 sm:gap-4">
-              <DigitalBentoCard service={digitalServices[3]} index={3} />
-              <DigitalBentoCard service={digitalServices[4]} index={4} />
-            </div>
-
-            {/* Row 4: final card full-width but compact */}
-            {digitalServices[5] && (
-              <DigitalBentoCard service={digitalServices[5]} index={5} featured />
-            )}
-          </div>
-        </div>
-
-        {/* ─── Bottom Statement ─── */}
-        <div className="mt-20 sm:mt-28 pt-10 border-t border-[#f0f0f0] flex flex-col md:flex-row md:items-end justify-between gap-6">
+      {/* ── Bottom Statement ── */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-16 lg:px-24 pb-20 sm:pb-28 pt-0 border-t border-[#f0f0f0]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pt-10">
           <p className="text-xs text-[#919191] max-w-lg leading-relaxed">
-            FIFTH FLOOR delivers technical services and expansion strategies to serve all sectors and leading enterprises with confidence and flexibility.
+            FIFTH FLOOR delivers technical and creative services to serve all sectors and leading enterprises across the GCC with confidence and flexibility.
           </p>
           <a
             href="/contact"
             className="group inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-[#3E3E3E] hover:text-[#6A6A6A] transition-colors"
           >
             <span>Discuss your project</span>
-            <svg className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>

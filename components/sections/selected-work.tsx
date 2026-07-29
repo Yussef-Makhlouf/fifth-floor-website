@@ -112,7 +112,7 @@ export default function SelectedWork() {
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 relative z-10" ref={sectionRef}>
         {/* Section Header */}
-        <ScrollReveal variant="fade-up" className="mb-20 md:mb-32 border-b border-white/10 pb-12">
+        <ScrollReveal variant="fade-up" className="mb-20 md:mb-32 border-b border-white/10 pb-12 ">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-2 h-2 rounded-full bg-[#F7F6F3] animate-pulse" />
             <p className="tracking-[0.3em] uppercase text-xs font-semibold text-[#8E8D8A] font-mono">
@@ -130,9 +130,9 @@ export default function SelectedWork() {
           </div>
         </ScrollReveal>
 
-        {/* Projects List */}
+        {/* Projects List — Only show top 3 recent items */}
         <div className="flex flex-col gap-24 md:gap-40">
-          {projects.map((project, idx) => (
+          {projects.slice(0, 3).map((project, idx) => (
             <ScrollReveal key={project.id} variant="fade-up" delay={idx * 0.1}>
               <div
                 onClick={() => handleOpenPanel(project)}

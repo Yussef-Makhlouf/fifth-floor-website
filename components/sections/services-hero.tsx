@@ -111,7 +111,7 @@ export default function ServicesHero() {
           </div>
 
           {/* Service Tags – Two Row Layout */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <div className="flex flex-wrap gap-2 sm:gap-3">
               {['Brand Strategy', 'Branding', 'Marketing', 'Events', 'Booths', 'Creative Concepts'].map((tag) => (
                 <span
@@ -132,7 +132,7 @@ export default function ServicesHero() {
                 </span>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

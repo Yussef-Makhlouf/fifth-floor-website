@@ -688,24 +688,37 @@ export default function PartnershipForm() {
                 </div>
 
                 {/* Step Indicators */}
-                <div className={`grid gap-2 mt-4 ${maxSteps === 6 ? 'grid-cols-2 sm:grid-cols-6' : maxSteps === 5 ? 'grid-cols-5' : 'grid-cols-4'}`}>
-                  {steps.map(s => (
+                <div
+                  className={`grid gap-2.5 mt-4 ${
+                    maxSteps === 6
+                      ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-6'
+                      : maxSteps === 5
+                      ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5'
+                      : 'grid-cols-2 sm:grid-cols-4'
+                  }`}
+                >
+                  {steps.map((s, idx) => (
                     <button
                       key={s.id}
                       type="button"
                       onClick={() => setStep(s.id)}
-                      className={`text-left p-2.5 border transition-all text-xs ${step === s.id
-                          ? 'border-[#3E3E3E] bg-[#3E3E3E]/5 font-bold text-[#3E3E3E]'
+                      className={`text-left p-3 border transition-all text-xs rounded-sm flex flex-col justify-between min-h-[70px] cursor-pointer ${
+                        maxSteps === 5 && idx === 4 ? 'col-span-2 sm:col-span-1' : ''
+                      } ${
+                        step === s.id
+                          ? 'border-[#3E3E3E] bg-[#3E3E3E]/5 ring-1 ring-[#3E3E3E] font-bold text-[#3E3E3E]'
                           : s.id < step
-                            ? 'border-[#3E3E3E]/40 text-[#3E3E3E]'
-                            : 'border-[#919191]/20 text-[#919191]'
-                        }`}
+                            ? 'border-[#3E3E3E]/40 text-[#3E3E3E] bg-white hover:border-[#3E3E3E]/70'
+                            : 'border-[#919191]/20 text-[#919191] bg-white/50 hover:border-[#919191]/50'
+                      }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px]">0{s.id}</span>
-                        {s.id < step && <Check className="w-3 h-3 text-[#3E3E3E]" />}
+                      <div className="flex items-center justify-between w-full">
+                        <span className="font-mono text-[10px] tracking-wider opacity-70">0{s.id}</span>
+                        {s.id < step && <Check className="w-3.5 h-3.5 text-[#3E3E3E]" />}
                       </div>
-                      <span className="block truncate mt-1">{s.title}</span>
+                      <span className="block mt-1.5 text-[11px] sm:text-xs font-semibold leading-tight whitespace-normal break-words">
+                        {s.title}
+                      </span>
                     </button>
                   ))}
                 </div>

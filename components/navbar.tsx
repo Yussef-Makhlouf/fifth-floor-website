@@ -40,6 +40,7 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
     { label: 'About', href: '/about' },
     { label: 'Creatives', href: '/case-studies' },
     { label: 'Services', href: '/services' },
+    { label: 'Glee', href: '/glee' },
     { label: 'Contact', href: '/contact' },
   ]
 

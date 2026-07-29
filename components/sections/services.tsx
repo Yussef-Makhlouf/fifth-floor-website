@@ -2,51 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
+import { allServices } from '@/lib/data/services'
 
-const services = [
-  {
-    id: 1,
-    title: 'Brand Strategy',
-    description: 'Strategic foundations that define your market position and drive meaningful growth. We analyze, position, and craft narratives that endure.',
-    keywords: ['Research', 'Positioning', 'Narrative', 'Growth'],
-    image: '/images/services/brand-strategy.png',
-  },
-  {
-    id: 2,
-    title: 'Branding Identity',
-    description: 'Visual identity systems that communicate your essence with distinction. From primary marks to comprehensive architectural design guidelines.',
-    keywords: ['Identity', 'Design Systems', 'Guidelines', 'Typography'],
-    image: '/images/services/branding.png',
-  },
-  {
-    id: 3,
-    title: 'Strategic Marketing',
-    description: 'Campaigns and communications that resonate with your audience and inspire decisive action. Analytical strategy meets artistic excellence.',
-    keywords: ['Campaigns', 'Digital', 'Content', 'Media'],
-    image: '/images/services/marketing.png',
-  },
-  {
-    id: 4,
-    title: 'Immersive Events',
-    description: 'Spatial experiences that transform moments into enduring brand equity. End-to-end conceptualization, staging, and execution.',
-    keywords: ['Conferences', 'Exhibitions', 'Galas', 'Launches'],
-    image: '/images/services/events.png',
-  },
-  {
-    id: 5,
-    title: 'Architectural Booths',
-    description: 'Exhibition structures that command attention and embody physical presence. High-precision structural design and fabrication.',
-    keywords: ['Design', 'Fabrication', 'Experience', 'Spatial'],
-    image: '/images/services/booths.png',
-  },
-  {
-    id: 6,
-    title: 'Creative Concepts',
-    description: 'Bold ideas that challenge conventions and push boundaries. Innovation at the intersection of spatial art, design, and technology.',
-    keywords: ['Ideation', 'Art Direction', 'Innovation', 'Future'],
-    image: '/images/services/creative.png',
-  },
-]
+// Show a curated selection of 6 services on the homepage
+const homepageServices = allServices.slice(0, 6)
 
 export default function Services() {
   const [activeService, setActiveService] = useState(0)
@@ -97,11 +58,11 @@ export default function Services() {
             </div>
 
             <div className="space-y-0 lg:space-y-32">
-              {services.map((service, idx) => {
+              {homepageServices.map((service, idx) => {
                 const isExpanded = expandedMobileIdx === idx
                 return (
                   <div
-                    key={service.id}
+                    key={service.slug}
                     ref={(el) => { serviceRefs.current[idx] = el }}
                     data-index={idx}
                     className={`transition-all duration-700 ${
@@ -159,16 +120,16 @@ export default function Services() {
                         </div>
 
                         <span className="hidden lg:block text-xs font-mono font-numeric-tabular text-[#8E8D8A] mb-3">
-                          0{service.id}
+                          0{idx + 1}
                         </span>
                         <h3 className="hidden lg:block text-3xl md:text-4xl font-bold font-syne-display text-[#1A1A1C] mb-5 tracking-tight">
                           {service.title}
                         </h3>
                         <p className="text-sm lg:text-base text-[#55555A] leading-relaxed mb-6 lg:mb-8 max-w-md font-sans">
-                          {service.description}
+                          {service.shortDescription}
                         </p>
                         <div className="flex flex-wrap gap-2 lg:gap-2.5">
-                          {service.keywords.map((keyword) => (
+                          {service.keywords.slice(0, 4).map((keyword) => (
                             <span
                               key={keyword}
                               className="px-3.5 py-1.5 bg-[#1A1A1C] text-[#F7F6F3] text-[10px] uppercase tracking-widest font-mono rounded-full active-press shadow-sm"
@@ -185,13 +146,41 @@ export default function Services() {
             </div>
 
             <div className="hidden lg:block h-[20vh]" />
+
+            {/* Services Banner CTA */}
+            <div className="mt-16 lg:mt-24 p-8 sm:p-10 bg-[#1A1A1C] text-[#F7F6F3] rounded-2xl relative overflow-hidden shadow-2xl border border-[#1A1A1C]/20 text-center flex flex-col items-center justify-center group">
+              {/* Subtle background ambient glows */}
+              <div className="absolute -top-24 -left-24 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none group-hover:bg-white/10 transition-all duration-700" />
+              <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none group-hover:bg-white/10 transition-all duration-700" />
+
+              <span className="text-[10px] uppercase tracking-[0.35em] text-[#8E8D8A] font-mono mb-3 block relative z-10">
+                // Full Capabilities
+              </span>
+
+              <h3 className="text-2xl sm:text-3xl font-bold font-syne-display tracking-tight text-[#F7F6F3] mb-3 relative z-10">
+                Explore All 15 Services
+              </h3>
+
+              <p className="text-xs sm:text-sm text-[#A0A0A5] mb-8 max-w-sm font-sans leading-relaxed relative z-10">
+                Discover our full range of bespoke branding, engineering, and digital growth services.
+              </p>
+
+              {/* Centered Button */}
+              <Link
+                href="/services"
+                className="relative z-10 inline-flex items-center justify-center gap-3 px-7 py-3.5 bg-[#F7F6F3] hover:bg-white text-[#1A1A1C] font-mono text-xs uppercase tracking-[0.2em] font-semibold rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-md group/btn"
+              >
+                <span>View All Services</span>
+                <ArrowUpRight className="w-4 h-4 text-[#1A1A1C] transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-300" />
+              </Link>
+            </div>
           </div>
 
           {/* Right Column - Sticky Images (Desktop Only) */}
           <div className="hidden lg:block w-1/2 h-screen sticky top-0 right-0 order-1 lg:order-2 overflow-hidden border-l border-[#1A1A1C]/10">
-            {services.map((service, idx) => (
+            {homepageServices.map((service, idx) => (
               <div
-                key={service.id}
+                key={service.slug}
                 className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${
                   activeService === idx
                     ? 'opacity-100 scale-100 grayscale-0'

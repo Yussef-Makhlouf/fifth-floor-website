@@ -39,7 +39,7 @@ export const projects: Project[] = [
         number: '02',
         title: 'Investment summit experience',
         client: 'Kuwait Investment Forum',
-        category: 'Events',
+        category: 'Offline Productions',
         year: '2024',
         description: 'End-to-end event design for the region\'s premier investment summit — spatial design, branded environments, and immersive attendee experiences across three days.',
         metrics: [
@@ -55,7 +55,7 @@ export const projects: Project[] = [
         number: '03',
         title: 'Luxury retail presence',
         client: 'Al Raya Collection',
-        category: 'Booths',
+        category: 'Offline Design',
         year: '2023',
         description: 'Exhibition booth design for a luxury retail brand — transforming a 200sqm footprint into a multi-sensory brand environment that drove record-breaking engagement.',
         metrics: [
@@ -71,7 +71,7 @@ export const projects: Project[] = [
         number: '04',
         title: 'Digital ecosystem launch',
         client: 'Venture Capital Group',
-        category: 'Digital',
+        category: 'UI/UX',
         year: '2023',
         description: 'Full digital transformation — from investor-facing web platform to internal dashboards. A unified digital language built for scale and designed for impact.',
         metrics: [
@@ -85,9 +85,9 @@ export const projects: Project[] = [
     {
         id: 5,
         number: '05',
-        title: 'Cultural festival identity',
+        title: 'Cultural festival campaign',
         client: 'Abu Dhabi Design Week',
-        category: 'Marketing',
+        category: 'Marketing Campaigns',
         year: '2023',
         description: 'Campaign strategy and creative direction for one of the GCC\'s most anticipated cultural events — visual systems, media assets, and a multi-channel rollout.',
         metrics: [
@@ -103,7 +103,7 @@ export const projects: Project[] = [
         number: '06',
         title: 'Heritage brand revival',
         client: 'Al Bahar Group',
-        category: 'Brand Strategy',
+        category: 'Branding',
         year: '2022',
         description: 'Repositioning a 40-year heritage brand for the modern era — preserving legacy while building a visual and strategic framework ready for the next chapter.',
         metrics: [
@@ -113,6 +113,38 @@ export const projects: Project[] = [
         ],
         tags: ['Rebranding', 'Market Research', 'Positioning'],
         image: '/projects/project-2.png',
+    },
+    {
+        id: 7,
+        number: '07',
+        title: 'CGI product launch film',
+        client: 'Luxury Automotive Brand',
+        category: 'CGI & VFX',
+        year: '2024',
+        description: 'Hyper-realistic 3D CGI production for a luxury automotive reveal — from concept visualization to cinematic launch film delivered across digital and broadcast channels.',
+        metrics: [
+            { label: 'Render Hours', value: '1,200+' },
+            { label: 'Video Views', value: '3.8M' },
+            { label: 'Awards', value: '2' },
+        ],
+        tags: ['CGI', '3D Visualization', 'Brand Film'],
+        image: '/projects/project-2.png',
+    },
+    {
+        id: 8,
+        number: '08',
+        title: 'AI-powered brand presence',
+        client: 'FinTech Startup',
+        category: 'AI Solutions',
+        year: '2024',
+        description: 'End-to-end AI content strategy — AI-generated imagery, synthetic voiceover, and a custom big data dashboard that unified brand intelligence across markets.',
+        metrics: [
+            { label: 'Content Output', value: '+400%' },
+            { label: 'Cost Reduction', value: '62%' },
+            { label: 'Markets', value: '5' },
+        ],
+        tags: ['AI Image', 'AI Voice', 'Data Dashboard'],
+        image: '/projects/project-1.png',
     },
 ]
 

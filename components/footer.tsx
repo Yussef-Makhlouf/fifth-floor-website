@@ -73,6 +73,7 @@ export default function Footer() {
                 { label: 'About Agency', href: '/about' },
                 { label: 'Selected Work', href: '/case-studies' },
                 { label: 'Capabilities', href: '/services' },
+                { label: 'Glee Partnership', href: '/glee' },
                 { label: 'Get in Touch', href: '/contact' },
               ].map((item) => (
                 <li key={item.label}>

@@ -4,6 +4,7 @@ import NavBar from "@/components/navbar"
 import Footer from "@/components/footer"
 import ServiceDetailHero from "@/components/services/service-detail-hero"
 import ServiceContent from "@/components/services/service-content"
+import ServiceRelatedProjects from "@/components/services/service-related-projects"
 import ServiceCTA from "@/components/sections/service-cta"
 
 export function generateStaticParams() {
@@ -26,6 +27,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <main>
         <ServiceDetailHero service={service} />
         <ServiceContent service={service} />
+        <ServiceRelatedProjects service={service} />
         <ServiceCTA />
       </main>
       <Footer />

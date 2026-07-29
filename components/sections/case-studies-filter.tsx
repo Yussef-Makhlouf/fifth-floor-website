@@ -4,11 +4,21 @@ import { useRef, useEffect } from 'react'
 
 const categories = [
     'All',
+    'Branding',
     'Brand Strategy',
-    'Events',
-    'Booths',
-    'Digital',
-    'Marketing',
+    'Social Media',
+    'Digital Marketing',
+    'Marketing Campaigns',
+    'UI/UX',
+    'Offline Design',
+    'Printing',
+    'Offline Productions',
+    'Photo & Video',
+    'Voice Over',
+    'Modeling',
+    'CGI & VFX',
+    'AI Solutions',
+    'Business Development',
 ]
 
 interface CaseStudiesFilterProps {
