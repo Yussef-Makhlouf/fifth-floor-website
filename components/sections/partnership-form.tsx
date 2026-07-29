@@ -93,7 +93,7 @@ interface SuccessReceipt {
 
 const BRAND_STEPS = [
   { id: 1, title: 'Company Identity', desc: 'Company details & contact info' },
-  { id: 2, title: 'Participation Format', desc: 'Participation method & options' },
+  { id: 2, title: 'Participation Type', desc: 'How you want to participate' },
   { id: 3, title: 'Target Audience', desc: 'Demographics & target segments' },
   { id: 4, title: 'Project Goals', desc: 'Objectives & campaign goals' },
   { id: 5, title: 'Additional Notes', desc: 'Event preferences & details' },
@@ -107,14 +107,11 @@ const CREATOR_STEPS = [
 ]
 
 const PARTICIPATION_TYPES = [
-  { id: 'Financial Sponsorship', label: 'Financial Sponsorship', icon: DollarSign },
-  { id: 'Products / Gifts', label: 'Products / Gifts', icon: Gift },
-  { id: 'Discount Vouchers', label: 'Discount Vouchers', icon: Ticket },
-  { id: 'Food & Beverage', label: 'Food & Beverage', icon: Utensils },
-  { id: 'Interactive Booth', label: 'Interactive Booth', icon: Sliders },
-  { id: 'Entertainment / Activity', label: 'Entertainment / Activity', icon: Tv },
-  { id: 'Workshop / Experience', label: 'Workshop / Experience', icon: Compass },
-  { id: 'Other', label: 'Other', icon: Sparkles },
+  { id: 'Sponsorship', label: 'Sponsorship', desc: 'Financial support & brand visibility', icon: Coins },
+  { id: 'Booth', label: 'Booth', desc: 'On-ground presence & activations', icon: Sliders },
+  { id: 'Collaboration', label: 'Collaboration', desc: 'Joint campaigns & co-created content', icon: HeartHandshake },
+  { id: 'Strategic Partner', label: 'Strategic Partner', desc: 'Long-term alliance & shared goals', icon: Target },
+  { id: 'Not sure yet', label: 'Not sure yet — walk us through it', desc: 'Our team will guide you to the best fit', icon: Compass },
 ]
 
 const EVENT_CATEGORIES = [
@@ -904,10 +901,10 @@ export default function PartnershipForm() {
                     <div className="space-y-6">
                       <div className="border-b border-[#3E3E3E]/10 pb-3">
                         <h3 className="text-xl font-light tracking-tight text-[#3E3E3E]">
-                          2. <span className="font-bold">Participation Format</span> <span className="text-red-400">*</span>
+                          2. <span className="font-bold">Participation Type</span> <span className="text-red-400">*</span>
                         </h3>
                         <p className="text-xs text-[#6A6A6A] font-light mt-1">
-                          How would you like to contribute or participate with us? Select all that apply.
+                          How would you like to participate with us? Select all that apply.
                         </p>
                       </div>
 
@@ -918,11 +915,12 @@ export default function PartnershipForm() {
                         </p>
                       )}
 
-                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                         {PARTICIPATION_TYPES.map(item => (
                           <RichOptionCard
                             key={item.id}
                             label={item.label}
+                            desc={item.desc}
                             icon={item.icon}
                             selected={brandData.participationType.includes(item.id)}
                             onClick={() => handleBrandToggle('participationType', item.id)}
@@ -930,23 +928,6 @@ export default function PartnershipForm() {
                           />
                         ))}
                       </div>
-
-                      {/* Other — write-in field */}
-                      {brandData.participationType.includes('Other') && (
-                        <div className="mt-2 animate-fade-in">
-                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
-                            Please describe your participation idea <span className="text-red-400">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            name="participationOther"
-                            value={brandData.participationOther}
-                            onChange={handleTextChange}
-                            placeholder="e.g. Exclusive sponsorship package, custom activation..."
-                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
-                          />
-                        </div>
-                      )}
 
                       {/* Preferred Event Categories */}
                       <div className="pt-6 border-t border-[#3E3E3E]/10 space-y-4">
@@ -972,6 +953,7 @@ export default function PartnershipForm() {
                       </div>
                     </div>
                   )}
+
 
                   {/* Step 3: Target Audience */}
                   {(viewMode === 'express' || step === 3) && (
