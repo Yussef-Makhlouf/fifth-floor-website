@@ -114,18 +114,18 @@ export default function AboutHero() {
                 <div className="max-w-5xl">
                     <TextReveal
                         text="Crafting"
-                        className="text-6xl md:text-8xl lg:text-[8rem] font-light text-[#6A6A6A] leading-[0.9] tracking-tight"
+                        className="text-3xl md:text-6xl lg:text-[4.5rem] font-light text-[#6A6A6A] leading-[1.2] tracking-tight"
                         staggerDelay={80}
                     />
                     <TextReveal
                         text="Experiences"
-                        className="text-7xl md:text-9xl lg:text-[10rem] font-bold text-[#3E3E3E] leading-[0.9] tracking-tighter font-syne-display"
+                        className="text-4xl md:text-6xl lg:text-[5rem] font-bold text-[#3E3E3E] leading-[0.9] tracking-tighter font-syne-display"
                         delay={300}
                         staggerDelay={60}
                     />
                     <TextReveal
                         text="Beyond Convention."
-                        className="text-5xl md:text-7xl lg:text-[6rem] font-light text-[#919191] leading-[1] tracking-tight mt-4"
+                        className="text-3xl md:text-5xl lg:text-[4.5rem] font-light text-[#919191] leading-[1] tracking-tight mt-4"
                         delay={600}
                         staggerDelay={50}
                     />
