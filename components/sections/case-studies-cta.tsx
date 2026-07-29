@@ -81,7 +81,7 @@ export default function CaseStudiesCTA() {
                         className="cta-item opacity-0 translate-y-8 transition-all duration-700 flex-shrink-0"
                         style={{ transitionDelay: '0.3s' }}
                     >
-                        <a
+                        {/* <a
                             href="/contact"
                             className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-[#0f0f0f] text-xs font-semibold uppercase tracking-[0.15em] hover:bg-[#CFCFCF] transition-all duration-300 active-press shadow-2xl"
                         >
@@ -89,7 +89,7 @@ export default function CaseStudiesCTA() {
                             <svg className="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
-                        </a>
+                        </a> */}
                     </div>
                 </div>
 
@@ -103,15 +103,15 @@ export default function CaseStudiesCTA() {
                         <p className="text-[9px] uppercase tracking-widest text-[#5a5a5a] mt-1">Bespoke Code &amp; Design</p>
                     </div>
                     <div>
-                        <p className="font-mono text-xl font-light text-white font-numeric-tabular">GCC</p>
-                        <p className="text-[9px] uppercase tracking-widest text-[#5a5a5a] mt-1">Regional Intelligence</p>
+                        <p className="font-mono text-xl font-light text-white font-numeric-tabular">Worldwide</p>
+                        <p className="text-[9px] uppercase tracking-widest text-[#5a5a5a] mt-1">Global Reach</p>
                     </div>
                     <div>
-                        <p className="font-mono text-xl font-light text-white font-numeric-tabular">96%</p>
+                        <p className="font-mono text-xl font-light text-white font-numeric-tabular">98%</p>
                         <p className="text-[9px] uppercase tracking-widest text-[#5a5a5a] mt-1">Client Retention</p>
                     </div>
                     <div>
-                        <p className="font-mono text-xl font-light text-white font-numeric-tabular">24h</p>
+                        <p className="font-mono text-xl font-light text-white font-numeric-tabular">1h</p>
                         <p className="text-[9px] uppercase tracking-widest text-[#5a5a5a] mt-1">Response Time</p>
                     </div>
                 </div>

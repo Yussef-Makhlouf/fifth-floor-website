@@ -38,7 +38,7 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
 
   const navLinks = [
     { label: 'About', href: '/about' },
-    { label: 'Created', href: '/case-studies' },
+    { label: 'Creatives', href: '/case-studies' },
     { label: 'Services', href: '/services' },
     { label: 'Contact', href: '/contact' },
   ]
@@ -127,7 +127,7 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
               href="/contact"
               className="px-5 py-2.5 bg-[#1A1A1C] text-[#F7F6F3] text-xs font-semibold uppercase tracking-[0.2em] rounded-full hover:bg-[#3E3E42] transition-all duration-300 active-press hover:shadow-lg inline-block"
             >
-              Start Project
+               Let's Talk
             </Link>
           </MagneticButton>
         </div>

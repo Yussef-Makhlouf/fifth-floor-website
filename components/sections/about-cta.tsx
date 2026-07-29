@@ -128,7 +128,7 @@ export default function AboutCTA() {
                             </svg>
                         </a>
                         <a
-                            href="mailto:hello@fifthfloor.agency"
+                            href="mailto:info.fifthfloorcc@gmail.com"
                             className="px-10 py-5 border border-[#6A6A6A] text-[#CFCFCF] font-medium tracking-wide hover:border-[#CFCFCF] hover:bg-[#CFCFCF]/5 transition-all duration-300"
                         >
                             Email Us Directly
@@ -144,10 +144,10 @@ export default function AboutCTA() {
                         <div className="text-center">
                             <p className="text-xs uppercase tracking-widest text-[#6A6A6A] mb-3">Email</p>
                             <a
-                                href="mailto:hello@fifthfloor.agency"
+                                href="mailto:info.fifthfloorcc@gmail.com"
                                 className="text-[#CFCFCF] hover:text-white transition-colors"
                             >
-                                hello@fifthfloor.agency
+                                info.fifthfloorcc@gmail.com
                             </a>
                         </div>
 
@@ -155,17 +155,17 @@ export default function AboutCTA() {
                         <div className="text-center">
                             <p className="text-xs uppercase tracking-widest text-[#6A6A6A] mb-3">Phone</p>
                             <a
-                                href="tel:+966555123456"
+                                href="tel:+96555400430"
                                 className="text-[#CFCFCF] hover:text-white transition-colors"
                             >
-                                +966 555 123 456
+                                +965 554 004 30
                             </a>
                         </div>
 
                         {/* Location */}
                         <div className="text-center">
                             <p className="text-xs uppercase tracking-widest text-[#6A6A6A] mb-3">Location</p>
-                            <p className="text-[#CFCFCF]">Riyadh, Saudi Arabia</p>
+                            <p className="text-[#CFCFCF]">Kuwait | UAE</p>
                         </div>
                     </div>
                 </div>
