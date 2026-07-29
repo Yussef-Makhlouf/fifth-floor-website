@@ -30,6 +30,11 @@ import {
   ArrowRight,
   AlertCircle,
   Coins,
+  Heart,
+  Dumbbell,
+  Shirt,
+  BookOpen,
+  Baby,
 } from 'lucide-react'
 import { CurveDecoration } from '@/components/ui/architectural-shapes'
 import {
@@ -56,6 +61,7 @@ interface BrandForm {
   projectGoals: string[]
   goalOther: string
   participationType: string[]
+  participationOther: string
   eventCategories: string[]
   notes: string
 }
@@ -108,7 +114,18 @@ const PARTICIPATION_TYPES = [
   { id: 'Interactive Booth', label: 'Interactive Booth', icon: Sliders },
   { id: 'Entertainment / Activity', label: 'Entertainment / Activity', icon: Tv },
   { id: 'Workshop / Experience', label: 'Workshop / Experience', icon: Compass },
-  { id: 'Other Special Request', label: 'Other Special Request', icon: Sparkles },
+  { id: 'Other', label: 'Other', icon: Sparkles },
+]
+
+const EVENT_CATEGORIES = [
+  { id: 'Family', label: 'Family', icon: Users },
+  { id: 'Kids', label: 'Kids', icon: Baby },
+  { id: 'Sports', label: 'Sports', icon: Dumbbell },
+  { id: 'Entertainment', label: 'Entertainment', icon: Tv },
+  { id: 'Fashion', label: 'Fashion', icon: Shirt },
+  { id: 'Business', label: 'Business', icon: Briefcase },
+  { id: 'Wellness', label: 'Wellness', icon: Heart },
+  { id: 'Education', label: 'Education', icon: BookOpen },
 ]
 
 const TARGET_AUDIENCE_OPTIONS = [
@@ -257,6 +274,7 @@ export default function PartnershipForm() {
     projectGoals: [],
     goalOther: '',
     participationType: [],
+    participationOther: '',
     eventCategories: [],
     notes: '',
   })
@@ -511,6 +529,7 @@ export default function PartnershipForm() {
       projectGoals: [],
       goalOther: '',
       participationType: [],
+      participationOther: '',
       eventCategories: [],
       notes: '',
     })
@@ -910,6 +929,46 @@ export default function PartnershipForm() {
                             error={!!fieldErrors.participationType}
                           />
                         ))}
+                      </div>
+
+                      {/* Other — write-in field */}
+                      {brandData.participationType.includes('Other') && (
+                        <div className="mt-2 animate-fade-in">
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/70 mb-2">
+                            Please describe your participation idea <span className="text-red-400">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="participationOther"
+                            value={brandData.participationOther}
+                            onChange={handleTextChange}
+                            placeholder="e.g. Exclusive sponsorship package, custom activation..."
+                            className="w-full py-3 px-0 bg-transparent border-b border-[#919191]/40 text-[#3E3E3E] placeholder-[#919191]/50 focus:outline-none focus:border-[#3E3E3E] text-base transition-colors"
+                          />
+                        </div>
+                      )}
+
+                      {/* Preferred Event Categories */}
+                      <div className="pt-6 border-t border-[#3E3E3E]/10 space-y-4">
+                        <div>
+                          <h4 className="text-base font-semibold tracking-tight text-[#3E3E3E]">
+                            Preferred Event Categories <span className="text-xs font-light text-[#919191] ml-1">(Optional)</span>
+                          </h4>
+                          <p className="text-xs text-[#6A6A6A] font-light mt-1">
+                            Which event types are most relevant to your brand? Select all that apply.
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                          {EVENT_CATEGORIES.map(item => (
+                            <RichOptionCard
+                              key={item.id}
+                              label={item.label}
+                              icon={item.icon}
+                              selected={brandData.eventCategories.includes(item.id)}
+                              onClick={() => handleBrandToggle('eventCategories', item.id)}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}

@@ -127,6 +127,12 @@ export const brandPartnershipSchema = z.object({
     .array(z.string())
     .min(1, 'Please select at least one participation method'),
 
+  participationOther: z
+    .string()
+    .max(500, 'Other participation description cannot exceed 500 characters')
+    .optional()
+    .or(z.literal('')),
+
   eventCategories: z
     .array(z.string())
     .optional(),
