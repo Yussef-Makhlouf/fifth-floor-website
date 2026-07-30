@@ -359,6 +359,19 @@ export default function PartnershipForm() {
         if (creatorData.collabType.length === 0) {
           newErrors.collabType = 'Please select at least one collaboration type'
         }
+        if (creatorData.collabType.includes('Paid Ad')) {
+          if (creatorData.paidDeliverables.length === 0) {
+            newErrors.paidDeliverables = 'Please select at least one paid deliverable'
+          }
+        }
+        if (creatorData.collabType.includes('Free Collab')) {
+          if (creatorData.freeCollabTypes.length === 0) {
+            newErrors.freeCollabTypes = 'Please select at least one free collaboration type'
+          }
+          if (creatorData.freeDeliverables.length === 0) {
+            newErrors.freeDeliverables = 'Please select at least one free deliverable'
+          }
+        }
       }
     }
 
@@ -421,7 +434,32 @@ export default function PartnershipForm() {
     setFieldErrors(prev => ({ ...prev, [field]: '' }))
     setCreatorData(prev => {
       const arr = prev[field] as string[]
-      return { ...prev, [field]: toggleArrayItem(arr, id) }
+      const updated = toggleArrayItem(arr, id)
+
+      if (field === 'collabType') {
+        let paidDelivs = prev.paidDeliverables
+        let freeTypes = prev.freeCollabTypes
+        let freeDelivs = prev.freeDeliverables
+
+        if (!updated.includes('Paid Ad')) {
+          paidDelivs = []
+          setFieldErrors(e => ({ ...e, paidDeliverables: '' }))
+        }
+        if (!updated.includes('Free Collab')) {
+          freeTypes = []
+          freeDelivs = []
+          setFieldErrors(e => ({ ...e, freeCollabTypes: '', freeDeliverables: '' }))
+        }
+        return {
+          ...prev,
+          collabType: updated,
+          paidDeliverables: paidDelivs,
+          freeCollabTypes: freeTypes,
+          freeDeliverables: freeDelivs,
+        }
+      }
+
+      return { ...prev, [field]: updated }
     })
   }
 
@@ -1253,9 +1291,15 @@ export default function PartnershipForm() {
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-3">
-                              Select Deliverables You Provide:
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-2">
+                              Select Deliverables You Provide <span className="text-red-400">*</span>
                             </label>
+                            {fieldErrors.paidDeliverables && (
+                              <p className="text-xs text-red-500 flex items-center gap-1 font-medium mb-3">
+                                <AlertCircle className="w-3.5 h-3.5" />
+                                {fieldErrors.paidDeliverables}
+                              </p>
+                            )}
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                               {PAID_DELIVERABLES.map(item => {
                                 const isSel = creatorData.paidDeliverables.includes(item.id)
@@ -1309,9 +1353,15 @@ export default function PartnershipForm() {
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-3">
-                              What Types of Free Collabs Interest You?
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-2">
+                              What Types of Free Collabs Interest You? <span className="text-red-400">*</span>
                             </label>
+                            {fieldErrors.freeCollabTypes && (
+                              <p className="text-xs text-red-500 flex items-center gap-1 font-medium mb-3">
+                                <AlertCircle className="w-3.5 h-3.5" />
+                                {fieldErrors.freeCollabTypes}
+                              </p>
+                            )}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                               {FREE_COLLAB_TYPES.map(item => (
                                 <RichOptionCard
@@ -1321,15 +1371,22 @@ export default function PartnershipForm() {
                                   icon={item.icon}
                                   selected={creatorData.freeCollabTypes.includes(item.id)}
                                   onClick={() => handleCreatorToggle('freeCollabTypes', item.id)}
+                                  error={!!fieldErrors.freeCollabTypes}
                                 />
                               ))}
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-3">
-                              Deliverables You Offer in Exchange for Free Collabs:
+                            <label className="block text-xs font-bold uppercase tracking-widest text-[#3E3E3E]/80 mb-2">
+                              Deliverables You Offer in Exchange for Free Collabs <span className="text-red-400">*</span>
                             </label>
+                            {fieldErrors.freeDeliverables && (
+                              <p className="text-xs text-red-500 flex items-center gap-1 font-medium mb-3">
+                                <AlertCircle className="w-3.5 h-3.5" />
+                                {fieldErrors.freeDeliverables}
+                              </p>
+                            )}
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                               {FREE_DELIVERABLES.map(item => {
                                 const isSel = creatorData.freeDeliverables.includes(item.id)

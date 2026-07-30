@@ -150,68 +150,96 @@ export type BrandPartnershipData = z.infer<typeof brandPartnershipSchema>
 // CREATOR PARTNERSHIP SCHEMA - Strict Super Validation
 // ============================================================================
 
-export const creatorPartnershipSchema = z.object({
-  fullName: z
-    .string()
-    .min(1, 'Full name is required')
-    .min(2, 'Full name must be at least 2 characters')
-    .max(100, 'Full name cannot exceed 100 characters')
-    .regex(NAME_REGEX, 'Name can only contain letters, spaces, and hyphens'),
+export const creatorPartnershipSchema = z
+  .object({
+    fullName: z
+      .string()
+      .min(1, 'Full name is required')
+      .min(2, 'Full name must be at least 2 characters')
+      .max(100, 'Full name cannot exceed 100 characters')
+      .regex(NAME_REGEX, 'Name can only contain letters, spaces, and hyphens'),
 
-  instagram: z
-    .string()
-    .min(1, 'Instagram handle is required')
-    .regex(SOCIAL_HANDLE_REGEX, 'Please enter a valid handle (e.g. @username) or profile link'),
+    instagram: z
+      .string()
+      .min(1, 'Instagram handle is required')
+      .regex(SOCIAL_HANDLE_REGEX, 'Please enter a valid handle (e.g. @username) or profile link'),
 
-  otherSocials: z
-    .string()
-    .max(200, 'Other social platforms detail cannot exceed 200 characters')
-    .optional()
-    .or(z.literal('')),
+    otherSocials: z
+      .string()
+      .max(200, 'Other social platforms detail cannot exceed 200 characters')
+      .optional()
+      .or(z.literal('')),
 
-  followers: z
-    .string()
-    .max(50, 'Followers count cannot exceed 50 characters')
-    .optional()
-    .or(z.literal('')),
+    followers: z
+      .string()
+      .max(50, 'Followers count cannot exceed 50 characters')
+      .optional()
+      .or(z.literal('')),
 
-  email: z
-    .string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address')
-    .max(254, 'Email cannot exceed 254 characters'),
+    email: z
+      .string()
+      .min(1, 'Email is required')
+      .email('Please enter a valid email address')
+      .max(254, 'Email cannot exceed 254 characters'),
 
-  phone: z
-    .string()
-    .min(1, 'Phone number is required')
-    .regex(PHONE_REGEX, 'Please enter a valid phone number (e.g. +965 9999 8888)'),
+    phone: z
+      .string()
+      .min(1, 'Phone number is required')
+      .regex(PHONE_REGEX, 'Please enter a valid phone number (e.g. +965 9999 8888)'),
 
-  categories: z
-    .array(z.string())
-    .min(1, 'Please select at least one content category'),
+    categories: z
+      .array(z.string())
+      .min(1, 'Please select at least one content category'),
 
-  collabType: z
-    .array(z.string())
-    .min(1, 'Please select at least one collaboration type'),
+    collabType: z
+      .array(z.string())
+      .min(1, 'Please select at least one collaboration type'),
 
-  paidDeliverables: z.array(z.string()).optional(),
+    paidDeliverables: z.array(z.string()).optional(),
 
-  paidNotes: z
-    .string()
-    .max(1000, 'Notes cannot exceed 1000 characters')
-    .optional()
-    .or(z.literal('')),
+    paidNotes: z
+      .string()
+      .max(1000, 'Notes cannot exceed 1000 characters')
+      .optional()
+      .or(z.literal('')),
 
-  freeCollabTypes: z.array(z.string()).optional(),
+    freeCollabTypes: z.array(z.string()).optional(),
 
-  freeDeliverables: z.array(z.string()).optional(),
+    freeDeliverables: z.array(z.string()).optional(),
 
-  notes: z
-    .string()
-    .max(1000, 'Notes cannot exceed 1000 characters')
-    .optional()
-    .or(z.literal('')),
-})
+    notes: z
+      .string()
+      .max(1000, 'Notes cannot exceed 1000 characters')
+      .optional()
+      .or(z.literal('')),
+  })
+  .superRefine((data, ctx) => {
+    if (data.collabType.includes('Paid Ad')) {
+      if (!data.paidDeliverables || data.paidDeliverables.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Please select at least one paid deliverable',
+          path: ['paidDeliverables'],
+        })
+      }
+    }
+    if (data.collabType.includes('Free Collab')) {
+      if (!data.freeCollabTypes || data.freeCollabTypes.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Please select at least one free collaboration type',
+          path: ['freeCollabTypes'],
+        })
+      }
+      if (!data.freeDeliverables || data.freeDeliverables.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Please select at least one free deliverable',
+          path: ['freeDeliverables'],
+        })
+      }
+    }
+  })
 
 export type CreatorPartnershipData = z.infer<typeof creatorPartnershipSchema>
 
@@ -242,12 +270,13 @@ export function validateForm<T extends z.ZodTypeAny>(
   return { success: false, errors: errors as FormErrors<z.infer<T>> }
 }
 
-export function validateSingleField<T extends z.ZodObject<z.ZodRawShape>>(
+export function validateSingleField<T extends z.ZodTypeAny>(
   schema: T,
-  field: keyof z.infer<T>,
+  field: string,
   value: unknown
 ): string | null {
-  const fieldSchema = schema.shape[field as string]
+  const baseSchema = 'shape' in schema ? schema : (schema as any)._def?.schema
+  const fieldSchema = baseSchema?.shape?.[field]
   if (!fieldSchema) return null
 
   const result = fieldSchema.safeParse(value)
