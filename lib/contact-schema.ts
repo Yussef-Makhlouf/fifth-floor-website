@@ -193,7 +193,10 @@ export const creatorPartnershipSchema = z
 
     collabType: z
       .array(z.string())
-      .min(1, 'Please select at least one collaboration type'),
+      .refine(
+        (arr) => arr.includes('Paid Ad') && arr.includes('Free Collab'),
+        'Both Paid Ad and Free Collab options are required'
+      ),
 
     paidDeliverables: z.array(z.string()).optional(),
 
@@ -214,30 +217,26 @@ export const creatorPartnershipSchema = z
       .or(z.literal('')),
   })
   .superRefine((data, ctx) => {
-    if (data.collabType.includes('Paid Ad')) {
-      if (!data.paidDeliverables || data.paidDeliverables.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Please select at least one paid deliverable',
-          path: ['paidDeliverables'],
-        })
-      }
+    if (!data.paidDeliverables || data.paidDeliverables.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please select at least one paid deliverable',
+        path: ['paidDeliverables'],
+      })
     }
-    if (data.collabType.includes('Free Collab')) {
-      if (!data.freeCollabTypes || data.freeCollabTypes.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Please select at least one free collaboration type',
-          path: ['freeCollabTypes'],
-        })
-      }
-      if (!data.freeDeliverables || data.freeDeliverables.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Please select at least one free deliverable',
-          path: ['freeDeliverables'],
-        })
-      }
+    if (!data.freeCollabTypes || data.freeCollabTypes.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please select at least one free collaboration type',
+        path: ['freeCollabTypes'],
+      })
+    }
+    if (!data.freeDeliverables || data.freeDeliverables.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please select at least one free deliverable',
+        path: ['freeDeliverables'],
+      })
     }
   })
 

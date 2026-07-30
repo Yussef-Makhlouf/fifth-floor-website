@@ -274,7 +274,7 @@ export default function PartnershipForm() {
     email: '',
     phone: '',
     categories: [],
-    collabType: [],
+    collabType: ['Paid Ad', 'Free Collab'],
     paidDeliverables: [],
     paidNotes: '',
     freeCollabTypes: [],
@@ -356,21 +356,17 @@ export default function PartnershipForm() {
       }
 
       if (step === 3 || viewMode === 'express') {
-        if (creatorData.collabType.length === 0) {
-          newErrors.collabType = 'Please select at least one collaboration type'
+        if (!creatorData.collabType.includes('Paid Ad') || !creatorData.collabType.includes('Free Collab')) {
+          newErrors.collabType = 'Both Paid Ad and Free Collab options are required'
         }
-        if (creatorData.collabType.includes('Paid Ad')) {
-          if (creatorData.paidDeliverables.length === 0) {
-            newErrors.paidDeliverables = 'Please select at least one paid deliverable'
-          }
+        if (creatorData.paidDeliverables.length === 0) {
+          newErrors.paidDeliverables = 'Please select at least one paid deliverable'
         }
-        if (creatorData.collabType.includes('Free Collab')) {
-          if (creatorData.freeCollabTypes.length === 0) {
-            newErrors.freeCollabTypes = 'Please select at least one free collaboration type'
-          }
-          if (creatorData.freeDeliverables.length === 0) {
-            newErrors.freeDeliverables = 'Please select at least one free deliverable'
-          }
+        if (creatorData.freeCollabTypes.length === 0) {
+          newErrors.freeCollabTypes = 'Please select at least one free collaboration type'
+        }
+        if (creatorData.freeDeliverables.length === 0) {
+          newErrors.freeDeliverables = 'Please select at least one free deliverable'
         }
       }
     }
@@ -566,7 +562,7 @@ export default function PartnershipForm() {
       email: '',
       phone: '',
       categories: [],
-      collabType: [],
+      collabType: ['Paid Ad', 'Free Collab'],
       paidDeliverables: [],
       paidNotes: '',
       freeCollabTypes: [],
