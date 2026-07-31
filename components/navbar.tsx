@@ -9,9 +9,10 @@ import MagneticButton from '@/components/ui/magnetic-button'
 
 interface NavBarProps {
   isScrolled?: boolean
+  theme?: 'light' | 'dark'
 }
 
-export default function NavBar({ isScrolled = false }: NavBarProps) {
+export default function NavBar({ isScrolled = false, theme = 'light' }: NavBarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(isScrolled)
   const pathname = usePathname()
@@ -44,6 +45,8 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
     { label: 'Contact', href: '/contact' },
   ]
 
+  const isDarkNavbar = !scrolled && theme === 'dark'
+
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-out ${
@@ -61,30 +64,30 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
           className="flex items-center gap-3 group transition-transform duration-300 hover:scale-[1.02] active-press"
         >
           <div className="relative w-11 h-11 shrink-0">
-            {/* Dark Logo (Default) */}
+            {/* Dark Logo */}
             <Image
               src="/logos/fifth-icon-dark.png"
               alt="Fifth Floor"
               fill
               className={`object-contain rounded-full transition-opacity duration-300 ${
-                isOpen ? 'opacity-0' : 'opacity-100'
+                isOpen || isDarkNavbar ? 'opacity-0' : 'opacity-100'
               }`}
               priority
             />
-            {/* Light Logo (Mobile Menu) */}
+            {/* Light Logo */}
             <Image
               src="/logos/fifth-icon-light.png"
               alt="Fifth Floor"
               fill
               className={`object-contain rounded-full transition-opacity duration-300 ${
-                isOpen ? 'opacity-100' : 'opacity-0'
+                isOpen || isDarkNavbar ? 'opacity-100' : 'opacity-0'
               }`}
               priority
             />
           </div>
           <span
             className={`text-lg md:text-xl font-bold tracking-[0.25em] font-syne-display whitespace-nowrap transition-colors duration-300 ${
-              isOpen ? 'text-[#F7F6F3]' : 'text-[#1A1A1C]'
+              isOpen || isDarkNavbar ? 'text-[#F7F6F3]' : 'text-[#1A1A1C]'
             }`}
           >
             FIFTH FLOOR
@@ -96,17 +99,26 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
           {navLinks.map((link) => {
             const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
 
+            let linkTextColor = ''
+            if (isDarkNavbar) {
+              linkTextColor = isActive ? 'text-white font-bold' : 'text-white/70 hover:text-white'
+            } else {
+              linkTextColor = isActive ? 'text-[#1A1A1C] font-bold' : 'text-[#6E6E73] hover:text-[#1A1A1C]'
+            }
+
             return (
               <div key={link.label} className="relative group">
                 <Link
                   href={link.href}
-                  className={`text-xs uppercase tracking-[0.25em] font-semibold transition-colors duration-300 block py-1.5 px-1 relative ${
-                    isActive ? 'text-[#1A1A1C]' : 'text-[#6E6E73] hover:text-[#1A1A1C]'
-                  }`}
+                  className={`text-xs uppercase tracking-[0.25em] transition-colors duration-300 block py-1.5 px-1 relative ${linkTextColor}`}
                 >
                   <span className="relative z-10 flex items-center gap-1.5">
                     {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1C] inline-block animate-pulse" />
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full inline-block animate-pulse ${
+                          isDarkNavbar ? 'bg-white' : 'bg-[#1A1A1C]'
+                        }`}
+                      />
                     )}
                     {link.label}
                   </span>
@@ -114,9 +126,9 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
 
                 {/* Animated active/hover underline */}
                 <span
-                  className={`absolute bottom-0 left-0 h-[2px] bg-[#1A1A1C] transition-all duration-300 cubic-bezier(0.16,1,0.3,1) ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
+                  className={`absolute bottom-0 left-0 h-[2px] transition-all duration-300 cubic-bezier(0.16,1,0.3,1) ${
+                    isDarkNavbar ? 'bg-white' : 'bg-[#1A1A1C]'
+                  } ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}
                 />
               </div>
             )
@@ -126,9 +138,13 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
           <MagneticButton strength={0.25}>
             <Link
               href="/contact"
-              className="px-5 py-2.5 bg-[#1A1A1C] text-[#F7F6F3] text-xs font-semibold uppercase tracking-[0.2em] rounded-full hover:bg-[#3E3E42] transition-all duration-300 active-press hover:shadow-lg inline-block"
+              className={`px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] rounded-full transition-all duration-300 active-press hover:shadow-lg inline-block ${
+                isDarkNavbar
+                  ? 'bg-white text-[#0E0E10] hover:bg-white/90'
+                  : 'bg-[#1A1A1C] text-[#F7F6F3] hover:bg-[#3E3E42]'
+              }`}
             >
-               Let's Talk
+              Let's Talk
             </Link>
           </MagneticButton>
         </div>
@@ -136,7 +152,11 @@ export default function NavBar({ isScrolled = false }: NavBarProps) {
         {/* Mobile Menu Button */}
         <button
           className={`relative z-50 md:hidden p-2 rounded-full transition-colors duration-300 ${
-            isOpen ? 'text-[#F7F6F3]' : 'text-[#1A1A1C] hover:bg-black/5'
+            isOpen
+              ? 'text-[#F7F6F3]'
+              : isDarkNavbar
+              ? 'text-white hover:bg-white/10'
+              : 'text-[#1A1A1C] hover:bg-black/5'
           }`}
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"

@@ -12,10 +12,10 @@ export default function CaseStudiesPage() {
     const [activeFilter, setActiveFilter] = useState('All')
     const [scrollProgress, setScrollProgress] = useState(0)
 
-    // Project counts for filter
+    // Project counts for filter — uses categoryFilter which matches filter tabs
     const projectCounts: Record<string, number> = {}
     projects.forEach((p) => {
-        projectCounts[p.category] = (projectCounts[p.category] || 0) + 1
+        projectCounts[p.categoryFilter] = (projectCounts[p.categoryFilter] || 0) + 1
     })
 
     // Scroll progress bar

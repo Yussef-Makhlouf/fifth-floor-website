@@ -2,24 +2,8 @@
 
 import { useRef, useEffect } from 'react'
 
-const categories = [
-    'All',
-    'Branding',
-    'Brand Strategy',
-    'Social Media',
-    'Digital Marketing',
-    'Marketing Campaigns',
-    'UI/UX',
-    'Offline Design',
-    'Printing',
-    'Offline Productions',
-    'Photo & Video',
-    'Voice Over',
-    'Modeling',
-    'CGI & VFX',
-    'AI Solutions',
-    'Business Development',
-]
+// Derived from real project data — only categories that have actual work
+const categories = ['All', 'Branding', 'Production', 'Social Media', 'Printing']
 
 interface CaseStudiesFilterProps {
     activeFilter: string
